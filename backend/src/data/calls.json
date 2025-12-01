@@ -1,0 +1,40 @@
+[
+  {
+    "callId": "94c1c05a-9c5f-4edb-b6bb-2b35ba26a1f2",
+    "name": "syed momin",
+    "phone": "+923142309654",
+    "script": "Dear Team, as we continue to scale our customer outreach, it is important that every interaction reflects clarity, confidence, and value. When engaging with clients, focus on understanding their needs first, then highlight how our solution directly solves their challenges. Always communicate our key benefits clearly — efficiency, reliability, and cost-effectiveness. Maintain a positive tone, follow up consistently, and ensure each conversation moves the client one step closer to a decision. Your commitment and professionalism play the biggest role in driving our success.",
+    "voice": "female_calm",
+    "status": "completed",
+    "startedAt": 1764588512898,
+    "transcript": [
+      {
+        "speaker": "ai",
+        "text": "Dear Team, as we continue to scale our customer outreach, it is important that every interaction reflects clarity, confidence, and value",
+        "timestamp": "2025-12-01T11:28:34.111Z"
+      },
+      {
+        "speaker": "ai",
+        "text": "When engaging with clients, focus on understanding their needs first, then highlight how our solution directly solves their challenges",
+        "timestamp": "2025-12-01T11:28:35.322Z"
+      },
+      {
+        "speaker": "ai",
+        "text": "Always communicate our key benefits clearly — efficiency, reliability, and cost-effectiveness",
+        "timestamp": "2025-12-01T11:28:36.536Z"
+      },
+      {
+        "speaker": "ai",
+        "text": "Maintain a positive tone, follow up consistently, and ensure each conversation moves the client one step closer to a decision",
+        "timestamp": "2025-12-01T11:28:37.750Z"
+      },
+      {
+        "speaker": "ai",
+        "text": "Your commitment and professionalism play the biggest role in driving our success",
+        "timestamp": "2025-12-01T11:28:38.966Z"
+      }
+    ],
+    "endedAt": 1764588518971,
+    "duration": 6
+  }
+]
