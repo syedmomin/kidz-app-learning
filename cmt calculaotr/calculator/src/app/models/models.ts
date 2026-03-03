@@ -1,12 +1,15 @@
+export type UnitSystem = 'metric' | 'imperial';
+
 export interface ShipmentItem {
   id: string;
-  widthCm: number;
-  lengthCm: number;
-  heightCm: number;
+  width: number; // in cm (metric) or inch (imperial)
+  length: number;
+  height: number;
   quantity: number;
-  weightKg: number;
+  weight: number; // in kg (metric) or lb (imperial)
   volumeM3: number;
   color: string;
+  placed: number;
 }
 
 export interface Container {

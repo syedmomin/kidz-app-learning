@@ -65,15 +65,11 @@ export class ThreeSceneService implements OnDestroy {
         const { internalWidthM, internalLengthM, internalHeightM } = container;
         const geometry = new THREE.BoxGeometry(internalLengthM, internalHeightM, internalWidthM);
         const edges = new THREE.EdgesGeometry(geometry);
-        this.containerMesh = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: '#1e293b' }));
-
-        // Position it so (0,0,0) is the bottom-front-left corner internally, 
-        // but for Three.js BoxGeometry, the center is (0,0,0).
-        // Let's center it for now.
+        this.containerMesh = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: '#1e293b', opacity: 0.3, transparent: true }));
         this.scene.add(this.containerMesh);
     }
 
-    renderItems(items: ShipmentItem[], container: Container): void {
+    renderItems(items: ShipmentItem[], container: Container, unitSystem: 'metric' | 'imperial'): void {
         this.boxGroup.clear();
 
         let curX = -container.internalLengthM / 2;
@@ -88,12 +84,16 @@ export class ThreeSceneService implements OnDestroy {
         let layerMaxDepth = 0;
 
         items.forEach(item => {
-            const itemWidthM = item.widthCm / 100;
-            const itemHeightM = item.heightCm / 100;
-            const itemLengthM = item.lengthCm / 100;
+            // Input conversion for rendering - everything converted to Meters for Three.js scene
+            const scale = unitSystem === 'metric' ? 0.01 : 0.0254; // cm to m OR inch to m
+            const itemWidthM = item.width * scale;
+            const itemHeightM = item.height * scale;
+            const itemLengthM = item.length * scale;
+
+            item.placed = 0;
 
             for (let i = 0; i < item.quantity; i++) {
-                // Simple Grid Stacking
+                // Grid Stacking with check
                 if (curX + itemLengthM > maxLength / 2) {
                     curX = -maxLength / 2;
                     curZ += layerMaxDepth;
@@ -106,37 +106,37 @@ export class ThreeSceneService implements OnDestroy {
                     rowMaxHeight = 0;
                 }
 
-                const geometry = new THREE.BoxGeometry(itemLengthM, itemHeightM, itemWidthM);
-                const material = new THREE.MeshPhongMaterial({
-                    color: item.color,
-                    transparent: true,
-                    opacity: 0.9
-                });
-                const mesh = new THREE.Mesh(geometry, material);
+                const fits = (curY + itemHeightM <= maxHeight / 2);
 
-                // Position logic: center of box is at (curX + L/2, curY + H/2, curZ + W/2)
-                mesh.position.set(
-                    curX + itemLengthM / 2,
-                    curY + itemHeightM / 2,
-                    curZ + itemWidthM / 2
-                );
+                if (fits) {
+                    const geometry = new THREE.BoxGeometry(itemLengthM, itemHeightM, itemWidthM);
+                    const material = new THREE.MeshPhongMaterial({
+                        color: item.color,
+                        transparent: true,
+                        opacity: 0.9
+                    });
+                    const mesh = new THREE.Mesh(geometry, material);
 
-                // Overflow detection
-                if (curY + itemHeightM > maxHeight / 2) {
-                    (mesh.material as THREE.MeshPhongMaterial).color.set('#ef4444');
+                    mesh.position.set(
+                        curX + itemLengthM / 2,
+                        curY + itemHeightM / 2,
+                        curZ + itemWidthM / 2
+                    );
+
+                    this.boxGroup.add(mesh);
+                    item.placed++;
+
+                    // Update markers
+                    curX += itemLengthM;
+                    rowMaxHeight = Math.max(rowMaxHeight, itemHeightM);
+                    layerMaxDepth = Math.max(layerMaxDepth, itemWidthM);
                 }
-
-                this.boxGroup.add(mesh);
-
-                // Update markers
-                curX += itemLengthM;
-                rowMaxHeight = Math.max(rowMaxHeight, itemHeightM);
-                layerMaxDepth = Math.max(layerMaxDepth, itemWidthM);
             }
         });
     }
 
     onResize(width: number, height: number): void {
+        if (!this.camera || !this.renderer) return;
         this.camera.aspect = width / height;
         this.camera.updateProjectionMatrix();
         this.renderer.setSize(width, height);

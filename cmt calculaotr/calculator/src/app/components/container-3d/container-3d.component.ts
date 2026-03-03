@@ -57,7 +57,8 @@ export class Container3DComponent implements AfterViewInit {
     effect(() => {
       const items = this.calcService.shipmentItems();
       const container = this.calcService.selectedContainer();
-      this.threeService.renderItems(items, container);
+      const unitSystem = this.calcService.unitSystem();
+      this.threeService.renderItems(items, container, unitSystem);
     });
   }
 
@@ -66,7 +67,7 @@ export class Container3DComponent implements AfterViewInit {
 
     const container = this.calcService.selectedContainer();
     this.threeService.renderContainer(container);
-    this.threeService.renderItems(this.calcService.shipmentItems(), container);
+    this.threeService.renderItems(this.calcService.shipmentItems(), container, this.calcService.unitSystem());
   }
 
   @HostListener('window:resize')

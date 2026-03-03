@@ -8,65 +8,72 @@ import { CbmCalculationService } from '../../services/cbm-calculation.service';
   imports: [CommonModule],
   template: `
     <div class="card">
-      <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--text-main); margin-bottom: 1.5rem;">Shipment Summary</h2>
+      <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--text-main); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+        </svg>
+        Summary
+      </h2>
       
-      <div class="summary-grid">
-        <div class="summary-stat stat-blue">
-          <p style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem;">Total CBM</p>
-          <p style="font-size: 1.5rem; font-weight: 700;">{{ calcService.totalVolumeM3() | number:'1.2-2' }} m³</p>
-          <p style="font-size: 0.875rem; opacity: 0.8;">{{ calcService.totalVolumeFt3() | number:'1.2-2' }} ft³</p>
+      <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+        <div class="summary-item">
+          <span class="summary-label">Total rows:</span>
+          <span class="summary-value">{{ calcService.shipmentItems().length }}</span>
         </div>
-        <div class="summary-stat stat-emerald">
-          <p style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem;">Total Weight</p>
-          <p style="font-size: 1.5rem; font-weight: 700;">{{ calcService.totalWeightKg() | number:'1.2-2' }} kg</p>
-          <p style="font-size: 0.875rem; opacity: 0.8;">{{ calcService.totalWeightLb() | number:'1.2-2' }} lb</p>
+        <div class="summary-item">
+          <span class="summary-label">Total volume:</span>
+          <span class="summary-value">{{ calcService.totalVolumeM3() | number:'1.3-3' }} m³</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">Converted volume:</span>
+          <span class="summary-value">{{ calcService.totalVolumeFt3() | number:'1.3-3' }} ft³</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">Total weight:</span>
+          <span class="summary-value">{{ calcService.totalWeightKg() | number:'1.1-1' }} kg</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">Converted weight:</span>
+          <span class="summary-value">{{ calcService.totalWeightLb() | number:'1.1-1' }} lb</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">Freight Class:</span>
+          <span class="summary-value" style="color: #ef4444;">Class {{ calcService.freightClass() }} ({{ calcService.densityLbFt3() | number:'1.1-1' }} lb/ft³)</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">Containers needed:</span>
+          <span class="summary-value">{{ calcService.containersNeeded() }}</span>
         </div>
       </div>
 
-      <div style="display: flex; flex-direction: column; gap: 1rem;">
-        <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.5rem; border-bottom: 1px solid #f8fafc;">
-          <span style="color: var(--text-muted);">Density</span>
-          <span style="font-weight: 600; color: var(--text-main);">{{ calcService.density() | number:'1.2-2' }} lb/ft³</span>
-        </div>
-        <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.5rem; border-bottom: 1px solid #f8fafc;">
-          <span style="color: var(--text-muted);">Freight Class</span>
-          <span class="badge badge-amber">Class {{ calcService.freightClass() }}</span>
-        </div>
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-          <span style="color: var(--text-muted);">Utilization</span>
-          <span style="font-weight: 600;" [style.color]="getUtilizationColor()">
-            {{ getUtilization() | number:'1.1-1' }}%
-          </span>
-        </div>
+      <div class="info-box">
+        <h4 style="font-size: 0.85rem; font-weight: 700; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.25rem;">
+          🚚 Freight Class Info:
+        </h4>
+        <p style="font-size: 0.75rem; color: var(--text-muted);">
+          Class 50-500 (NMFC). Lower number = lower shipping cost. Based on density calculation.
+        </p>
       </div>
-
-      @if (calcService.totalWeightKg() > calcService.selectedContainer().maxWeightKg) {
-        <div class="alert-error">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="currentColor" style="flex-shrink: 0;">
-            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
-          </svg>
-          <span>Weight exceeds container capacity ({{ calcService.selectedContainer().maxWeightKg }} kg)</span>
-        </div>
-      }
     </div>
   `,
   styles: [`
-    :host { display: block; }
+    .summary-item {
+      display: flex;
+      justify-content: space-between;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #f8fafc;
+    }
+    .summary-label { color: var(--text-muted); font-size: 0.9rem; }
+    .summary-value { font-weight: 700; color: var(--text-main); font-size: 0.9rem; }
+    .info-box {
+      margin-top: 1.5rem;
+      padding: 1rem;
+      background: #f8fafc;
+      border-top: 4px solid var(--primary);
+      border-radius: 4px;
+    }
   `]
 })
 export class SummaryComponent {
   calcService = inject(CbmCalculationService);
-
-  getUtilization() {
-    const container = this.calcService.selectedContainer();
-    const capacity = container.internalWidthM * container.internalHeightM * container.internalLengthM;
-    return (this.calcService.totalVolumeM3() / capacity) * 100;
-  }
-
-  getUtilizationColor() {
-    const u = this.getUtilization();
-    if (u > 100) return '#ef4444';
-    if (u > 90) return '#d97706';
-    return '#10b981';
-  }
 }
