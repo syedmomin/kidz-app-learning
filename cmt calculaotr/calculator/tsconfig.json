@@ -3,6 +3,11 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "paths": {
+      "cmt-calculator": [
+        "./dist/cmt-calculator"
+      ]
+    },
     "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
@@ -28,6 +33,12 @@
     },
     {
       "path": "./tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/cmt-calculator/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/cmt-calculator/tsconfig.spec.json"
     }
   ]
 }

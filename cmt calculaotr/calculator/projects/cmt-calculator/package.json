@@ -1,0 +1,25 @@
+{
+  "name": "cmt-calculator",
+  "version": "1.0.0",
+  "description": "A high-performance Angular library for CBM (Cubic Meter) calculation with 3D container loading simulation using Three.js.",
+  "keywords": [
+    "angular",
+    "cbm",
+    "calculator",
+    "logistics",
+    "threejs",
+    "3d-simulation",
+    "container-loading"
+  ],
+  "author": "Antigravity AI",
+  "license": "MIT",
+  "peerDependencies": {
+    "@angular/common": "^21.0.0",
+    "@angular/core": "^21.0.0",
+    "three": "^0.183.2"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "sideEffects": false
+}

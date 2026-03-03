@@ -69,6 +69,32 @@
           "builder": "@angular/build:unit-test"
         }
       }
+    },
+    "cmt-calculator": {
+      "projectType": "library",
+      "root": "projects/cmt-calculator",
+      "sourceRoot": "projects/cmt-calculator/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/cmt-calculator/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/cmt-calculator/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "tsConfig": "projects/cmt-calculator/tsconfig.spec.json"
+          }
+        }
+      }
     }
   }
 }

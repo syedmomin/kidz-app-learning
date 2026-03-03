@@ -1,7 +1,9 @@
-import { CalculatorComponent } from './components/calculator/calculator.component';
-import { SummaryComponent } from './components/summary/summary.component';
-import { Container3DComponent } from './components/container-3d/container-3d.component';
-import { DetailedSummaryComponent } from './components/detailed-summary/detailed-summary.component';
+import {
+  CalculatorComponent,
+  SummaryComponent,
+  Container3DComponent,
+  DetailedSummaryComponent
+} from 'cmt-calculator';
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
