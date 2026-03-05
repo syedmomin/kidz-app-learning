@@ -1,6 +1,7 @@
 {
-  "name": "calculator",
-  "version": "0.0.0",
+  "name": "cbm-calculator",
+  "version": "1.0.0",
+  "description": "A high-performance Angular library for CBM (Cubic Meter) calculation with 3D container loading simulation using Three.js.",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
