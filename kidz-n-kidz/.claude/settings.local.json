@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx expo *)",
+      "Bash(npm install *)",
+      "Bash(cat \"C:\\\\Users\\\\SYEDAB~1\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\e--demo-kidz-n-kidz\\\\103f4f57-23ae-4571-a2cd-bdb16964c627\\\\tasks\\\\b386nve3k.output\")",
+      "Bash(jobs -l)",
+      "Bash(kill %1)",
+      "Bash(netstat -ano)",
+      "PowerShell(netstat -ano)",
+      "PowerShell(Start-Process -FilePath \"cmd.exe\" -ArgumentList \"/c cd /d E:\\\\demo\\\\kidz-n-kidz && npx expo start --web\" -WindowStyle Normal)",
+      "PowerShell(head)",
+      "Bash(curl -L \"https://api.dicebear.com/7.x/fun-emoji/svg?seed=kidz&backgroundColor=FFE566\" -o splash_char.svg)",
+      "Bash(curl -L \"https://api.dicebear.com/7.x/fun-emoji/svg?seed=abc&backgroundColor=FF6B6B\" -o card_letters.svg)",
+      "Bash(curl -L \"https://api.dicebear.com/7.x/fun-emoji/svg?seed=123&backgroundColor=7BE0AD\" -o card_numbers.svg)",
+      "Bash(curl -L \"https://api.dicebear.com/7.x/fun-emoji/svg?seed=rainbow&backgroundColor=B68CFF\" -o card_colors.svg)",
+      "Bash(curl -L \"https://api.dicebear.com/7.x/fun-emoji/svg?seed=book&backgroundColor=3FB5FF\" -o card_stories.svg)",
+      "Bash(curl -L \"https://api.dicebear.com/7.x/icons/svg?seed=abc123&icon=book&backgroundColor=FFE566&radius=20&size=200\" -o card_letters2.svg)",
+      "Bash(curl -L \"https://api.dicebear.com/7.x/fun-emoji/png?seed=kidlearn&size=200&backgroundColor=FFE566\" -o card_letters.png)",
+      "Bash(curl -L \"https://api.dicebear.com/7.x/fun-emoji/png?seed=counting&size=200&backgroundColor=7BE0AD\" -o card_numbers.png)",
+      "Bash(curl -L \"https://api.dicebear.com/7.x/fun-emoji/png?seed=painting&size=200&backgroundColor=B68CFF\" -o card_colors.png)",
+      "Bash(curl -L \"https://api.dicebear.com/7.x/fun-emoji/png?seed=storytime&size=200&backgroundColor=3FB5FF\" -o card_stories.png)",
+      "Bash(node -e ' *)",
+      "Bash(curl -sL --max-time 20 -o card_letters_x1.jpg \"https://img.freepik.com/free-vector/alphabet-poster-with-cute-animals_23-2147511231.jpg\" -w \"x1: %{http_code} %{size_download}b\\\\n\")",
+      "Bash(curl -sL --max-time 20 -o card_letters_x2.jpg \"https://img.freepik.com/free-vector/english-alphabet-with-cartoon-characters_23-2147612035.jpg\" -w \"x2: %{http_code} %{size_download}b\\\\n\")",
+      "Bash(curl -sL --max-time 20 -o card_letters_x3.jpg \"https://img.freepik.com/free-vector/kids-abc-alphabet-coloring-book_33099-1718.jpg\" -w \"x3: %{http_code} %{size_download}b\\\\n\")",
+      "Bash(curl -sL --max-time 20 -o card_letters_x4.jpg \"https://img.freepik.com/free-vector/cute-child-playing-with-colorful-abc-blocks_33099-1723.jpg\" -w \"x4: %{http_code} %{size_download}b\\\\n\")",
+      "Bash(curl -sL --max-time 20 -o card_letters_x5.jpg \"https://img.freepik.com/free-vector/children-with-abc-blocks-white-background_33099-1724.jpg\" -w \"x5: %{http_code} %{size_download}b\\\\n\")"
+    ]
+  }
+}

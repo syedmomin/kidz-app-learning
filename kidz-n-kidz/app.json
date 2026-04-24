@@ -1,0 +1,19 @@
+{
+  "expo": {
+    "name": "Bumbloo",
+    "slug": "bumbloo",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "backgroundColor": "#3FB5FF",
+      "resizeMode": "contain"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": { "supportsTablet": true },
+    "android": {
+      "adaptiveIcon": { "backgroundColor": "#3FB5FF" }
+    },
+    "web": { "favicon": "./assets/favicon.png" }
+  }
+}
