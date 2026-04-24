@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { SvgXml } from 'react-native-svg';
 import { Star } from '../components/Icons';
 import { C } from '../theme';
 import type { ScreenProps, RootStackParamList } from '../navigation/types';
@@ -214,13 +215,10 @@ function Card({ spec, onPress }: { spec: CardSpec; onPress: () => void }) {
   return (
     <Pressable
       onPress={onPress}
-      style={({ pressed }) => [s.card, { transform: [{ scale: pressed ? 0.96 : 1 }] }]}
+      style={({ pressed }) => [s.card, { opacity: pressed ? 0.85 : 1, transform: [{ scale: pressed ? 0.95 : 1 }] }]}
     >
       <View style={s.illusBox}>
-        <img
-          src={`data:image/svg+xml;utf8,${encodeURIComponent(spec.xml)}`}
-          style={{ width: '100%', height: 130, display: 'block', objectFit: 'cover' }}
-        />
+        <SvgXml xml={spec.xml} width="100%" height={130} />
       </View>
       <View style={[s.cardFooter, { backgroundColor: spec.accent }]}>
         <Text style={s.cardLabel}>{spec.label}</Text>
@@ -308,8 +306,8 @@ const s = StyleSheet.create({
     shadowColor: '#000', shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.10, shadowRadius: 12, elevation: 6,
   },
-  illusBox: { width: '100%', overflow: 'hidden', backgroundColor: '#f9f9f9' },
-  cardFooter: { paddingHorizontal: 12, paddingVertical: 10 },
+  illusBox: { width: '100%', height: 130, overflow: 'hidden', backgroundColor: '#f0f4ff' },
+  cardFooter: { paddingHorizontal: 12, paddingVertical: 12, alignItems: 'center' },
   cardLabel: { fontWeight: '800', fontSize: 15, color: C.ink },
   badge: {
     position: 'absolute', top: 8, right: 8,

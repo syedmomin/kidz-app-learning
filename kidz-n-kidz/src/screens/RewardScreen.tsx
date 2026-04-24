@@ -3,7 +3,7 @@ import React, { useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, Animated, Dimensions } from 'react-native';
 import Svg, { Path, Circle, G } from 'react-native-svg';
 import PhoneSafe from '../components/PhoneSafe';
-import BounceButton from '../components/BounceButton';
+import { KButton } from '../components/ui';
 import { Star, Coin } from '../components/Icons';
 import { C } from '../theme';
 import { useProgress } from '../store/ProgressStore';
@@ -78,8 +78,8 @@ export default function RewardScreen({ navigation, route }: ScreenProps<'Reward'
         </View>
 
         <View style={s.actions}>
-          <BounceButton color={C.cream} shadow={C.ink} onPress={() => navigation.navigate('Explore')}>🏠 Home</BounceButton>
-          <BounceButton color={C.mint} shadow={C.mintDeep} big onPress={() => navigation.goBack()}>Again ▶</BounceButton>
+          <KButton color={C.cream} shadowColor={C.ink} size="md" onPress={() => navigation.navigate('Explore')}>🏠 Home</KButton>
+          <KButton color={C.mint} shadowColor={C.mintDeep} size="lg" onPress={() => navigation.goBack()}>Again ▶</KButton>
         </View>
       </View>
     </PhoneSafe>

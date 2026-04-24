@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import Svg, { Path, Ellipse } from 'react-native-svg';
 import PhoneSafe from '../components/PhoneSafe';
-import BounceButton from '../components/BounceButton';
+import { KButton } from '../components/ui';
 import { C } from '../theme';
 import { useProgress } from '../store/ProgressStore';
 import type { ScreenProps } from '../navigation/types';
@@ -61,9 +61,9 @@ export default function NumbersScreen({ navigation }: ScreenProps<'Numbers'>) {
       </View>
 
       <View style={{ padding: 16 }}>
-        <BounceButton color={correct ? C.mint : C.blue} shadow={correct ? C.mintDeep : C.blueDeep} big onPress={check} style={{ alignSelf: 'stretch' }}>
+        <KButton color={correct ? C.mint : C.blue} shadowColor={correct ? C.mintDeep : C.blueDeep} size="lg" fullWidth onPress={check}>
           {correct ? '✓ Correct!' : 'Check'}
-        </BounceButton>
+        </KButton>
       </View>
     </PhoneSafe>
   );

@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import Svg, { Path, Rect, Circle, Ellipse } from 'react-native-svg';
 import PhoneSafe from '../components/PhoneSafe';
-import BounceButton from '../components/BounceButton';
+import { KButton } from '../components/ui';
 import { C } from '../theme';
 import Mango from '../components/Mango';
 import { useProgress } from '../store/ProgressStore';
@@ -92,9 +92,9 @@ export default function ColorMatchScreen({ navigation }: ScreenProps<'ColorMatch
       </View>
 
       <View style={{ padding: 16 }}>
-        <BounceButton color={allDone ? C.mint : C.blue} shadow={allDone ? C.mintDeep : C.blueDeep} big onPress={finish} style={{ alignSelf: 'stretch' }}>
+        <KButton color={allDone ? C.mint : C.blue} shadowColor={allDone ? C.mintDeep : C.blueDeep} size="lg" fullWidth onPress={finish} style={{ alignSelf: 'stretch' }}>
           {allDone ? 'Done ✓' : 'Keep going...'}
-        </BounceButton>
+        </KButton>
       </View>
     </PhoneSafe>
   );

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, Animated, Easing, useWindowDimensions } from 'react-native';
-import BounceButton from '../components/BounceButton';
+import { KButton } from '../components/ui';
 import { C } from '../theme';
 import type { ScreenProps } from '../navigation/types';
 import Svg, { Circle, Path, Ellipse, Rect, G, Defs, RadialGradient, Stop } from 'react-native-svg';
@@ -184,9 +184,9 @@ export default function SplashScreen({ navigation }: ScreenProps<'Splash'>) {
           <Text style={s.desc}>Fun learning adventures{'\n'}for little explorers! 🚀</Text>
         </View>
 
-        <BounceButton color={C.coral} big onPress={() => navigation.navigate('Explore')}>
+        <KButton color={C.coral} size="lg" onPress={() => navigation.navigate('Explore')}>
           🎉  Let's Start!
-        </BounceButton>
+        </KButton>
       </Animated.View>
     </View>
   );
