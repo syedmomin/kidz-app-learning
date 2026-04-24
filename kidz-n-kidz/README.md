@@ -25,3 +25,6 @@ Open **Expo Go** on your phone → scan QR.
 - Sound / music preferences
 
 Key: `@bumbloo/progress/v1`. All reads/writes go through `useProgress()` in `src/store/ProgressStore.tsx`.
+
+
+https://www.pinterest.com/search/pins/?q=KiddiePak%20app%20UI

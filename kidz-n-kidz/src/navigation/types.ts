@@ -13,6 +13,7 @@ export type RootStackParamList = {
   Profile: undefined;
   Settings: undefined;
   Streak: undefined;
+  Animals: undefined;
 };
 
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';

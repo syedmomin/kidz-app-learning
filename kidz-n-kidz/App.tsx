@@ -23,6 +23,7 @@ import RewardScreen from './src/screens/RewardScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
 import SettingsScreen from './src/screens/SettingsScreen';
 import StreakScreen from './src/screens/StreakScreen';
+import AnimalScreen from './src/screens/AnimalScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -47,6 +48,7 @@ export default function App() {
               <Stack.Screen name="Profile" component={ProfileScreen}/>
               <Stack.Screen name="Settings" component={SettingsScreen}/>
               <Stack.Screen name="Streak" component={StreakScreen}/>
+              <Stack.Screen name="Animals" component={AnimalScreen}/>
             </Stack.Navigator>
           </NavigationContainer>
         </ProgressProvider>
