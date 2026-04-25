@@ -15,6 +15,11 @@ export type RootStackParamList = {
   Streak: undefined;
   Animals: undefined;
   Music: undefined;
+  NumberQuiz: undefined;
+  MemoryFlip: undefined;
+  ShapeQuiz:  undefined;
+  BalloonPop: undefined;
+  OddOneOut:  undefined;
 };
 
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';

@@ -26,6 +26,11 @@ import SettingsScreen from './src/screens/SettingsScreen';
 import StreakScreen from './src/screens/StreakScreen';
 import AnimalScreen from './src/screens/AnimalScreen';
 import MusicScreen from './src/screens/MusicScreen';
+import NumberQuizScreen  from './src/screens/NumberQuizScreen';
+import MemoryFlipScreen  from './src/screens/MemoryFlipScreen';
+import ShapeQuizScreen   from './src/screens/ShapeQuizScreen';
+import BalloonPopScreen  from './src/screens/BalloonPopScreen';
+import OddOneOutScreen   from './src/screens/OddOneOutScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -61,6 +66,11 @@ export default function App() {
               <Stack.Screen name="Streak" component={StreakScreen}/>
               <Stack.Screen name="Animals" component={AnimalScreen}/>
               <Stack.Screen name="Music" component={MusicScreen}/>
+              <Stack.Screen name="NumberQuiz"  component={NumberQuizScreen}/>
+              <Stack.Screen name="MemoryFlip"  component={MemoryFlipScreen}/>
+              <Stack.Screen name="ShapeQuiz"   component={ShapeQuizScreen}/>
+              <Stack.Screen name="BalloonPop"  component={BalloonPopScreen}/>
+              <Stack.Screen name="OddOneOut"   component={OddOneOutScreen}/>
             </Stack.Navigator>
           </NavigationContainer>
         </ProgressProvider>

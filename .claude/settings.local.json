@@ -47,7 +47,14 @@
       "Bash(curl -sIL \"https://www.bensound.com/bensound-music/bensound-cute.mp3\")",
       "Bash(curl -sIL \"https://www.bensound.com/bensound-music/bensound-ukulele.mp3\")",
       "Bash(curl -sIL \"https://cdn.pixabay.com/audio/2022/01/18/audio_d0c6ff1bab.mp3\")",
-      "Bash(curl -sIL \"https://incompetech.com/music/royalty-free/mp3-royaltyfree/Quirky%20Dog.mp3\")"
+      "Bash(curl -sIL \"https://incompetech.com/music/royalty-free/mp3-royaltyfree/Quirky%20Dog.mp3\")",
+      "Bash(head -43 src/screens/ColorMatchScreen.tsx)",
+      "Bash(tail -n +761 src/screens/ColorMatchScreen.tsx)",
+      "Read(//tmp/**)",
+      "Bash(npx tsc *)"
+    ],
+    "additionalDirectories": [
+      "\\tmp"
     ]
   }
 }
