@@ -8,12 +8,12 @@ import { useAudio } from '../hooks/useAudio';
 import type { ScreenProps } from '../navigation/types';
 
 const { width: SW } = Dimensions.get('window');
-const TOTAL = 15;
+const TOTAL = 50; // Increased to 50 rounds
 
 type Op = '+' | '−' | '×';
 interface Question { a: number; b: number; op: Op; answer: number; options: number[] }
 
-const MATH_ICONS = ['🍎', '⭐', '🎈', '🍪', '🦁', '🍦'];
+const MATH_ICONS = ['🍎', '⭐', '🎈', '🍪', '🦁', '🍦', '🍓', '🥕', '🍭', '🍔'];
 
 function shuffle<T>(arr: T[]): T[] { return [...arr].sort(() => Math.random() - 0.5); }
 
@@ -36,9 +36,11 @@ function makeQ(a: number, b: number, op: Op): Question {
 }
 
 const BASE_POOL: Question[] = [
-  makeQ(3,2,'+'), makeQ(5,1,'+'), makeQ(4,3,'+'), makeQ(2,2,'+'), makeQ(6,2,'+'),
-  makeQ(5,2,'−'), makeQ(6,3,'−'), makeQ(4,1,'−'), makeQ(7,2,'−'), makeQ(3,3,'−'),
-  makeQ(2,2,'×'), makeQ(3,1,'×'), makeQ(2,3,'×'), makeQ(4,2,'×'), makeQ(5,2,'×'),
+  makeQ(1,1,'+'), makeQ(2,1,'+'), makeQ(3,2,'+'), makeQ(5,1,'+'), makeQ(4,3,'+'),
+  makeQ(2,2,'+'), makeQ(6,2,'+'), makeQ(1,4,'+'), makeQ(3,3,'+'), makeQ(8,1,'+'),
+  makeQ(2,1,'−'), makeQ(5,2,'−'), makeQ(6,3,'−'), makeQ(4,1,'−'), makeQ(7,2,'−'),
+  makeQ(3,3,'−'), makeQ(9,3,'−'), makeQ(8,4,'−'), makeQ(5,5,'−'), makeQ(10,2,'−'),
+  makeQ(1,2,'×'), makeQ(2,2,'×'), makeQ(3,1,'×'), makeQ(2,3,'×'), makeQ(4,2,'×'),
 ];
 
 function buildPool(): Question[] {
@@ -49,7 +51,6 @@ function buildPool(): Question[] {
 
 const POOL = buildPool();
 
-const OP_BG:   Record<Op,string> = { '+': '#E8F5E9', '−': '#FFEBEE', '×': '#F3E5F5' };
 const OP_DARK: Record<Op,string> = { '+': '#4CAF50', '−': '#FF5252', '×': '#9C27B0' };
 const OP_WORD: Record<Op,string> = { '+': 'plus', '−': 'minus', '×': 'times' };
 
@@ -59,7 +60,7 @@ export default function NumberQuizScreen({ navigation }: ScreenProps<'NumberQuiz
   const [picked, setPicked] = useState<number | null>(null);
   const [score,  setScore]  = useState(0);
   const [streak, setStreak] = useState(0);
-  const [icon]   = useState(() => MATH_ICONS[Math.floor(Math.random() * MATH_ICONS.length)]);
+  const [icon,   setIcon]   = useState(MATH_ICONS[0]);
 
   const q           = POOL[idx];
   const shake       = useRef(new Animated.Value(0)).current;
@@ -71,6 +72,9 @@ export default function NumberQuizScreen({ navigation }: ScreenProps<'NumberQuiz
     slideIn.setValue(SW);
     Animated.spring(slideIn, { toValue: 0, damping: 12, stiffness: 90, useNativeDriver: true }).start();
     
+    // Change icon every round to keep it fresh
+    setIcon(MATH_ICONS[Math.floor(Math.random() * MATH_ICONS.length)]);
+
     Speech.stop();
     Speech.speak(`${q.a} ${OP_WORD[q.op]} ${q.b} equals?`, { rate: 0.9, pitch: 1.1 });
   }, [idx]);
@@ -87,12 +91,18 @@ export default function NumberQuizScreen({ navigation }: ScreenProps<'NumberQuiz
   const pick = (n: number) => {
     if (picked !== null) return;
     setPicked(n);
-    if (n === q.answer) {
+    const isCorr = n === q.answer;
+    
+    Speech.stop();
+    Speech.speak(
+      `${q.a} ${OP_WORD[q.op]} ${q.b} equals ${q.answer}. Your answer is ${isCorr ? 'correct' : 'wrong'}.`, 
+      { rate: 1.0, pitch: 1.1 }
+    );
+
+    if (isCorr) {
       const ns = score + 1;
       setScore(ns);
       setStreak(s => s + 1);
-      playSound(require('../../assets/sounds/lion.mp3'));
-      Speech.speak(`Correct! ${q.answer}`, { rate: 1.1 });
       
       Animated.sequence([
         Animated.spring(cardBounce, { toValue: 1.1, tension: 200, friction: 5, useNativeDriver: true }),
@@ -104,18 +114,16 @@ export default function NumberQuizScreen({ navigation }: ScreenProps<'NumberQuiz
         Animated.timing(mascotAnim, { toValue: 0,   duration: 150, useNativeDriver: true }),
       ]).start();
 
-      setTimeout(() => advance(ns), 1500);
+      setTimeout(() => advance(ns), 2200);
     } else {
       setStreak(0);
-      playSound(require('../../assets/sounds/dog.mp3')); // Using dog for wrong sound placeholder
-      Speech.speak(`Oops! It was ${q.answer}`, { rate: 1.0 });
       Animated.sequence([
         Animated.timing(shake, { toValue: 15,  duration: 60, useNativeDriver: true }),
         Animated.timing(shake, { toValue: -15, duration: 60, useNativeDriver: true }),
         Animated.timing(shake, { toValue: 10,   duration: 60, useNativeDriver: true }),
         Animated.timing(shake, { toValue: 0,   duration: 60, useNativeDriver: true }),
       ]).start();
-      setTimeout(() => advance(score), 2000);
+      setTimeout(() => advance(score), 2500);
     }
   };
 
@@ -139,9 +147,7 @@ export default function NumberQuizScreen({ navigation }: ScreenProps<'NumberQuiz
         <View style={[s.scorePill, { backgroundColor: opDark }]}><Text style={s.scoreT}>⭐ {score}</Text></View>
       </View>
 
-      <View style={s.progressBar}>
-        <View style={[s.progressFill, { width: `${(idx / TOTAL) * 100}%`, backgroundColor: opDark }]}/>
-      </View>
+      {/* Progress Bar Removed as requested */}
 
       <View style={s.mascotArea}>
         <Animated.Text style={[s.mascot, { transform: [{ translateY: mascotAnim }] }]}>
@@ -153,13 +159,13 @@ export default function NumberQuizScreen({ navigation }: ScreenProps<'NumberQuiz
       <Animated.View style={[s.card, { transform: [{ translateX: slideIn }, { translateX: shake }, { scale: cardBounce }] }]}>
         <View style={s.mathRow}>
           <View style={s.numBox}>
-            <Text style={s.cardNum}>{q.a}</Text>
             {renderVisual(q.a)}
+            <Text style={s.cardNum}>{q.a}</Text>
           </View>
           <Text style={[s.opChar, { color: opDark }]}>{q.op === '−' ? '−' : q.op === '×' ? '×' : '+'}</Text>
           <View style={s.numBox}>
-            <Text style={s.cardNum}>{q.b}</Text>
             {renderVisual(q.b)}
+            <Text style={s.cardNum}>{q.b}</Text>
           </View>
         </View>
         
@@ -197,18 +203,16 @@ const s = StyleSheet.create({
   title:        { flex: 1, textAlign: 'center', fontWeight: '900', fontSize: 22, color: C.ink },
   scorePill:    { borderRadius: 20, paddingHorizontal: 15, paddingVertical: 6, elevation: 4 },
   scoreT:       { fontWeight: '900', fontSize: 16, color: '#fff' },
-  progressBar:  { height: 14, marginHorizontal: 30, backgroundColor: 'rgba(255,255,255,0.4)', borderRadius: 10, overflow: 'hidden', marginBottom: 10 },
-  progressFill: { height: '100%', borderRadius: 10 },
-  mascotArea:   { alignItems: 'center', height: 80, justifyContent: 'center' },
-  mascot:       { fontSize: 50 },
+  mascotArea:   { alignItems: 'center', height: 100, justifyContent: 'center' },
+  mascot:       { fontSize: 55 },
   streakText:   { fontSize: 14, fontWeight: '900', color: '#FF5722', marginTop: 4 },
   card:         { marginHorizontal: 20, backgroundColor: '#fff', borderRadius: 40, padding: 25, elevation: 12, alignItems: 'center', shadowColor: '#000', shadowOffset: { width: 0, height: 10 }, shadowOpacity: 0.1, shadowRadius: 15 },
   mathRow:      { flexDirection: 'row', alignItems: 'center', gap: 15 },
   numBox:       { alignItems: 'center' },
   cardNum:      { fontSize: 60, fontWeight: '900', color: C.ink },
   opChar:       { fontSize: 40, fontWeight: '900' },
-  visualRow:    { flexDirection: 'row', flexWrap: 'wrap', width: 60, justifyContent: 'center' },
-  visualIcon:   { fontSize: 14 },
+  visualRow:    { flexDirection: 'row', flexWrap: 'wrap', width: 80, justifyContent: 'center', marginBottom: 10 },
+  visualIcon:   { fontSize: 16 },
   eqLine:       { width: '80%', height: 4, backgroundColor: '#eee', marginVertical: 20, borderRadius: 2 },
   answerCircle: { width: 90, height: 90, borderRadius: 45, backgroundColor: '#F8F9FA', alignItems: 'center', justifyContent: 'center', borderWidth: 4, borderColor: '#eee' },
   answerT:      { fontSize: 44, fontWeight: '900' },
@@ -216,4 +220,6 @@ const s = StyleSheet.create({
   opt:          { width: '45%', height: 80, borderRadius: 25, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center', shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.1, shadowRadius: 6 },
   optT:         { fontSize: 36, fontWeight: '900' },
 });
+
+
 
