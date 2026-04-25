@@ -8,8 +8,8 @@ import { useAudio } from '../hooks/useAudio';
 import type { ScreenProps } from '../navigation/types';
 
 const { width: SW, height: SH } = Dimensions.get('window');
-const TOTAL         = 20; // Reduced for faster rounds
-const BALLOON_COLORS = ['#FF5E5E', '#5E8BFF', '#5EE39F', '#FFB75E', '#BC5EFF', '#FF5EC1'];
+const TOTAL         = 50; // Increased to 50 levels
+const BALLOON_COLORS = ['#FF5E5E', '#5E8BFF', '#5EE39F', '#FFB75E', '#BC5EFF', '#FF5EC1', '#FF9F5E', '#5EEBFF'];
 
 function shuffle<T>(arr: T[]): T[] { return [...arr].sort(() => Math.random() - 0.5); }
 
@@ -80,14 +80,14 @@ function Balloon({ number, color, phase, state, onPress }: {
   useEffect(() => {
     const t = setTimeout(() => {
       const loop = Animated.loop(Animated.sequence([
-        Animated.timing(floatY, { toValue: -15, duration: 1500 + phase * 500, easing: Easing.inOut(Easing.sin), useNativeDriver: true }),
-        Animated.timing(floatY, { toValue: 0,   duration: 1500 + phase * 500, easing: Easing.inOut(Easing.sin), useNativeDriver: true }),
+        Animated.timing(floatY, { toValue: -20, duration: 1800 + phase * 600, easing: Easing.inOut(Easing.sin), useNativeDriver: true }),
+        Animated.timing(floatY, { toValue: 0,   duration: 1800 + phase * 600, easing: Easing.inOut(Easing.sin), useNativeDriver: true }),
       ]));
       loopRef.current = loop;
       loop.start();
     }, phase * 1000);
     return () => { clearTimeout(t); loopRef.current?.stop(); };
-  }, []);
+  }, [phase]);
 
   useEffect(() => {
     if (state === 'wrong') {
@@ -103,7 +103,7 @@ function Balloon({ number, color, phase, state, onPress }: {
       Animated.sequence([
         Animated.spring(popSc, { toValue: 1.4, friction: 3, useNativeDriver: true }),
         Animated.parallel([
-          Animated.timing(popSc,   { toValue: 2, duration: 150, useNativeDriver: true }),
+          Animated.timing(popSc,   { toValue: 2.2, duration: 150, useNativeDriver: true }),
           Animated.timing(opacity, { toValue: 0, duration: 150, useNativeDriver: true }),
         ]),
       ]).start();
@@ -127,20 +127,19 @@ function Balloon({ number, color, phase, state, onPress }: {
 
 export default function BalloonPopScreen({ navigation }: ScreenProps<'BalloonPop'>) {
   const { playSound } = useAudio();
-  const first                           = buildRound();
   const [roundIdx, setRoundIdx]         = useState(0);
-  const [round,    setRound]            = useState(first);
-  const [states,   setStates]           = useState<BState[]>(first.numbers.map(() => 'idle'));
+  const [round,    setRound]            = useState(() => buildRound());
+  const [states,   setStates]           = useState<BState[]>(() => round.numbers.map(() => 'idle'));
   const [score,    setScore]            = useState(0);
   const [locked,   setLocked]           = useState(false);
   const [particles, setParticles]       = useState<{id: number, color: string, x: number, y: number}[]>([]);
+  const [phases,   setPhases]           = useState(() => round.numbers.map(() => Math.random()));
   
-  const phases     = useRef(first.numbers.map(() => Math.random())).current;
   const targetPulse = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
     const loop = Animated.loop(Animated.sequence([
-      Animated.spring(targetPulse, { toValue: 1.15, tension: 150, friction: 5, useNativeDriver: true }),
+      Animated.spring(targetPulse, { toValue: 1.2, tension: 150, friction: 5, useNativeDriver: true }),
       Animated.spring(targetPulse, { toValue: 1,    tension: 150, friction: 5, useNativeDriver: true }),
     ]));
     loop.start();
@@ -149,7 +148,7 @@ export default function BalloonPopScreen({ navigation }: ScreenProps<'BalloonPop
 
   useEffect(() => {
     Speech.stop();
-    Speech.speak(`Find number ${round.target}`, { rate: 0.9, pitch: 1.2 });
+    Speech.speak(`Find number ${round.target}`, { rate: 0.9, pitch: 1.1 });
   }, [round.target]);
 
   const advance = useCallback((ns: number) => {
@@ -158,8 +157,7 @@ export default function BalloonPopScreen({ navigation }: ScreenProps<'BalloonPop
       return;
     }
     const next = buildRound(round.target);
-    phases.length = 0;
-    next.numbers.forEach(() => phases.push(Math.random()));
+    setPhases(next.numbers.map(() => Math.random()));
     setRoundIdx(i => i + 1);
     setRound(next);
     setStates(next.numbers.map(() => 'idle'));
@@ -176,39 +174,41 @@ export default function BalloonPopScreen({ navigation }: ScreenProps<'BalloonPop
       setLocked(true);
       setStates(prev => prev.map((s, i) => i === idx ? 'popped' : s) as BState[]);
       
-      // Add particles
-      const newParticles = Array.from({ length: 12 }).map((_, i) => ({
+      // Detailed voice feedback as requested
+      Speech.stop();
+      Speech.speak(`Awesome! That is number ${num}.`, { rate: 1.1, pitch: 1.1 });
+
+      const newParticles = Array.from({ length: 15 }).map((_, i) => ({
         id: Date.now() + i,
         color: BALLOON_COLORS[idx % BALLOON_COLORS.length],
         x: (idx % 3) * (SW / 3.5) + 50,
-        y: Math.floor(idx / 3) * (SH / 4) + 100
+        y: Math.floor(idx / 3) * (SH / 5) + 200
       }));
       setParticles(newParticles);
 
-      // Play sound
-      playSound(require('../../assets/sounds/lion.mp3')); // Using lion as a placeholder pop if no pop sound
+      // Removed animal sounds, using voice only as requested
       
       setScore(s => {
         const ns = s + 1;
-        setTimeout(() => advance(ns), 1000);
+        setTimeout(() => advance(ns), 2000);
         return ns;
       });
     } else {
       setStates(prev => prev.map((s, i) => i === idx ? 'wrong' : s) as BState[]);
       Speech.stop();
-      Speech.speak('Not this one!', { rate: 1.1 });
+      Speech.speak(`Oops! Not this one. Try again!`, { rate: 1.1 });
       setTimeout(() => {
         setStates(prev => prev.map((s, i) => i === idx && s === 'wrong' ? 'idle' : s) as BState[]);
       }, 800);
     }
-  }, [locked, states, round, advance, playSound]);
+  }, [locked, states, round, advance]);
 
   return (
     <PhoneSafe bg="#87CEEB">
       {/* Background Clouds */}
-      <Cloud top={100} delay={0} />
-      <Cloud top={250} delay={5000} />
-      <Cloud top={400} delay={2000} />
+      <Cloud top={80} delay={0} />
+      <Cloud top={220} delay={5000} />
+      <Cloud top={380} delay={2000} />
 
       <View style={s.header}>
         <Pressable onPress={() => navigation.goBack()} style={s.back}><Text style={s.backT}>←</Text></Pressable>
@@ -216,9 +216,7 @@ export default function BalloonPopScreen({ navigation }: ScreenProps<'BalloonPop
         <View style={s.scorePill}><Text style={s.scoreT}>⭐ {score}</Text></View>
       </View>
 
-      <View style={s.progressBar}>
-        <View style={[s.progressFill, { width: `${(roundIdx / TOTAL) * 100}%` }]}/>
-      </View>
+      {/* Progress Bar Removed as requested */}
 
       <View style={s.targetArea}>
         <Text style={s.targetLbl}>Pop the number</Text>
@@ -266,8 +264,6 @@ const s = StyleSheet.create({
   title:        { flex: 1, textAlign: 'center', fontWeight: '900', fontSize: 24, color: '#fff', textShadowColor: 'rgba(0,0,0,0.2)', textShadowOffset: { width: 0, height: 2 }, textShadowRadius: 4 },
   scorePill:    { backgroundColor: '#FFEB3B', borderRadius: 20, paddingHorizontal: 15, paddingVertical: 6, elevation: 4 },
   scoreT:       { fontWeight: '900', fontSize: 16, color: C.ink },
-  progressBar:  { height: 14, marginHorizontal: 30, backgroundColor: 'rgba(255,255,255,0.3)', borderRadius: 10, overflow: 'hidden', marginBottom: 10 },
-  progressFill: { height: '100%', backgroundColor: '#FF5252', borderRadius: 10 },
   targetArea:   { alignItems: 'center', marginTop: 10, gap: 8 },
   targetLbl:    { fontSize: 18, fontWeight: '900', color: '#fff' },
   targetBadge:  { width: 100, height: 100, borderRadius: 50, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center', elevation: 10, shadowColor: '#000', shadowOffset: { width: 0, height: 5 }, shadowOpacity: 0.2, shadowRadius: 8 },
@@ -277,4 +273,5 @@ const s = StyleSheet.create({
   cloud:        { position: 'absolute', fontSize: 80, opacity: 0.6, zIndex: -1 },
   particle:     { position: 'absolute', width: 10, height: 10, borderRadius: 5, zIndex: 100 },
 });
+
 
