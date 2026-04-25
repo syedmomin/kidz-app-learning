@@ -25,7 +25,21 @@
       "Bash(curl -sL --max-time 20 -o card_letters_x2.jpg \"https://img.freepik.com/free-vector/english-alphabet-with-cartoon-characters_23-2147612035.jpg\" -w \"x2: %{http_code} %{size_download}b\\\\n\")",
       "Bash(curl -sL --max-time 20 -o card_letters_x3.jpg \"https://img.freepik.com/free-vector/kids-abc-alphabet-coloring-book_33099-1718.jpg\" -w \"x3: %{http_code} %{size_download}b\\\\n\")",
       "Bash(curl -sL --max-time 20 -o card_letters_x4.jpg \"https://img.freepik.com/free-vector/cute-child-playing-with-colorful-abc-blocks_33099-1723.jpg\" -w \"x4: %{http_code} %{size_download}b\\\\n\")",
-      "Bash(curl -sL --max-time 20 -o card_letters_x5.jpg \"https://img.freepik.com/free-vector/children-with-abc-blocks-white-background_33099-1724.jpg\" -w \"x5: %{http_code} %{size_download}b\\\\n\")"
+      "Bash(curl -sL --max-time 20 -o card_letters_x5.jpg \"https://img.freepik.com/free-vector/children-with-abc-blocks-white-background_33099-1724.jpg\" -w \"x5: %{http_code} %{size_download}b\\\\n\")",
+      "Read(//d/d/projects/kidz-app-learning/**)",
+      "Bash(curl -sI https://assets.mixkit.co/sfx/preview/mixkit-dog-barking-twice-1.wav -H 'User-Agent: Mozilla/5.0 \\(Windows NT 10.0; Win64; x64\\) AppleWebKit/537.36 \\(KHTML, like Gecko\\) Chrome/120.0.0.0 Safari/537.36' -H 'Referer: https://mixkit.co/')",
+      "Bash(curl -sI http://soundbible.com/mp3/Dog%20Barking-SoundBible.com-1664127357.mp3 -H 'User-Agent: Mozilla/5.0')",
+      "Bash(curl -sI \"https://raw.githubusercontent.com/prof3ssorSt3v3/media-sample-files/master/media-files/alarm.mp3\")",
+      "Bash(curl -sI \"https://opengameart.org/sites/default/files/cat_meow_0.wav\" -L)",
+      "Bash(curl -sI \"https://ia800502.us.archive.org/1/items/262_animal_sounds/cat.mp3\")",
+      "Bash(curl -sI \"https://freesound.org/data/previews/415/415209_5121236-lq.mp3\")",
+      "Bash(curl -sI \"https://soundcloud.com/animalworld/dog-barking\" -L)",
+      "Bash(curl -sI \"https://www2.cs.uic.edu/~i101/SoundFiles/CantinaBand3.wav\" -L)",
+      "Bash(curl -sI 'https://translate.google.com/translate_tts?ie=UTF-8&q=Lion&tl=en&client=tw-ob' -H 'User-Agent: Mozilla/5.0')",
+      "Bash(curl -sI \"https://www.soundgator.com/audios/395/cat-sound-effect.mp3\" -H \"User-Agent: Mozilla/5.0\")",
+      "Bash(curl -sL --max-time 20 \"https://picsum.photos/seed/wolf/600/400\" -o wolf.jpg)",
+      "Bash(curl -sL --max-time 20 \"https://picsum.photos/seed/turtle/600/400\" -o turtle.jpg)",
+      "Bash(awk '{print $5, $9}')"
     ]
   }
 }
