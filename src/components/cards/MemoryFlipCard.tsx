@@ -16,7 +16,7 @@ export default function MemoryFlipCard({ onPress }: { onPress: () => void }) {
       </View>
       <View style={[s.footer, { backgroundColor: '#D9F0FF' }]}>
         <Text style={s.name}>Memory Flip</Text>
-        <Text style={s.desc}>Match the pairs!</Text>
+
       </View>
     </Pressable>
   );
@@ -29,5 +29,4 @@ const s = StyleSheet.create({
   miniCard: { width: 44, height: 52, borderRadius: 10, borderWidth: 2.5, borderColor: C.ink, alignItems: 'center', justifyContent: 'center' },
   footer:   { paddingHorizontal: 10, paddingVertical: 10, alignItems: 'center' },
   name:     { fontWeight: '900', fontSize: 15, color: C.ink },
-  desc:     { fontWeight: '600', fontSize: 11, color: C.inkSoft, marginTop: 2 },
 });

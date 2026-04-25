@@ -16,7 +16,7 @@ export default function ShapeQuizCard({ onPress }: { onPress: () => void }) {
       </View>
       <View style={[s.footer, { backgroundColor: '#FFF0F8' }]}>
         <Text style={s.name}>Shape Quiz</Text>
-        <Text style={s.desc}>Name the shape!</Text>
+
       </View>
     </Pressable>
   );
@@ -28,5 +28,4 @@ const s = StyleSheet.create({
   shapeRow:  { flexDirection: 'row', gap: 10, alignItems: 'center' },
   footer:    { paddingHorizontal: 10, paddingVertical: 10, alignItems: 'center' },
   name:      { fontWeight: '900', fontSize: 15, color: C.ink },
-  desc:      { fontWeight: '600', fontSize: 11, color: C.inkSoft, marginTop: 2 },
 });

@@ -16,7 +16,7 @@ export default function BalloonPopCard({ onPress }: { onPress: () => void }) {
       </View>
       <View style={[s.footer, { backgroundColor: '#E8F4FF' }]}>
         <Text style={s.name}>Balloon Pop</Text>
-        <Text style={s.desc}>Pop the right one!</Text>
+
       </View>
     </Pressable>
   );
@@ -30,5 +30,4 @@ const s = StyleSheet.create({
   bNum:    { fontSize: 22, fontWeight: '900', color: '#fff' },
   footer:  { paddingHorizontal: 10, paddingVertical: 10, alignItems: 'center' },
   name:    { fontWeight: '900', fontSize: 15, color: C.ink },
-  desc:    { fontWeight: '600', fontSize: 11, color: C.inkSoft, marginTop: 2 },
 });

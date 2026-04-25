@@ -11,7 +11,7 @@ export default function AnimalsCard({ onPress }: { onPress: () => void }) {
       <View style={s.imgBox}><Image source={img} style={s.img}/></View>
       <View style={[s.footer, { backgroundColor: '#E8F5E9' }]}>
         <Text style={s.name}>Animals</Text>
-        <Text style={s.desc}>Sounds & names</Text>
+
       </View>
     </Pressable>
   );
@@ -23,7 +23,6 @@ const s = StyleSheet.create({
   img:      { width: '100%', height: '100%', resizeMode: 'cover' },
   footer:   { paddingHorizontal: 10, paddingVertical: 10, alignItems: 'center' },
   name:     { fontWeight: '900', fontSize: 15, color: C.ink },
-  desc:     { fontWeight: '600', fontSize: 11, color: C.inkSoft, marginTop: 2 },
   newBadge: { position: 'absolute', top: 8, right: 8, zIndex: 10, backgroundColor: C.coral, borderRadius: 999, paddingHorizontal: 8, paddingVertical: 3 },
   newT:     { color: '#fff', fontWeight: '900', fontSize: 10 },
 });

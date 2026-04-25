@@ -10,7 +10,7 @@ export default function ColoringCard({ onPress }: { onPress: () => void }) {
       <View style={s.imgBox}><Image source={img} style={s.img}/></View>
       <View style={[s.footer, { backgroundColor: '#E0F7FA' }]}>
         <Text style={s.name}>Coloring</Text>
-        <Text style={s.desc}>Paint & color art</Text>
+
       </View>
     </Pressable>
   );
@@ -22,5 +22,4 @@ const s = StyleSheet.create({
   img:    { width: '100%', height: '100%', resizeMode: 'cover' },
   footer: { paddingHorizontal: 10, paddingVertical: 10, alignItems: 'center' },
   name:   { fontWeight: '900', fontSize: 15, color: C.ink },
-  desc:   { fontWeight: '600', fontSize: 11, color: C.inkSoft, marginTop: 2 },
 });

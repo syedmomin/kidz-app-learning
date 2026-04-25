@@ -10,7 +10,7 @@ export default function WordMatchCard({ onPress }: { onPress: () => void }) {
       <View style={s.imgBox}><Image source={img} style={s.img}/></View>
       <View style={[s.footer, { backgroundColor: '#E8DCFF' }]}>
         <Text style={s.name}>Word Match</Text>
-        <Text style={s.desc}>Picture to word</Text>
+
       </View>
     </Pressable>
   );
@@ -22,6 +22,5 @@ const s = StyleSheet.create({
   img:      { width: '100%', height: '100%', resizeMode: 'cover' },
   footer:   { paddingHorizontal: 10, paddingVertical: 10, alignItems: 'center' },
   name:     { fontWeight: '900', fontSize: 15, color: C.ink },
-  desc:     { fontWeight: '600', fontSize: 11, color: C.inkSoft, marginTop: 2 },
 });
 

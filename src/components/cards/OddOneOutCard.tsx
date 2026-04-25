@@ -16,7 +16,7 @@ export default function OddOneOutCard({ onPress }: { onPress: () => void }) {
       </View>
       <View style={[s.footer, { backgroundColor: '#FFFBE6' }]}>
         <Text style={s.name}>Odd One Out</Text>
-        <Text style={s.desc}>Find what's different!</Text>
+
       </View>
     </Pressable>
   );
@@ -30,5 +30,4 @@ const s = StyleSheet.create({
   oddItem: { backgroundColor: '#FFE0E0', borderColor: C.coral },
   footer:  { paddingHorizontal: 10, paddingVertical: 10, alignItems: 'center' },
   name:    { fontWeight: '900', fontSize: 15, color: C.ink },
-  desc:    { fontWeight: '600', fontSize: 11, color: C.inkSoft, marginTop: 2 },
 });

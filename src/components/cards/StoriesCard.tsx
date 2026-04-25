@@ -10,7 +10,7 @@ export default function StoriesCard({ onPress }: { onPress: () => void }) {
       <View style={s.imgBox}><Image source={img} style={s.img}/></View>
       <View style={[s.footer, { backgroundColor: '#DDEEFF' }]}>
         <Text style={s.name}>Stories</Text>
-        <Text style={s.desc}>Fun bedtime tales</Text>
+
       </View>
     </Pressable>
   );
@@ -22,5 +22,4 @@ const s = StyleSheet.create({
   img:    { width: '100%', height: '100%', resizeMode: 'cover' },
   footer: { paddingHorizontal: 10, paddingVertical: 10, alignItems: 'center' },
   name:   { fontWeight: '900', fontSize: 15, color: C.ink },
-  desc:   { fontWeight: '600', fontSize: 11, color: C.inkSoft, marginTop: 2 },
 });
