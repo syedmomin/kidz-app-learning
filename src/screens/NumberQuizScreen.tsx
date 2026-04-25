@@ -1,16 +1,19 @@
 // src/screens/NumberQuizScreen.tsx
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { View, Text, StyleSheet, Pressable, Animated, Dimensions } from 'react-native';
-import { Audio } from 'expo-av';
+import { View, Text, StyleSheet, Pressable, Animated, Dimensions, Easing } from 'react-native';
+import * as Speech from 'expo-speech';
 import PhoneSafe from '../components/PhoneSafe';
 import { C } from '../theme';
+import { useAudio } from '../hooks/useAudio';
 import type { ScreenProps } from '../navigation/types';
 
 const { width: SW } = Dimensions.get('window');
-const TOTAL = 30;
+const TOTAL = 15;
 
 type Op = '+' | '−' | '×';
 interface Question { a: number; b: number; op: Op; answer: number; options: number[] }
+
+const MATH_ICONS = ['🍎', '⭐', '🎈', '🍪', '🦁', '🍦'];
 
 function shuffle<T>(arr: T[]): T[] { return [...arr].sort(() => Math.random() - 0.5); }
 
@@ -33,12 +36,9 @@ function makeQ(a: number, b: number, op: Op): Question {
 }
 
 const BASE_POOL: Question[] = [
-  makeQ(3,4,'+'), makeQ(5,6,'+'), makeQ(7,3,'+'), makeQ(8,4,'+'), makeQ(6,5,'+'),
-  makeQ(9,2,'+'), makeQ(4,4,'+'), makeQ(7,5,'+'), makeQ(8,6,'+'), makeQ(9,5,'+'),
-  makeQ(9,4,'−'), makeQ(8,3,'−'), makeQ(7,2,'−'), makeQ(10,6,'−'), makeQ(12,5,'−'),
-  makeQ(11,4,'−'), makeQ(9,3,'−'), makeQ(15,7,'−'), makeQ(14,6,'−'), makeQ(13,5,'−'),
-  makeQ(2,3,'×'), makeQ(3,4,'×'), makeQ(2,5,'×'), makeQ(4,3,'×'), makeQ(2,6,'×'),
-  makeQ(5,3,'×'), makeQ(4,4,'×'), makeQ(2,8,'×'), makeQ(3,6,'×'), makeQ(5,4,'×'),
+  makeQ(3,2,'+'), makeQ(5,1,'+'), makeQ(4,3,'+'), makeQ(2,2,'+'), makeQ(6,2,'+'),
+  makeQ(5,2,'−'), makeQ(6,3,'−'), makeQ(4,1,'−'), makeQ(7,2,'−'), makeQ(3,3,'−'),
+  makeQ(2,2,'×'), makeQ(3,1,'×'), makeQ(2,3,'×'), makeQ(4,2,'×'), makeQ(5,2,'×'),
 ];
 
 function buildPool(): Question[] {
@@ -49,42 +49,39 @@ function buildPool(): Question[] {
 
 const POOL = buildPool();
 
-const OP_BG:   Record<Op,string> = { '+': '#D9FFE8', '−': '#FFE0E0', '×': '#EBD9FF' };
-const OP_DARK: Record<Op,string> = { '+': C.mintDeep, '−': C.coralDeep, '×': C.purpleDeep };
-const OP_NAME: Record<Op,string> = { '+': 'Addition', '−': 'Subtraction', '×': 'Multiply' };
-const OP_EMOJI:Record<Op,string> = { '+': '➕', '−': '➖', '×': '✖️' };
+const OP_BG:   Record<Op,string> = { '+': '#E8F5E9', '−': '#FFEBEE', '×': '#F3E5F5' };
+const OP_DARK: Record<Op,string> = { '+': '#4CAF50', '−': '#FF5252', '×': '#9C27B0' };
+const OP_WORD: Record<Op,string> = { '+': 'plus', '−': 'minus', '×': 'times' };
 
 export default function NumberQuizScreen({ navigation }: ScreenProps<'NumberQuiz'>) {
+  const { playSound } = useAudio();
   const [idx,    setIdx]    = useState(0);
   const [picked, setPicked] = useState<number | null>(null);
   const [score,  setScore]  = useState(0);
   const [streak, setStreak] = useState(0);
+  const [icon]   = useState(() => MATH_ICONS[Math.floor(Math.random() * MATH_ICONS.length)]);
 
   const q           = POOL[idx];
   const shake       = useRef(new Animated.Value(0)).current;
   const slideIn     = useRef(new Animated.Value(SW)).current;
   const cardBounce  = useRef(new Animated.Value(1)).current;
+  const mascotAnim  = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     slideIn.setValue(SW);
-    Animated.spring(slideIn, { toValue: 0, tension: 60, friction: 11, useNativeDriver: true }).start();
+    Animated.spring(slideIn, { toValue: 0, damping: 12, stiffness: 90, useNativeDriver: true }).start();
+    
+    Speech.stop();
+    Speech.speak(`${q.a} ${OP_WORD[q.op]} ${q.b} equals?`, { rate: 0.9, pitch: 1.1 });
   }, [idx]);
-
-  const playCorrect = useCallback(async () => {
-    try {
-      const { sound } = await Audio.Sound.createAsync(require('../../assets/music/happy.mp3'), { shouldPlay: true, volume: 0.55 });
-      setTimeout(() => sound.unloadAsync(), 900);
-    } catch (_) {}
-  }, []);
 
   const advance = (sc: number) => {
     if (idx + 1 >= TOTAL) {
-      navigation.navigate('Reward', { from: 'NumberQuiz', stars: sc >= 25 ? 3 : sc >= 18 ? 2 : 1 });
+      navigation.navigate('Reward', { from: 'NumberQuiz', stars: 3 });
       return;
     }
     setIdx(i => i + 1);
     setPicked(null);
-    cardBounce.setValue(1);
   };
 
   const pick = (n: number) => {
@@ -94,36 +91,51 @@ export default function NumberQuizScreen({ navigation }: ScreenProps<'NumberQuiz
       const ns = score + 1;
       setScore(ns);
       setStreak(s => s + 1);
-      playCorrect();
+      playSound(require('../../assets/sounds/lion.mp3'));
+      Speech.speak(`Correct! ${q.answer}`, { rate: 1.1 });
+      
       Animated.sequence([
-        Animated.spring(cardBounce, { toValue: 1.06, tension: 200, friction: 5, useNativeDriver: true }),
+        Animated.spring(cardBounce, { toValue: 1.1, tension: 200, friction: 5, useNativeDriver: true }),
         Animated.spring(cardBounce, { toValue: 1,    tension: 200, friction: 8, useNativeDriver: true }),
       ]).start();
-      setTimeout(() => advance(ns), 1300);
+      
+      Animated.sequence([
+        Animated.timing(mascotAnim, { toValue: -20, duration: 150, useNativeDriver: true }),
+        Animated.timing(mascotAnim, { toValue: 0,   duration: 150, useNativeDriver: true }),
+      ]).start();
+
+      setTimeout(() => advance(ns), 1500);
     } else {
       setStreak(0);
+      playSound(require('../../assets/sounds/dog.mp3')); // Using dog for wrong sound placeholder
+      Speech.speak(`Oops! It was ${q.answer}`, { rate: 1.0 });
       Animated.sequence([
-        Animated.timing(shake, { toValue: 14,  duration: 55, useNativeDriver: true }),
-        Animated.timing(shake, { toValue: -14, duration: 55, useNativeDriver: true }),
-        Animated.timing(shake, { toValue: 8,   duration: 55, useNativeDriver: true }),
-        Animated.timing(shake, { toValue: 0,   duration: 55, useNativeDriver: true }),
+        Animated.timing(shake, { toValue: 15,  duration: 60, useNativeDriver: true }),
+        Animated.timing(shake, { toValue: -15, duration: 60, useNativeDriver: true }),
+        Animated.timing(shake, { toValue: 10,   duration: 60, useNativeDriver: true }),
+        Animated.timing(shake, { toValue: 0,   duration: 60, useNativeDriver: true }),
       ]).start();
-      setTimeout(() => advance(score), 1600);
+      setTimeout(() => advance(score), 2000);
     }
   };
 
   const isCorrect = picked === q.answer;
-  const opBg   = OP_BG[q.op];
   const opDark = OP_DARK[q.op];
 
-  const optBg  = (n: number) => { if (!picked) return '#fff'; if (n === q.answer) return C.mint; if (n === picked) return C.coral; return '#fff'; };
-  const optClr = (n: number) => (!picked || (n !== q.answer && n !== picked)) ? C.ink : '#fff';
+  const renderVisual = (count: number) => (
+    <View style={s.visualRow}>
+      {Array.from({ length: Math.min(count, 10) }).map((_, i) => (
+        <Text key={i} style={s.visualIcon}>{icon}</Text>
+      ))}
+      {count > 10 && <Text style={s.visualIcon}>...</Text>}
+    </View>
+  );
 
   return (
-    <PhoneSafe bg="#F5F0FF">
+    <PhoneSafe bg="#EEF2FF">
       <View style={s.header}>
         <Pressable onPress={() => navigation.goBack()} style={s.back}><Text style={s.backT}>←</Text></Pressable>
-        <Text style={s.title}>Math Quiz</Text>
+        <Text style={s.title}>Math Challenge! 🧮</Text>
         <View style={[s.scorePill, { backgroundColor: opDark }]}><Text style={s.scoreT}>⭐ {score}</Text></View>
       </View>
 
@@ -131,64 +143,77 @@ export default function NumberQuizScreen({ navigation }: ScreenProps<'NumberQuiz
         <View style={[s.progressFill, { width: `${(idx / TOTAL) * 100}%`, backgroundColor: opDark }]}/>
       </View>
 
-      <View style={[s.opBadge, { backgroundColor: opBg, borderColor: opDark }]}>
-        <Text style={s.opBadgeT}>{OP_EMOJI[q.op]}  {OP_NAME[q.op]}</Text>
+      <View style={s.mascotArea}>
+        <Animated.Text style={[s.mascot, { transform: [{ translateY: mascotAnim }] }]}>
+          {picked === null ? '🤔' : isCorrect ? '🎉' : '😢'}
+        </Animated.Text>
+        <Text style={s.streakText}>{streak > 1 ? `Streak: ${streak} 🔥` : ''}</Text>
       </View>
 
-      {streak >= 2 && <Text style={s.streak}>🔥 {streak} correct in a row!</Text>}
-
-      <Animated.View style={[s.card, { backgroundColor: opBg, borderColor: opDark, transform: [{ translateX: slideIn }, { translateX: shake }, { scale: cardBounce }] }]}>
-        <Text style={s.cardNum}>{q.a}</Text>
-        <View style={[s.opCircle, { backgroundColor: opDark }]}><Text style={s.opCircleT}>{q.op}</Text></View>
-        <Text style={s.cardNum}>{q.b}</Text>
-        <Text style={[s.cardEq, { color: opDark }]}>=</Text>
-        <View style={s.answerBox}>
-          <Text style={s.answerT}>{picked === null ? '?' : isCorrect ? q.answer : '✗'}</Text>
+      <Animated.View style={[s.card, { transform: [{ translateX: slideIn }, { translateX: shake }, { scale: cardBounce }] }]}>
+        <View style={s.mathRow}>
+          <View style={s.numBox}>
+            <Text style={s.cardNum}>{q.a}</Text>
+            {renderVisual(q.a)}
+          </View>
+          <Text style={[s.opChar, { color: opDark }]}>{q.op === '−' ? '−' : q.op === '×' ? '×' : '+'}</Text>
+          <View style={s.numBox}>
+            <Text style={s.cardNum}>{q.b}</Text>
+            {renderVisual(q.b)}
+          </View>
+        </View>
+        
+        <View style={s.eqLine} />
+        
+        <View style={s.answerCircle}>
+          <Text style={[s.answerT, { color: picked === null ? '#ccc' : opDark }]}>
+            {picked === null ? '?' : isCorrect ? q.answer : '✗'}
+          </Text>
         </View>
       </Animated.View>
 
       <View style={s.grid}>
-        {q.options.map(n => (
-          <Pressable key={n} onPress={() => pick(n)} disabled={picked !== null}
-            style={({ pressed }) => [s.opt, { backgroundColor: optBg(n), borderColor: picked && n === q.answer ? C.mintDeep : picked === n ? C.coralDeep : C.ink, transform: [{ scale: pressed && !picked ? 0.92 : 1 }] }]}>
-            <Text style={[s.optT, { color: optClr(n) }]}>{n}</Text>
-            {picked !== null && n === q.answer && <Text style={s.mark}>✓</Text>}
-            {picked === n && n !== q.answer    && <Text style={s.mark}>✗</Text>}
-          </Pressable>
-        ))}
+        {q.options.map(n => {
+          const isSelected = picked === n;
+          const isCorrectChoice = n === q.answer;
+          const bg = !picked ? '#fff' : (isCorrectChoice ? '#5EE39F' : (isSelected ? '#FF5E5E' : '#fff'));
+          
+          return (
+            <Pressable key={n} onPress={() => pick(n)} disabled={picked !== null}
+              style={[s.opt, { backgroundColor: bg, elevation: isSelected ? 0 : 5 }]}>
+              <Text style={[s.optT, { color: picked && (isSelected || isCorrectChoice) ? '#fff' : C.ink }]}>{n}</Text>
+            </Pressable>
+          );
+        })}
       </View>
-
-      {picked && (
-        <Text style={[s.feedback, { color: isCorrect ? opDark : C.coralDeep }]}>
-          {isCorrect ? '🎉 Correct!' : `❌ Answer was ${q.answer}`}
-        </Text>
-      )}
     </PhoneSafe>
   );
 }
 
 const s = StyleSheet.create({
   header:       { flexDirection: 'row', alignItems: 'center', padding: 14, gap: 8 },
-  back:         { width: 44, height: 44, borderRadius: 22, backgroundColor: '#fff', borderWidth: 3, borderColor: C.ink, alignItems: 'center', justifyContent: 'center' },
-  backT:        { fontSize: 20, fontWeight: '900', color: C.ink },
+  back:         { width: 44, height: 44, borderRadius: 22, backgroundColor: '#fff', elevation: 4, alignItems: 'center', justifyContent: 'center' },
+  backT:        { fontSize: 22, fontWeight: '900', color: C.ink },
   title:        { flex: 1, textAlign: 'center', fontWeight: '900', fontSize: 22, color: C.ink },
-  scorePill:    { borderRadius: 14, paddingHorizontal: 12, paddingVertical: 5, borderWidth: 3, borderColor: C.ink },
-  scoreT:       { fontWeight: '900', fontSize: 15, color: '#fff' },
-  progressBar:  { height: 14, marginHorizontal: 20, backgroundColor: '#E0DCF0', borderRadius: 8, borderWidth: 3, borderColor: C.ink, overflow: 'hidden', marginBottom: 4 },
-  progressFill: { height: '100%', borderRadius: 6 },
-  opBadge:      { alignSelf: 'center', marginTop: 8, borderWidth: 3, borderRadius: 20, paddingHorizontal: 18, paddingVertical: 7 },
-  opBadgeT:     { fontWeight: '800', fontSize: 15, color: C.ink },
-  streak:       { textAlign: 'center', fontWeight: '900', fontSize: 15, color: C.coral, marginTop: 4 },
-  card:         { marginHorizontal: 20, marginTop: 10, borderRadius: 30, borderWidth: 4, paddingVertical: 24, paddingHorizontal: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.12, shadowRadius: 8, elevation: 6 },
-  cardNum:      { fontSize: 62, fontWeight: '900', color: C.ink },
-  opCircle:     { width: 46, height: 46, borderRadius: 23, alignItems: 'center', justifyContent: 'center', borderWidth: 3, borderColor: C.ink },
-  opCircleT:    { fontSize: 24, fontWeight: '900', color: '#fff' },
-  cardEq:       { fontSize: 50, fontWeight: '900' },
-  answerBox:    { width: 70, height: 70, borderRadius: 16, backgroundColor: '#fff', borderWidth: 4, borderColor: C.ink, alignItems: 'center', justifyContent: 'center' },
-  answerT:      { fontSize: 32, fontWeight: '900', color: C.ink },
-  grid:         { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: 12, marginTop: 18, paddingHorizontal: 20 },
-  opt:          { width: (SW - 40 - 12) / 2, height: 70, borderRadius: 20, borderWidth: 4, alignItems: 'center', justifyContent: 'center', flexDirection: 'row', gap: 8 },
-  optT:         { fontSize: 34, fontWeight: '900' },
-  mark:         { fontSize: 20, fontWeight: '900' },
-  feedback:     { textAlign: 'center', fontWeight: '900', fontSize: 16, marginTop: 14 },
+  scorePill:    { borderRadius: 20, paddingHorizontal: 15, paddingVertical: 6, elevation: 4 },
+  scoreT:       { fontWeight: '900', fontSize: 16, color: '#fff' },
+  progressBar:  { height: 14, marginHorizontal: 30, backgroundColor: 'rgba(255,255,255,0.4)', borderRadius: 10, overflow: 'hidden', marginBottom: 10 },
+  progressFill: { height: '100%', borderRadius: 10 },
+  mascotArea:   { alignItems: 'center', height: 80, justifyContent: 'center' },
+  mascot:       { fontSize: 50 },
+  streakText:   { fontSize: 14, fontWeight: '900', color: '#FF5722', marginTop: 4 },
+  card:         { marginHorizontal: 20, backgroundColor: '#fff', borderRadius: 40, padding: 25, elevation: 12, alignItems: 'center', shadowColor: '#000', shadowOffset: { width: 0, height: 10 }, shadowOpacity: 0.1, shadowRadius: 15 },
+  mathRow:      { flexDirection: 'row', alignItems: 'center', gap: 15 },
+  numBox:       { alignItems: 'center' },
+  cardNum:      { fontSize: 60, fontWeight: '900', color: C.ink },
+  opChar:       { fontSize: 40, fontWeight: '900' },
+  visualRow:    { flexDirection: 'row', flexWrap: 'wrap', width: 60, justifyContent: 'center' },
+  visualIcon:   { fontSize: 14 },
+  eqLine:       { width: '80%', height: 4, backgroundColor: '#eee', marginVertical: 20, borderRadius: 2 },
+  answerCircle: { width: 90, height: 90, borderRadius: 45, backgroundColor: '#F8F9FA', alignItems: 'center', justifyContent: 'center', borderWidth: 4, borderColor: '#eee' },
+  answerT:      { fontSize: 44, fontWeight: '900' },
+  grid:         { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: 15, marginTop: 30, paddingHorizontal: 20 },
+  opt:          { width: '45%', height: 80, borderRadius: 25, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center', shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.1, shadowRadius: 6 },
+  optT:         { fontSize: 36, fontWeight: '900' },
 });
+
