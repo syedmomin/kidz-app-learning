@@ -25,7 +25,7 @@ type CardSpec = {
 const CARDS: CardSpec[] = [
   { label: 'Alphabets', route: 'Category',   accent: '#E3F2FD', image: imgAlphabets },
   { label: 'Animals',   route: 'Animals',    accent: '#E8F5E9', image: imgAnimals, badge: 'NEW' },
-  { label: 'Music',     route: 'ColorMatch', accent: '#FFF9C4', image: imgMusic    },
+  { label: 'Music',     route: 'Music',      accent: '#FFF9C4', image: imgMusic    },
   { label: 'Stories',   route: 'Story',      accent: '#DDEEFF', image: imgStories  },
   { label: 'Coloring',  route: 'Games',      accent: '#E0F7FA', image: imgColoring },
   { label: 'Numbers',   route: 'Numbers',    accent: '#FFFDE7', image: imgNumbers  },

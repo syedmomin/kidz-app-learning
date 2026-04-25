@@ -39,7 +39,15 @@
       "Bash(curl -sI \"https://www.soundgator.com/audios/395/cat-sound-effect.mp3\" -H \"User-Agent: Mozilla/5.0\")",
       "Bash(curl -sL --max-time 20 \"https://picsum.photos/seed/wolf/600/400\" -o wolf.jpg)",
       "Bash(curl -sL --max-time 20 \"https://picsum.photos/seed/turtle/600/400\" -o turtle.jpg)",
-      "Bash(awk '{print $5, $9}')"
+      "Bash(awk '{print $5, $9}')",
+      "Bash(curl -sIL \"https://archive.org/download/cd_nursery-rhymes_various-artists/disc1/01.%20Various%20Artists%20-%20Twinkle%20Twinkle%20Little%20Star.flac\")",
+      "Bash(curl -sIL \"https://archive.org/download/NurseryRhymesForChildren/NurseryRhymesForChildren_64kb.mp3\")",
+      "Bash(curl -sIL \"https://upload.wikimedia.org/wikipedia/commons/1/12/Twinkle_Twinkle_Little_Star.ogg\")",
+      "Bash(curl -sIL \"https://upload.wikimedia.org/wikipedia/commons/6/6e/Row%2C_Row%2C_Row_Your_Boat.ogg\")",
+      "Bash(curl -sIL \"https://www.bensound.com/bensound-music/bensound-cute.mp3\")",
+      "Bash(curl -sIL \"https://www.bensound.com/bensound-music/bensound-ukulele.mp3\")",
+      "Bash(curl -sIL \"https://cdn.pixabay.com/audio/2022/01/18/audio_d0c6ff1bab.mp3\")",
+      "Bash(curl -sIL \"https://incompetech.com/music/royalty-free/mp3-royaltyfree/Quirky%20Dog.mp3\")"
     ]
   }
 }

@@ -1,11 +1,12 @@
 // App.tsx — Bumbloo root
 import 'react-native-gesture-handler';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { Audio } from 'expo-av';
 
 import { ProgressProvider } from './src/store/ProgressStore';
 import type { RootStackParamList } from './src/navigation/types';
@@ -24,10 +25,20 @@ import ProfileScreen from './src/screens/ProfileScreen';
 import SettingsScreen from './src/screens/SettingsScreen';
 import StreakScreen from './src/screens/StreakScreen';
 import AnimalScreen from './src/screens/AnimalScreen';
+import MusicScreen from './src/screens/MusicScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function App() {
+  useEffect(() => {
+    Audio.setAudioModeAsync({
+      allowsRecordingIOS: false,
+      playsInSilentModeIOS: true,
+      shouldDuckAndroid: true,
+      playThroughEarpieceAndroid: false,
+    });
+  }, []);
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
@@ -49,6 +60,7 @@ export default function App() {
               <Stack.Screen name="Settings" component={SettingsScreen}/>
               <Stack.Screen name="Streak" component={StreakScreen}/>
               <Stack.Screen name="Animals" component={AnimalScreen}/>
+              <Stack.Screen name="Music" component={MusicScreen}/>
             </Stack.Navigator>
           </NavigationContainer>
         </ProgressProvider>
