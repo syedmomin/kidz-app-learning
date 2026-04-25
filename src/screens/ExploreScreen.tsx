@@ -1,9 +1,11 @@
-import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
+import React, { useEffect, useRef } from 'react';
+import { View, Text, StyleSheet, Pressable, ScrollView, Animated } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import * as Speech from 'expo-speech';
 import { Star } from '../components/Icons';
 import { C } from '../theme';
 import { useProgress } from '../store/ProgressStore';
+import { useAudio } from '../hooks/useAudio';
 import type { ScreenProps } from '../navigation/types';
 
 import AlphabetsCard  from '../components/cards/AlphabetsCard';
@@ -19,9 +21,50 @@ import ShapeQuizCard  from '../components/cards/ShapeQuizCard';
 import BalloonPopCard from '../components/cards/BalloonPopCard';
 import OddOneOutCard  from '../components/cards/OddOneOutCard';
 
+const SOUNDS = {
+  abc: require('../../assets/music/abc_tts.mp3'),
+  lion: require('../../assets/sounds/lion.mp3'),
+  happy: require('../../assets/music/happy.mp3'),
+  twinkle: require('../../assets/music/twinkle_tts.mp3'),
+};
+
 export default function ExploreScreen({ navigation }: ScreenProps<'Explore'>) {
   const { p, touchStreak } = useProgress();
-  useEffect(() => { touchStreak(); }, []);
+  const { playSound } = useAudio();
+  
+  const fadeAnims = useRef([...Array(12)].map(() => new Animated.Value(0))).current;
+  const slideAnims = useRef([...Array(12)].map(() => new Animated.Value(30))).current;
+
+  useEffect(() => { 
+    touchStreak(); 
+    // Staggered entrance animation
+    Animated.stagger(100, fadeAnims.map((anim, i) => 
+      Animated.parallel([
+        Animated.timing(anim, { toValue: 1, duration: 500, useNativeDriver: true }),
+        Animated.timing(slideAnims[i], { toValue: 0, duration: 500, useNativeDriver: true })
+      ])
+    )).start();
+  }, []);
+
+  const handlePress = (target: keyof any, soundKey?: keyof typeof SOUNDS, speechText?: string) => {
+    if (soundKey) {
+      playSound(SOUNDS[soundKey]);
+    } else if (speechText) {
+      Speech.stop();
+      Speech.speak(speechText, { rate: 0.9, pitch: 1.1 });
+    }
+    
+    // Navigate after a small delay to let the sound start
+    setTimeout(() => {
+      navigation.navigate(target as any);
+    }, 150);
+  };
+
+  const renderCard = (index: number, Component: React.ElementType, target: string, soundKey?: keyof typeof SOUNDS, speechText?: string) => (
+    <Animated.View style={[s.col, { opacity: fadeAnims[index], transform: [{ translateY: slideAnims[index] }] }]}>
+      <Component onPress={() => handlePress(target, soundKey, speechText)} />
+    </Animated.View>
+  );
 
   return (
     <SafeAreaView style={s.root} edges={['top']}>
@@ -43,18 +86,18 @@ export default function ExploreScreen({ navigation }: ScreenProps<'Explore'>) {
 
       <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
         <View style={s.grid}>
-          <View style={s.col}><AlphabetsCard  onPress={() => navigation.navigate('Category')}/></View>
-          <View style={s.col}><AnimalsCard    onPress={() => navigation.navigate('Animals')}/></View>
-          <View style={s.col}><MusicCard      onPress={() => navigation.navigate('Music')}/></View>
-          <View style={s.col}><StoriesCard    onPress={() => navigation.navigate('Story')}/></View>
-          <View style={s.col}><MathQuizCard   onPress={() => navigation.navigate('NumberQuiz')}/></View>
-          <View style={s.col}><WordMatchCard  onPress={() => navigation.navigate('WordMatch')}/></View>
-          <View style={s.col}><ColoringCard   onPress={() => navigation.navigate('ColorMatch')}/></View>
-          <View style={s.col}><NumbersCard    onPress={() => navigation.navigate('Numbers')}/></View>
-          <View style={s.col}><MemoryFlipCard onPress={() => navigation.navigate('MemoryFlip')}/></View>
-          <View style={s.col}><ShapeQuizCard  onPress={() => navigation.navigate('ShapeQuiz')}/></View>
-          <View style={s.col}><BalloonPopCard onPress={() => navigation.navigate('BalloonPop')}/></View>
-          <View style={s.col}><OddOneOutCard  onPress={() => navigation.navigate('OddOneOut')}/></View>
+          {renderCard(0, AlphabetsCard, 'Category', 'abc')}
+          {renderCard(1, AnimalsCard, 'Animals', 'lion')}
+          {renderCard(2, MusicCard, 'Music', 'happy')}
+          {renderCard(3, StoriesCard, 'Story', 'twinkle')}
+          {renderCard(4, MathQuizCard, 'NumberQuiz', undefined, 'Math Quiz')}
+          {renderCard(5, WordMatchCard, 'WordMatch', undefined, 'Word Match')}
+          {renderCard(6, ColoringCard, 'ColorMatch', undefined, 'Coloring')}
+          {renderCard(7, NumbersCard, 'Numbers', undefined, 'Numbers')}
+          {renderCard(8, MemoryFlipCard, 'MemoryFlip', undefined, 'Memory Flip')}
+          {renderCard(9, ShapeQuizCard, 'ShapeQuiz', undefined, 'Shape Quiz')}
+          {renderCard(10, BalloonPopCard, 'BalloonPop', undefined, 'Balloon Pop')}
+          {renderCard(11, OddOneOutCard, 'OddOneOut', undefined, 'Odd One Out')}
         </View>
         <View style={{ height: 24 }}/>
       </ScrollView>
@@ -74,3 +117,4 @@ const s = StyleSheet.create({
   grid:        { flexDirection: 'row', flexWrap: 'wrap', gap: 14 },
   col:         { width: '47.5%' },
 });
+
