@@ -9,23 +9,40 @@ import { useAudio } from '../hooks/useAudio';
 import type { ScreenProps } from '../navigation/types';
 
 const { width: SW } = Dimensions.get('window');
-const TOTAL = 15;
+const TOTAL = 200;
+
+import { 
+  SvgCircleShape, SvgSquareShape, SvgTriangleShape, SvgStarShape, SvgHeartShape,
+  SvgOvalShape, SvgDiamondShape, SvgHexagonShape, SvgPentagonShape, SvgCrossShape,
+  SvgCrescentShape, SvgArrowShape, SvgTrapezoidShape, SvgParallelogramShape, SvgOctagonShape,
+  SvgHeptagonShape, SvgKiteShape, SvgSemiCircleShape, SvgDropShape, SvgPieShape
+} from '../components/Illustrations';
 
 // ─── All shapes ───────────────────────────────────────────────────────────────
 
 interface ShapeDef { name: string; color: string; render: (f: string) => React.ReactNode }
 
 const SHAPES: ShapeDef[] = [
-  { name: 'Circle',    color: '#FF5E5E',
-    render: f => <Svg width="130" height="130"><Circle cx="65" cy="65" r="55" fill={f} stroke="#00000011" strokeWidth="0"/></Svg> },
-  { name: 'Square',    color: '#5E8BFF',
-    render: f => <Svg width="130" height="130"><Rect x="12" y="12" width="106" height="106" fill={f} rx="10"/></Svg> },
-  { name: 'Triangle',  color: '#5EE39F',
-    render: f => <Svg width="130" height="130"><Polygon points="65,8 122,122 8,122" fill={f}/></Svg> },
-  { name: 'Star',      color: '#FFEB3B',
-    render: f => <Svg width="130" height="130"><Polygon points="65,8 78,45 118,48 88,74 98,112 65,90 32,112 42,74 12,48 52,45" fill={f}/></Svg> },
-  { name: 'Heart',     color: '#FF5EC1',
-    render: f => <Svg width="130" height="130"><Path d="M65,108 C65,108 10,70 10,38 C10,20 24,9 42,16 C52,20 65,32 65,32 C65,32 78,20 88,16 C106,9 120,20 120,38 C120,70 65,108 65,108Z" fill={f}/></Svg> },
+  { name: 'Circle',    color: '#FF5E5E', render: f => <SvgCircleShape fill={f} /> },
+  { name: 'Square',    color: '#5E8BFF', render: f => <SvgSquareShape fill={f} /> },
+  { name: 'Triangle',  color: '#5EE39F', render: f => <SvgTriangleShape fill={f} /> },
+  { name: 'Star',      color: '#FFEB3B', render: f => <SvgStarShape fill={f} /> },
+  { name: 'Heart',     color: '#FF5EC1', render: f => <SvgHeartShape fill={f} /> },
+  { name: 'Oval',      color: '#FF9800', render: f => <SvgOvalShape fill={f} /> },
+  { name: 'Diamond',   color: '#9C27B0', render: f => <SvgDiamondShape fill={f} /> },
+  { name: 'Hexagon',   color: '#00BCD4', render: f => <SvgHexagonShape fill={f} /> },
+  { name: 'Pentagon',  color: '#4CAF50', render: f => <SvgPentagonShape fill={f} /> },
+  { name: 'Cross',     color: '#FF5722', render: f => <SvgCrossShape fill={f} /> },
+  { name: 'Crescent',  color: '#FFD54F', render: f => <SvgCrescentShape fill={f} /> },
+  { name: 'Arrow',     color: '#FF5252', render: f => <SvgArrowShape fill={f} /> },
+  { name: 'Trapezoid', color: '#4CAF50', render: f => <SvgTrapezoidShape fill={f} /> },
+  { name: 'Parallelogram', color: '#2196F3', render: f => <SvgParallelogramShape fill={f} /> },
+  { name: 'Octagon',   color: '#9C27B0', render: f => <SvgOctagonShape fill={f} /> },
+  { name: 'Heptagon',  color: '#00BCD4', render: f => <SvgHeptagonShape fill={f} /> },
+  { name: 'Kite',      color: '#E91E63', render: f => <SvgKiteShape fill={f} /> },
+  { name: 'Semi-Circle', color: '#8BC34A', render: f => <SvgSemiCircleShape fill={f} /> },
+  { name: 'Drop',      color: '#03A9F4', render: f => <SvgDropShape fill={f} /> },
+  { name: 'Pie',       color: '#FFC107', render: f => <SvgPieShape fill={f} /> },
 ];
 
 function shuffle<T>(arr: T[]): T[] { return [...arr].sort(() => Math.random() - 0.5); }
@@ -48,27 +65,26 @@ const ROUNDS = buildRounds();
 // ─── Screen ───────────────────────────────────────────────────────────────────
 
 export default function ShapeQuizScreen({ navigation }: ScreenProps<'ShapeQuiz'>) {
-  const { playSound } = useAudio();
   const [idx,    setIdx]    = useState(0);
   const [picked, setPicked] = useState<string | null>(null);
   const [score,  setScore]  = useState(0);
 
   const { shape, options } = ROUNDS[idx];
   const shake      = useRef(new Animated.Value(0)).current;
-  const slideIn    = useRef(new Animated.Value(400)).current;
+  const slideIn    = useRef(new Animated.Value(SW)).current;
   const shapeSc    = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
-    slideIn.setValue(400);
-    Animated.spring(slideIn, { toValue: 0, damping: 15, stiffness: 100, useNativeDriver: true }).start();
+    slideIn.setValue(SW);
+    Animated.spring(slideIn, { toValue: 0, damping: 15, stiffness: 90, useNativeDriver: true }).start();
     Speech.stop();
     Speech.speak(`Can you find the ${shape.name}?`, { rate: 1.0 });
   }, [idx]);
 
   const doShake = () => Animated.sequence([
-    Animated.timing(shake, { toValue: 12,  duration: 60, useNativeDriver: true }),
-    Animated.timing(shake, { toValue: -12, duration: 60, useNativeDriver: true }),
-    Animated.timing(shake, { toValue: 8,   duration: 60, useNativeDriver: true }),
+    Animated.timing(shake, { toValue: 15,  duration: 60, useNativeDriver: true }),
+    Animated.timing(shake, { toValue: -15, duration: 60, useNativeDriver: true }),
+    Animated.timing(shake, { toValue: 10,   duration: 60, useNativeDriver: true }),
     Animated.timing(shake, { toValue: 0,   duration: 60, useNativeDriver: true }),
   ]).start();
 
@@ -77,7 +93,7 @@ export default function ShapeQuizScreen({ navigation }: ScreenProps<'ShapeQuiz'>
     Animated.spring(shapeSc, { toValue: 1,    tension: 200, friction: 8, useNativeDriver: true }),
   ]).start();
 
-  const advance = (sc: number) => {
+  const advance = () => {
     if (idx + 1 >= TOTAL) {
       navigation.navigate('Reward', { from: 'ShapeQuiz', stars: 3 });
       return;
@@ -89,21 +105,21 @@ export default function ShapeQuizScreen({ navigation }: ScreenProps<'ShapeQuiz'>
   const pick = (name: string) => {
     if (picked !== null) return;
     setPicked(name);
+    
     if (name === shape.name) {
-      const ns = score + 1;
-      setScore(ns);
+      setScore(s => s + 1);
       doBounce();
-      playSound(require('../../assets/sounds/lion.mp3'));
-      Speech.speak(`Yes! That is a ${name}`, { rate: 1.0 });
-      setTimeout(() => advance(ns), 1500);
+      Speech.stop();
+      Speech.speak(`Yes! That is a ${name}`, { rate: 1.0, pitch: 1.1 });
+      setTimeout(() => advance(), 1800);
     } else {
       doShake();
-      Speech.speak(`No, this is ${shape.name}`, { rate: 1.1 });
-      setTimeout(() => advance(score), 1800);
+      Speech.stop();
+      Speech.speak(`Oops! Try again!`, { rate: 1.1 });
+      // Reset picked after delay so they can try again
+      setTimeout(() => setPicked(null), 1500);
     }
   };
-
-  const isCorrect = picked === shape.name;
 
   return (
     <PhoneSafe bg="#FFE0F0">
@@ -111,10 +127,6 @@ export default function ShapeQuizScreen({ navigation }: ScreenProps<'ShapeQuiz'>
         <Pressable onPress={() => navigation.goBack()} style={s.back}><Text style={s.backT}>←</Text></Pressable>
         <Text style={s.title}>Shape Quiz! 💎</Text>
         <View style={s.scorePill}><Text style={s.scoreT}>⭐ {score}</Text></View>
-      </View>
-
-      <View style={s.progressBar}>
-        <View style={[s.progressFill, { width: `${(idx / TOTAL) * 100}%` }]}/>
       </View>
 
       <View style={s.content}>
@@ -132,28 +144,20 @@ export default function ShapeQuizScreen({ navigation }: ScreenProps<'ShapeQuiz'>
         <View style={s.optGrid}>
           {options.map(n => {
             const isSelected = picked === n;
-            const isTarget = n === shape.name;
-            const bg = !picked ? '#fff' : (isTarget ? '#5EE39F' : (isSelected ? '#FF5E5E' : '#fff'));
-            const borderColor = !picked ? '#00000011' : (isTarget ? '#00C853' : (isSelected ? '#D32F2F' : '#00000011'));
+            const isCorrectPick = isSelected && n === shape.name;
+            const isWrongPick = isSelected && n !== shape.name;
+            
+            const bg = isCorrectPick ? '#5EE39F' : (isWrongPick ? '#FF5E5E' : '#fff');
 
             return (
               <Pressable key={n} onPress={() => pick(n)} disabled={picked !== null}
-                style={[s.opt, { backgroundColor: bg, borderColor, elevation: isSelected ? 0 : 4 }]}>
-                <Text style={[s.optT, { color: picked && (isSelected || isTarget) ? '#fff' : C.ink }]}>{n}</Text>
-                {picked && isTarget && <Text style={s.mark}>✨</Text>}
+                style={[s.opt, { backgroundColor: bg, elevation: isSelected ? 0 : 4 }]}>
+                <Text style={[s.optT, { color: isSelected ? '#fff' : '#333' }]}>{n}</Text>
               </Pressable>
             );
           })}
         </View>
       </View>
-
-      {picked && (
-        <View style={s.feedbackBox}>
-          <Text style={[s.feedback, { color: isCorrect ? '#00C853' : '#D32F2F' }]}>
-            {isCorrect ? 'WELL DONE!' : 'TRY AGAIN!'}
-          </Text>
-        </View>
-      )}
     </PhoneSafe>
   );
 }

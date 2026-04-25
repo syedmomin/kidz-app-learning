@@ -26,10 +26,10 @@ const PAIRS_DATA = [
   { emoji: '🐵', sound: require('../../assets/sounds/monkey.mp3'), name: 'Monkey' },
   { emoji: '🦓', sound: require('../../assets/sounds/zebra.mp3'), name: 'Zebra' },
   { emoji: '🦒', sound: require('../../assets/sounds/giraffe.mp3'), name: 'Giraffe' },
-  { emoji: '🐨', sound: require('../../assets/sounds/koala.mp3'), name: 'Koala' },
+  { emoji: '🐯', sound: require('../../assets/sounds/tiger.mp3'), name: 'Tiger' },
   { emoji: '🦉', sound: require('../../assets/sounds/owl.mp3'), name: 'Owl' },
-  { emoji: '🐝', sound: require('../../assets/sounds/bee.mp3'), name: 'Bee' },
-  { emoji: '🦋', sound: require('../../assets/sounds/butterfly.mp3'), name: 'Butterfly' },
+  { emoji: '🐻', sound: require('../../assets/sounds/bear.mp3'), name: 'Bear' },
+  { emoji: '🐺', sound: require('../../assets/sounds/wolf.mp3'), name: 'Wolf' },
 ];
 
 interface Card { id: number; pairIdx: number; emoji: string; sound: any; name: string }
@@ -53,13 +53,13 @@ function buildDeck(pairCount: number): Card[] {
 type CardStatus = 'hidden' | 'revealed' | 'matched';
 
 function MemCard({ card, status, onPress, width, height }: {
-  card:    Card;
-  status:  CardStatus;
+  card: Card;
+  status: CardStatus;
   onPress: () => void;
-  width:   number;
-  height:  number;
+  width: number;
+  height: number;
 }) {
-  const rot     = useRef(new Animated.Value(0)).current;
+  const rot = useRef(new Animated.Value(0)).current;
   const matchSc = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
@@ -75,15 +75,15 @@ function MemCard({ card, status, onPress, width, height }: {
     if (status === 'matched') {
       Animated.sequence([
         Animated.spring(matchSc, { toValue: 1.15, tension: 200, friction: 5, useNativeDriver: true }),
-        Animated.spring(matchSc, { toValue: 1,    tension: 200, friction: 8, useNativeDriver: true }),
+        Animated.spring(matchSc, { toValue: 1, tension: 200, friction: 8, useNativeDriver: true }),
       ]).start();
     }
   }, [status]);
 
   const frontRot = rot.interpolate({ inputRange: [0, 1], outputRange: ['180deg', '360deg'] });
-  const backRot  = rot.interpolate({ inputRange: [0, 1], outputRange: ['0deg',   '180deg'] });
-  const frontOp  = rot.interpolate({ inputRange: [0.45, 0.5], outputRange: [0, 1] });
-  const backOp   = rot.interpolate({ inputRange: [0.45, 0.5], outputRange: [1, 0] });
+  const backRot = rot.interpolate({ inputRange: [0, 1], outputRange: ['0deg', '180deg'] });
+  const frontOp = rot.interpolate({ inputRange: [0.45, 0.5], outputRange: [0, 1] });
+  const backOp = rot.interpolate({ inputRange: [0.45, 0.5], outputRange: [1, 0] });
 
   return (
     <Pressable onPress={status === 'hidden' ? onPress : undefined} style={{ width, height, marginBottom: GAP }}>
@@ -104,12 +104,12 @@ function MemCard({ card, status, onPress, width, height }: {
 
 export default function MemoryFlipScreen({ navigation }: ScreenProps<'MemoryFlip'>) {
   const { playSound } = useAudio();
-  const [level,    setLevel]    = useState(1);
-  const [deck,     setDeck]     = useState(() => buildDeck(2));
+  const [level, setLevel] = useState(1);
+  const [deck, setDeck] = useState(() => buildDeck(2));
   const [statuses, setStatuses] = useState<CardStatus[]>(() => new Array(4).fill('hidden'));
-  const [matched,  setMatched]  = useState(0);
-  const busy    = useRef(false);
-  const first   = useRef<number | null>(null);
+  const [matched, setMatched] = useState(0);
+  const busy = useRef(false);
+  const first = useRef<number | null>(null);
 
   // Harder Difficulty Scaling Logic
   const getPairCount = (lv: number) => {
@@ -127,12 +127,12 @@ export default function MemoryFlipScreen({ navigation }: ScreenProps<'MemoryFlip
     if (lv >= 7) return 5;
     return 4;
   };
-  
+
   const pairCount = getPairCount(level);
-  const cols      = getCols(level);
-  const cardW     = (SW - PAD * 2 - GAP * (cols - 1)) / cols;
-  const cardH     = cardW * 1.25;
-  const isDone    = matched === pairCount;
+  const cols = getCols(level);
+  const cardW = (SW - PAD * 2 - GAP * (cols - 1)) / cols;
+  const cardH = cardW * 1.25;
+  const isDone = matched === pairCount;
 
   const nextLevel = () => {
     const nextLv = level + 1;
@@ -153,8 +153,8 @@ export default function MemoryFlipScreen({ navigation }: ScreenProps<'MemoryFlip
       setStatuses(prev => prev.map((s, i) => i === idx ? 'revealed' : s) as CardStatus[]);
     } else {
       const firstIdx = first.current;
-      first.current  = null;
-      busy.current   = true;
+      first.current = null;
+      busy.current = true;
 
       setStatuses(prev => prev.map((s, i) => i === idx ? 'revealed' : s) as CardStatus[]);
 
@@ -165,7 +165,7 @@ export default function MemoryFlipScreen({ navigation }: ScreenProps<'MemoryFlip
           playSound(deck[idx].sound);
           Speech.stop();
           Speech.speak(`Awesome! You found the ${deck[idx].name}!`, { rate: 1.0, pitch: 1.1 });
-          
+
           setStatuses(prev => prev.map((s, i) =>
             i === firstIdx || i === idx ? 'matched' : s
           ) as CardStatus[]);
@@ -220,24 +220,25 @@ export default function MemoryFlipScreen({ navigation }: ScreenProps<'MemoryFlip
 }
 
 const mc = StyleSheet.create({
-  side:   { position: 'absolute', width: '100%', height: '100%', borderRadius: 12, alignItems: 'center', justifyContent: 'center', backfaceVisibility: 'hidden', elevation: 4, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 3 },
-  backQ:  { },
-  emoji:  { },
-  tick:   { position: 'absolute', top: 2, right: 4 },
+  side: { position: 'absolute', width: '100%', height: '100%', borderRadius: 12, alignItems: 'center', justifyContent: 'center', backfaceVisibility: 'hidden', elevation: 4, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 3 },
+  backQ: {},
+  emoji: {},
+  tick: { position: 'absolute', top: 2, right: 4 },
 });
 
 const s = StyleSheet.create({
-  header:      { flexDirection: 'row', alignItems: 'center', padding: 16, gap: 10 },
-  back:        { width: 44, height: 44, borderRadius: 22, backgroundColor: '#fff', elevation: 4, alignItems: 'center', justifyContent: 'center' },
-  backT:       { fontSize: 22, fontWeight: '900', color: C.ink },
-  title:       { flex: 1, textAlign: 'center', fontWeight: '900', fontSize: 22, color: C.ink },
-  lvPill:      { backgroundColor: '#FF8A65', borderRadius: 20, paddingHorizontal: 15, paddingVertical: 6, elevation: 4 },
-  lvT:         { fontWeight: '900', fontSize: 14, color: '#fff' },
+  header: { flexDirection: 'row', alignItems: 'center', padding: 16, gap: 10 },
+  back: { width: 44, height: 44, borderRadius: 22, backgroundColor: '#fff', elevation: 4, alignItems: 'center', justifyContent: 'center' },
+  backT: { fontSize: 22, fontWeight: '900', color: C.ink },
+  title: { flex: 1, textAlign: 'center', fontWeight: '900', fontSize: 22, color: C.ink },
+  lvPill: { backgroundColor: '#FF8A65', borderRadius: 20, paddingHorizontal: 15, paddingVertical: 6, elevation: 4 },
+  lvT: { fontWeight: '900', fontSize: 14, color: '#fff' },
   gridContainer: { flex: 1 },
-  grid:        { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: GAP, paddingVertical: 10 },
-  winBox:      { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 20 },
-  winEmoji:    { fontSize: 80, marginBottom: 10 },
-  winTitle:    { fontSize: 32, fontWeight: '900', color: C.ink, marginBottom: 20 },
-  nextBtn:     { backgroundColor: '#5EE39F', paddingHorizontal: 35, paddingVertical: 18, borderRadius: 25, elevation: 6 },
-  nextBtnT:    { fontSize: 20, fontWeight: '900', color: '#fff' },
+  grid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: GAP, paddingVertical: 10 },
+  winBox: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 20 },
+  winEmoji: { fontSize: 80, marginBottom: 10 },
+  winTitle: { fontSize: 32, fontWeight: '900', color: C.ink, marginBottom: 20 },
+  nextBtn: { backgroundColor: '#5EE39F', paddingHorizontal: 35, paddingVertical: 18, borderRadius: 25, elevation: 6 },
+  nextBtnT: { fontSize: 20, fontWeight: '900', color: '#fff' },
+});
 
