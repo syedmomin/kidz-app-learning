@@ -292,14 +292,6 @@ export default function LetterTraceScreen({ navigation }: ScreenProps<'LetterTra
         </Pressable>
       </View>
 
-      {/* Progress bar */}
-      <View style={s.progressRow}>
-        <View style={s.progressBar}>
-          <View style={[s.progressFill, { backgroundColor: lesson.ink, width: `${Math.min(100, coverage * 100)}%` }]} />
-        </View>
-        <Text style={s.progressT}>{Math.min(100, Math.round(coverage * 100))}%</Text>
-      </View>
-
       {/* Tracing canvas */}
       <View style={s.canvasRow}>
         <View style={[s.canvas, { width: CANVAS, height: CANVAS }]} {...panResponder.panHandlers}>
@@ -372,10 +364,6 @@ const s = StyleSheet.create({
   promptWord:   { fontSize: 16, fontWeight: '800', color: C.ink },
   replay:       { fontSize: 18, marginLeft: 4, opacity: 0.6 },
 
-  progressRow:  { flexDirection: 'row', alignItems: 'center', gap: 8, paddingHorizontal: 24, marginTop: 8 },
-  progressBar:  { flex: 1, height: 12, borderRadius: 6, backgroundColor: '#fff', overflow: 'hidden', borderWidth: 2, borderColor: 'rgba(0,0,0,0.1)' },
-  progressFill: { height: '100%' },
-  progressT:    { fontSize: 13, fontWeight: '900', color: C.ink, width: 40, textAlign: 'right' },
 
   canvasRow:    { alignItems: 'center', marginTop: 12 },
   canvas:       { backgroundColor: '#fff', borderRadius: 26, overflow: 'hidden', elevation: 8, shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.12, shadowRadius: 8, borderWidth: 4, borderColor: '#fff' },

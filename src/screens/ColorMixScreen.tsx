@@ -254,9 +254,9 @@ function buildRounds(): string[] {
   list.push(...shuffle(TIER_2), ...shuffle(TIER_2));
   // Tier 3 once (~9) → total 47
   list.push(...shuffle(TIER_3));
-  // Top up with random picks from tier 2/3 to reach 50
-  const fill = shuffle([...TIER_2, ...TIER_3]);
-  while (list.length < 50) list.push(fill[list.length % fill.length]);
+  // Top up with random picks from all tiers to reach 200
+  const fill = shuffle([...TIER_1, ...TIER_2, ...TIER_3]);
+  while (list.length < 200) list.push(fill[list.length % fill.length]);
   // De-duplicate consecutive entries by swapping with a later one
   for (let i = 1; i < list.length; i++) {
     if (list[i] === list[i - 1]) {
@@ -268,7 +268,7 @@ function buildRounds(): string[] {
       }
     }
   }
-  return list.slice(0, 50);
+  return list.slice(0, 200);
 }
 
 const ROUNDS = buildRounds();
@@ -438,7 +438,6 @@ export default function ColorMixScreen({ navigation }: ScreenProps<'ColorMix'>) 
             <Text style={s.replay}>🔊</Text>
           </View>
         </Pressable>
-        <Text style={s.roundT}>Round {round + 1} / {TOTAL}</Text>
       </Animated.View>
 
       {/* Beaker stage */}

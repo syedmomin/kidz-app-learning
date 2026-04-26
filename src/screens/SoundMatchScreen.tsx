@@ -206,7 +206,7 @@ const oc = StyleSheet.create({
 
 // ─── Main Screen ────────────────────────────────────────────────────────────
 
-const TOTAL_ROUNDS = 50;
+const TOTAL_ROUNDS = 200;
 
 export default function SoundMatchScreen({ navigation }: ScreenProps<'SoundMatch'>) {
   const { addStars, playGame } = useProgress();
@@ -335,11 +335,6 @@ export default function SoundMatchScreen({ navigation }: ScreenProps<'SoundMatch
         scoreBg="#FFD93D"
       />
 
-      {/* Round indicator pill */}
-      <View style={s.roundRow}>
-        <View style={s.roundPill}><Text style={s.roundT}>Round {round} / {TOTAL_ROUNDS}</Text></View>
-      </View>
-
       {/* Speaker stage */}
       <View style={s.stage}>
         <Animated.View style={[s.wave, { transform: [{ scale: waveScale(speakerWaveA) }], opacity: waveOp(speakerWaveA) }]} />
@@ -392,10 +387,6 @@ export default function SoundMatchScreen({ navigation }: ScreenProps<'SoundMatch
 }
 
 const s = StyleSheet.create({
-  roundRow:   { alignItems: 'center', marginTop: -4, marginBottom: 8 },
-  roundPill:  { backgroundColor: '#fff', paddingHorizontal: 14, paddingVertical: 5, borderRadius: 20, elevation: 3 },
-  roundT:     { fontWeight: '900', fontSize: 13, color: C.ink },
-
   stage:      { alignItems: 'center', justifyContent: 'center', height: 200, marginTop: 4, marginBottom: 10 },
   wave:       {
     position: 'absolute',

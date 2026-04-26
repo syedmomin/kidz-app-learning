@@ -9,7 +9,7 @@ import { useProgress } from '../store/ProgressStore';
 import type { ScreenProps } from '../navigation/types';
 
 const { width: SW, height: SH } = Dimensions.get('window');
-const TOTAL_ROUNDS = 12;
+const TOTAL_ROUNDS = 200;
 
 type Theme = { emoji: string; name: string; bg: string; tray: string; accent: string };
 const THEMES: Theme[] = [
@@ -244,11 +244,6 @@ export default function NumbersScreen({ navigation }: ScreenProps<'Numbers'>) {
         scoreTextColor="#fff"
       />
 
-      {/* Round indicator */}
-      <View style={s.roundRow}>
-        <View style={s.roundPill}><Text style={s.roundT}>Round {round} / {TOTAL_ROUNDS}</Text></View>
-      </View>
-
       {/* Prompt + counter */}
       <Animated.View style={[s.promptCard, { opacity: promptOp, transform: [{ translateY: promptSlide }] }]}>
         <Pressable onPress={replayPrompt} style={s.promptBubble}>
@@ -318,10 +313,6 @@ export default function NumbersScreen({ navigation }: ScreenProps<'Numbers'>) {
 }
 
 const s = StyleSheet.create({
-  roundRow:   { alignItems: 'center', marginTop: -4, marginBottom: 4 },
-  roundPill:  { backgroundColor: '#fff', paddingHorizontal: 14, paddingVertical: 5, borderRadius: 20, elevation: 3 },
-  roundT:     { fontWeight: '900', fontSize: 13, color: C.ink },
-
   promptCard:   { marginHorizontal: 16, marginTop: 8, backgroundColor: '#fff', borderRadius: 26, padding: 16, alignItems: 'center', elevation: 6, shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.1, shadowRadius: 6 },
   promptBubble: { flexDirection: 'row', alignItems: 'center' },
   promptT:      { fontSize: 26, fontWeight: '900', color: C.ink },

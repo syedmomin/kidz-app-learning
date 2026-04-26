@@ -9,7 +9,7 @@ import { useAudio } from '../hooks/useAudio';
 import type { ScreenProps } from '../navigation/types';
 
 const { width: SW, height: SH } = Dimensions.get('window');
-const TOTAL         = 50; // Increased to 50 levels
+const TOTAL         = 200;
 const BALLOON_COLORS = ['#FF5E5E', '#5E8BFF', '#5EE39F', '#FFB75E', '#BC5EFF', '#FF5EC1', '#FF9F5E', '#5EEBFF'];
 
 function shuffle<T>(arr: T[]): T[] { return [...arr].sort(() => Math.random() - 0.5); }

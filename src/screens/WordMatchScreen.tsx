@@ -17,7 +17,7 @@ type Round = WordRound;
 
 const BANK = WORD_BANK;
 
-const TOTAL = 100;
+const TOTAL = 200;
 
 function buildRounds(): Round[] {
   const result: Round[] = [];

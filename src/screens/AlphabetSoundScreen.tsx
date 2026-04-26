@@ -15,28 +15,18 @@ const WORDS = ALPHABET_ITEMS;
 
 const ALL_LETTERS = WORDS.map(w => w.letter);
 
-const TOTAL = 26;
-
-function buildRounds() {
-  const result: { item: WordItem; options: string[] }[] = [];
-  const pool = [...WORDS];
-  while (result.length < TOTAL) {
-    shuffle(pool);
-    pool.forEach(item => {
-      const wrongs = shuffle(ALL_LETTERS.filter(l => l !== item.letter)).slice(0, 3);
-      result.push({ item, options: shuffle([item.letter, ...wrongs]) });
-    });
-  }
-  return result.slice(0, TOTAL);
-}
-
-const NUM_ROUNDS = 2;
-const TOTAL_ALL = TOTAL * NUM_ROUNDS;
+const TOTAL_ALL = 200;
 
 function buildAllRounds() {
   const all: { item: WordItem; options: string[] }[] = [];
-  for (let r = 0; r < NUM_ROUNDS; r++) all.push(...buildRounds());
-  return all;
+  while (all.length < TOTAL_ALL) {
+    const pool = [...WORDS].sort(() => Math.random() - 0.5);
+    pool.forEach(item => {
+      const wrongs = shuffle(ALL_LETTERS.filter(l => l !== item.letter)).slice(0, 3);
+      all.push({ item, options: shuffle([item.letter, ...wrongs]) });
+    });
+  }
+  return all.slice(0, TOTAL_ALL);
 }
 
 const ALL_ROUNDS = buildAllRounds();
@@ -47,21 +37,9 @@ export default function AlphabetSoundScreen({ navigation }: ScreenProps<'Alphabe
   const { idx, picked, setPicked, score, addScore, shake, slideIn, bounceAnim, triggerSlideIn, doShake, doBounce, advance } =
     useGameScreen({ total: TOTAL_ALL, from: 'AlphabetSound', navigation });
 
-  const [showRoundBanner, setShowRoundBanner] = React.useState(false);
-  const bannerAnim = React.useRef(new Animated.Value(0)).current;
-
-  const currentRound = Math.floor(idx / TOTAL) + 1;
   const { item, options } = ALL_ROUNDS[idx];
 
   useEffect(() => {
-    if (idx === TOTAL) {
-      setShowRoundBanner(true);
-      Animated.sequence([
-        Animated.timing(bannerAnim, { toValue: 1, duration: 300, useNativeDriver: true }),
-        Animated.delay(1200),
-        Animated.timing(bannerAnim, { toValue: 0, duration: 300, useNativeDriver: true }),
-      ]).start(() => setShowRoundBanner(false));
-    }
     triggerSlideIn();
     Speech.stop();
     Speech.speak(`What letter does ${item.word} start with?`, { rate: 0.9, pitch: 1.1 });
@@ -89,21 +67,7 @@ export default function AlphabetSoundScreen({ navigation }: ScreenProps<'Alphabe
     <PhoneSafe bg="#FFF8EC">
       <GameHeader onBack={() => navigation.goBack()} title="A for Apple! 🍎" score={score} />
 
-      {showRoundBanner && (
-        <Animated.View style={[s.roundBanner, { opacity: bannerAnim, transform: [{ scale: bannerAnim }] }]}>
-          <Text style={s.roundBannerText}>⭐ Round 2! ⭐</Text>
-          <Text style={s.roundBannerSub}>Let's go again!</Text>
-        </Animated.View>
-      )}
-
       <View style={s.content}>
-        <View style={s.roundRow}>
-          {Array.from({ length: NUM_ROUNDS }).map((_, i) => (
-            <View key={i} style={[s.roundDot, i + 1 <= currentRound && s.roundDotActive]} />
-          ))}
-          <Text style={s.roundLabel}>Round {currentRound}/{NUM_ROUNDS}</Text>
-        </View>
-
         <Text style={s.prompt}>
           What letter does <Text style={[s.wordHighlight, { color: item.color === '#fff' ? C.coral : item.color }]}>{item.word}</Text> start with?
         </Text>
@@ -147,13 +111,6 @@ export default function AlphabetSoundScreen({ navigation }: ScreenProps<'Alphabe
 
 const s = StyleSheet.create({
   content:          { flex: 1, alignItems: 'center', justifyContent: 'center', paddingBottom: 30 },
-  roundRow:         { flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 8 },
-  roundDot:         { width: 10, height: 10, borderRadius: 5, backgroundColor: '#DDD', borderWidth: 1.5, borderColor: C.ink },
-  roundDotActive:   { backgroundColor: C.coral },
-  roundLabel:       { fontSize: 13, fontWeight: '700', color: C.inkSoft, marginLeft: 4 },
-  roundBanner:      { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 99, backgroundColor: 'rgba(255,248,236,0.95)', alignItems: 'center', justifyContent: 'center' },
-  roundBannerText:  { fontSize: 42, fontWeight: '900', color: C.coral, textAlign: 'center' },
-  roundBannerSub:   { fontSize: 20, fontWeight: '700', color: C.ink, marginTop: 8 },
   prompt:           { textAlign: 'center', fontWeight: '800', fontSize: 20, color: C.ink, marginBottom: 20, paddingHorizontal: 16 },
   wordHighlight:    { fontWeight: '900', fontSize: 22 },
   imageCard:        { width: 220, height: 240, backgroundColor: '#fff', borderRadius: 32, alignItems: 'center', justifyContent: 'center', marginBottom: 32, elevation: 16, shadowOffset: { width: 0, height: 8 }, shadowOpacity: 0.25, shadowRadius: 12 },

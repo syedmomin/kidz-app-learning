@@ -19,26 +19,30 @@ interface TimeEntry {
   label: string;
 }
 
+const TOTAL = 200;
+
 function buildRounds(): { time: TimeEntry; options: string[] }[] {
   const times: TimeEntry[] = [];
   for (let h = 1; h <= 12; h++) {
     times.push({ hour: h, minute: 0,  label: `${h}:00`  });
     times.push({ hour: h, minute: 30, label: `${h}:30` });
   }
-  // shuffle and use 30
-  const pool = [...times].sort(() => Math.random() - 0.5).slice(0, 30);
-  return pool.map(t => {
-    const wrong = times
-      .filter(x => x.label !== t.label)
-      .sort(() => Math.random() - 0.5)
-      .slice(0, 3)
-      .map(x => x.label);
-    return { time: t, options: shuffle([t.label, ...wrong]) };
-  });
+  const result: { time: TimeEntry; options: string[] }[] = [];
+  while (result.length < TOTAL) {
+    const shuffled = [...times].sort(() => Math.random() - 0.5);
+    shuffled.forEach(t => {
+      const wrong = times
+        .filter(x => x.label !== t.label)
+        .sort(() => Math.random() - 0.5)
+        .slice(0, 3)
+        .map(x => x.label);
+      result.push({ time: t, options: shuffle([t.label, ...wrong]) });
+    });
+  }
+  return result.slice(0, TOTAL);
 }
 
 const ROUNDS = buildRounds();
-const TOTAL = ROUNDS.length;
 
 // ─── Clock face SVG ──────────────────────────────────────────────────────────
 
@@ -196,14 +200,9 @@ export default function ClockReadScreen({ navigation }: ScreenProps<'ClockRead'>
       <GameHeader
         onBack={() => navigation.goBack()}
         title="Clock Reader"
-        subtitle={`Round ${idx + 1} / ${TOTAL}`}
         score={score}
         scoreBg="#B2EBF2"
       />
-
-      <View style={s.progTrack}>
-        <View style={[s.progFill, { width: `${((idx + 1) / TOTAL) * 100}%` }]} />
-      </View>
 
       {/* Clock card */}
       <Animated.View style={[s.clockCard, { transform: [{ translateX: shake }, { scale: clockScale }] }]}>
@@ -245,9 +244,6 @@ export default function ClockReadScreen({ navigation }: ScreenProps<'ClockRead'>
 }
 
 const s = StyleSheet.create({
-  progTrack: { height: 8, backgroundColor: '#B2EBF2', marginHorizontal: 16, borderRadius: 4, marginBottom: 16 },
-  progFill:  { height: 8, backgroundColor: '#00ACC1', borderRadius: 4 },
-
   clockCard: {
     marginHorizontal: 20, backgroundColor: '#fff', borderRadius: 28,
     borderWidth: 3.5, borderColor: C.ink, padding: 18,

@@ -9,7 +9,7 @@ import type { ScreenProps } from '../navigation/types';
 import { useProgress } from '../store/ProgressStore';
 
 const { width: SW, height: SH } = Dimensions.get('window');
-const TOTAL = 30;
+const TOTAL = 200;
 const BALLOON_COLORS = ['#FF5E5E', '#5E8BFF', '#5EE39F', '#FFB75E', '#BC5EFF', '#FF5EC1', '#FF9F5E', '#5EEBFF'];
 const LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 

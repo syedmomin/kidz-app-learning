@@ -38,11 +38,12 @@ interface Round {
   options: string[];
 }
 
+const TOTAL = 200;
+
 function buildRounds(): Round[] {
   const rounds: Round[] = [];
-  const pool = [...EMOTIONS].sort(() => Math.random() - 0.5);
-  for (let i = 0; i < 30; i++) {
-    const emotion = pool[i % pool.length];
+  for (let i = 0; i < TOTAL; i++) {
+    const emotion = EMOTIONS[i % EMOTIONS.length];
     const wrong = EMOTIONS
       .filter(e => e.name !== emotion.name)
       .sort(() => Math.random() - 0.5)
@@ -54,7 +55,6 @@ function buildRounds(): Round[] {
 }
 
 const ROUNDS = buildRounds();
-const TOTAL = ROUNDS.length;
 
 // ─── Floating face bubbles ────────────────────────────────────────────────────
 
@@ -181,14 +181,9 @@ export default function EmotionMatchScreen({ navigation }: ScreenProps<'EmotionM
       <GameHeader
         onBack={() => navigation.goBack()}
         title="Emotion Match"
-        subtitle={`Round ${idx + 1} / ${TOTAL}`}
         score={score}
         scoreBg="#FFCDD2"
       />
-
-      <View style={s.progTrack}>
-        <View style={[s.progFill, { width: `${((idx + 1) / TOTAL) * 100}%` }]} />
-      </View>
 
       {/* Background bubbles */}
       <View style={StyleSheet.absoluteFill} pointerEvents="none">
@@ -244,9 +239,6 @@ export default function EmotionMatchScreen({ navigation }: ScreenProps<'EmotionM
 }
 
 const s = StyleSheet.create({
-  progTrack: { height: 8, backgroundColor: '#FFCDD2', marginHorizontal: 16, borderRadius: 4, marginBottom: 14 },
-  progFill:  { height: 8, backgroundColor: '#E91E63', borderRadius: 4 },
-
   faceCard: {
     marginHorizontal: 18, borderRadius: 28, borderWidth: 3.5, borderColor: C.ink,
     padding: 20, alignItems: 'center', marginBottom: 18,

@@ -58,10 +58,12 @@ function makeRound(setIdx: number, type: PatType): Round {
   return { seq, answer, options, hint: hints[type] };
 }
 
+const TOTAL = 200;
+
 function buildRounds(): Round[] {
   const types: PatType[] = ['ABAB', 'AABB', 'ABCAB', 'ABBA'];
   const rounds: Round[] = [];
-  for (let i = 0; i < 30; i++) {
+  for (let i = 0; i < TOTAL; i++) {
     const setIdx = i % SETS.length;
     const type = types[Math.floor(i / SETS.length) % types.length];
     rounds.push(makeRound(setIdx, type));
@@ -70,7 +72,6 @@ function buildRounds(): Round[] {
 }
 
 const ROUNDS = buildRounds();
-const TOTAL = ROUNDS.length;
 
 // ─── Particle confetti ─────────────────────────────────────────────────────────
 
@@ -168,15 +169,9 @@ export default function PatternQuestScreen({ navigation }: ScreenProps<'PatternQ
       <GameHeader
         onBack={() => navigation.goBack()}
         title="Pattern Quest"
-        subtitle={`Round ${idx + 1} / ${TOTAL}`}
         score={score}
         scoreBg="#E8D5FF"
       />
-
-      {/* Progress bar */}
-      <View style={s.progTrack}>
-        <View style={[s.progFill, { width: `${((idx + 1) / TOTAL) * 100}%` }]} />
-      </View>
 
       <Animated.View style={[s.card, { transform: [{ translateX: slideIn }, { scale: questionScale }] }]}>
         {/* Hint */}
@@ -234,9 +229,6 @@ export default function PatternQuestScreen({ navigation }: ScreenProps<'PatternQ
 }
 
 const s = StyleSheet.create({
-  progTrack: { height: 8, backgroundColor: '#E0C8FF', marginHorizontal: 16, borderRadius: 4, marginBottom: 14 },
-  progFill:  { height: 8, backgroundColor: '#9B59D0', borderRadius: 4 },
-
   card: {
     marginHorizontal: 16, backgroundColor: '#fff', borderRadius: 26,
     borderWidth: 3.5, borderColor: C.ink, padding: 20,

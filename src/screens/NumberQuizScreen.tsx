@@ -11,7 +11,7 @@ import type { ScreenProps } from '../navigation/types';
 import { MATH_ICONS, MATH_BASE_POOL, type MathQuestion, type MathOp } from '../data/GameAssets';
 
 const { width: SW } = Dimensions.get('window');
-const TOTAL = 50;
+const TOTAL = 200;
 
 type Op = MathOp;
 type Question = MathQuestion;
