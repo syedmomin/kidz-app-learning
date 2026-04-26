@@ -1,5 +1,5 @@
 import React from 'react';
-import Svg, { Circle, Ellipse, Path, Rect, Polygon } from 'react-native-svg';
+import Svg, { Circle, Ellipse, Path, Rect, Polygon, G } from 'react-native-svg';
 
 export const SvgCat = ({ isShadow }: { isShadow?: boolean } = {}) => { const c = isShadow ? '#111' : '#FAD0C4'; const s = isShadow ? '#111' : '#333'; return <Svg width="140" height="140" viewBox="0 0 160 160"><Ellipse cx="80" cy="115" rx="52" ry="38" fill={c} stroke={s} strokeWidth="4" /><Circle cx="80" cy="72" r="40" fill={c} stroke={s} strokeWidth="4" /><Path d="M 48 52 L 40 22 L 68 40 Z" fill={c} stroke={s} strokeWidth="4" /><Path d="M 112 52 L 120 22 L 92 40 Z" fill={c} stroke={s} strokeWidth="4" /><Circle cx="66" cy="70" r="5" fill={s} /><Circle cx="94" cy="70" r="5" fill={s} /><Path d="M 76 84 L 84 84 L 80 90 Z" fill={isShadow ? '#111' : '#FF5252'} /></Svg>; };
 export const SvgSun = ({ isShadow }: { isShadow?: boolean } = {}) => { const c = isShadow ? '#111' : '#FFD54F'; const s = isShadow ? '#111' : '#333'; return <Svg width="140" height="140" viewBox="0 0 160 160"><Circle cx="80" cy="80" r="34" fill={c} stroke={s} strokeWidth="4" />{[0, 45, 90, 135, 180, 225, 270, 315].map((a, i) => { const r = a * Math.PI / 180, x1 = 80 + 40 * Math.cos(r), y1 = 80 + 40 * Math.sin(r), x2 = 80 + 58 * Math.cos(r), y2 = 80 + 58 * Math.sin(r); return <Path key={i} d={`M ${x1} ${y1} L ${x2} ${y2}`} stroke={s} strokeWidth="5" strokeLinecap="round" />; })}</Svg>; };
@@ -227,4 +227,25 @@ export const SvgZebra = () => (
         <Circle cx="68" cy="62" r="5" fill="#333" />
         <Circle cx="92" cy="62" r="5" fill="#333" />
     </Svg>
+);
+
+export const SvgMango = ({ size = 140 }: { size?: number }) => (
+  <Svg width={size} height={size} viewBox="0 0 200 200">
+    <Ellipse cx="100" cy="135" rx="55" ry="50" fill="#FF6B35" stroke="#333" strokeWidth="4" />
+    <Ellipse cx="100" cy="145" rx="32" ry="32" fill="#FFE9B0" stroke="#333" strokeWidth="3" />
+    <Ellipse cx="78" cy="180" rx="14" ry="9" fill="#E65100" stroke="#333" strokeWidth="3" />
+    <Ellipse cx="122" cy="180" rx="14" ry="9" fill="#E65100" stroke="#333" strokeWidth="3" />
+    <Ellipse cx="50" cy="125" rx="14" ry="20" fill="#FF6B35" stroke="#333" strokeWidth="4" transform="rotate(-15 50 125)" />
+    <Ellipse cx="150" cy="110" rx="14" ry="20" fill="#FF6B35" stroke="#333" strokeWidth="4" transform="rotate(25 150 110)" />
+    <Circle cx="100" cy="78" r="48" fill="#FF6B35" stroke="#333" strokeWidth="4" />
+    <Path d="M 62 50 Q 55 25 75 35 L 78 55 Z" fill="#FF6B35" stroke="#333" strokeWidth="4" strokeLinejoin="round" />
+    <Path d="M 138 50 Q 145 25 125 35 L 122 55 Z" fill="#FF6B35" stroke="#333" strokeWidth="4" strokeLinejoin="round" />
+    <Ellipse cx="100" cy="88" rx="32" ry="26" fill="#FFF5E0" stroke="none" />
+    <Ellipse cx="84" cy="78" rx="7" ry="9" fill="#333" />
+    <Ellipse cx="116" cy="78" rx="7" ry="9" fill="#333" />
+    <Circle cx="86" cy="75" r="2.5" fill="#fff" />
+    <Circle cx="118" cy="75" r="2.5" fill="#fff" />
+    <Ellipse cx="100" cy="92" rx="5" ry="4" fill="#333" />
+    <Path d="M 90 100 Q 100 110 110 100" stroke="#333" strokeWidth="3" fill="none" strokeLinecap="round" />
+  </Svg>
 );

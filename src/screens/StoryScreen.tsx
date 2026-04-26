@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import Svg, { Circle, Path, Rect } from 'react-native-svg';
 import PhoneSafe from '../components/PhoneSafe';
-import Mango from '../components/Mango';
+import {SvgMango} from '../components/Illustrations';
 import { C } from '../theme';
 import GameHeader from '../components/GameHeader';
 import { useProgress } from '../store/ProgressStore';
@@ -45,7 +45,7 @@ export default function StoryScreen({ navigation }: ScreenProps<'Story'>) {
           <Rect x="40" y="180" width="14" height="70" fill="#8B5A2B" stroke={C.ink} strokeWidth="3"/>
           <Circle cx="47" cy="170" r="30" fill={C.mintDeep} stroke={C.ink} strokeWidth="3"/>
         </Svg>
-        <View style={s.mango}><Mango size={90}/></View>
+        <View style={s.mango}><SvgMango size={90}/></View>
       </View>
 
       <View style={s.textBox}>

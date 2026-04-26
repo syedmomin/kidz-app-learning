@@ -42,6 +42,23 @@ type Page = { id:string; title:string; emoji:string; bg:string; regions:Region[]
 // ─── Coloring Pages  (simple shapes — 4-5 yr kids) ───────────────────────────
 
 const PAGES: Page[] = [
+  { id:'apple', title:'Red Apple', emoji:'🍎', bg:'#FFFFFF', regions:[
+    { id:'body',  k:'path',    d:'M 52 135 Q 52 56 150 56 Q 248 56 248 135 Q 248 259 150 278 Q 52 259 52 135 Z', label:'Apple' },
+    { id:'stem',  k:'path',    d:'M 150 56 Q 143 26 124 18', label:'Stem', defaultFill:'none' },
+    { id:'leaf',  k:'ellipse', cx:169, cy:38, rx:22, ry:11, label:'Leaf' },
+  ]},
+  { id:'mango', title:'Mango', emoji:'🥭', bg:'#FFFFFF', regions:[
+    { id:'body',  k:'ellipse', cx:150, cy:202, rx:82, ry:75, label:'Body' },
+    { id:'inner', k:'ellipse', cx:150, cy:217, rx:48, ry:48, label:'Tummy' },
+    { id:'head',  k:'circle',  cx:150, cy:117, r:72,  label:'Head' },
+    { id:'larm',  k:'ellipse', cx:75,  cy:187, rx:21, ry:30, t:'rotate(-15 75 187)', label:'Arm L' },
+    { id:'rarm',  k:'ellipse', cx:225, cy:165, rx:21, ry:30, t:'rotate(25 225 165)', label:'Arm R' },
+    { id:'lfoot', k:'ellipse', cx:117, cy:268, rx:21, ry:13, label:'Foot L' },
+    { id:'rfoot', k:'ellipse', cx:183, cy:268, rx:21, ry:13, label:'Foot R' },
+    { id:'leye',  k:'ellipse', cx:126, cy:112, rx:10, ry:13, label:'Eye L' },
+    { id:'reye',  k:'ellipse', cx:174, cy:112, rx:10, ry:13, label:'Eye R' },
+    { id:'nose',  k:'ellipse', cx:150, cy:138, rx:8,  ry:6,  label:'Nose' },
+  ]},
   { id:'cat',      title:'Cute Cat',       emoji:'🐱', bg:'#FFFFFF', regions:[
     { id:'body',  k:'ellipse', cx:150, cy:220, rx:90, ry:65, label:'Body' },
     { id:'head',  k:'circle',  cx:150, cy:118, r:78,  label:'Head' },
