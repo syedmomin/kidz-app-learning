@@ -141,11 +141,34 @@ export default function LessonScreen({ navigation, route }: ScreenProps<'Lesson'
   const isDrawing = useRef(false);
   const { completeLetter, addStars, touchStreak } = useProgress();
 
+  React.useEffect(() => {
+    import('expo-speech').then(Speech => {
+      Speech.speak(letter, { rate: 0.8, pitch: 1.2 });
+    });
+  }, [letter]);
+
+  const layoutRef = useRef({ width: 300, height: 340 });
+
+  const mapTouchToSvg = (e: any) => {
+    const t = e.nativeEvent.touches?.[0] || e.nativeEvent;
+    const rawX = t.locationX ?? t.clientX;
+    const rawY = t.locationY ?? t.clientY;
+    
+    const svgW = 300;
+    const svgH = 340;
+    const scale = Math.min(layoutRef.current.width / svgW, layoutRef.current.height / svgH);
+    const offsetX = (layoutRef.current.width - svgW * scale) / 2;
+    const offsetY = (layoutRef.current.height - svgH * scale) / 2;
+
+    return {
+      x: (rawX - offsetX) / scale,
+      y: (rawY - offsetY) / scale
+    };
+  };
+
   // Touch handlers via onStartShouldSetResponder etc on the View
   const onTouchStart = useCallback((e: any) => {
-    const t = e.nativeEvent.touches?.[0] || e.nativeEvent;
-    const x = t.locationX ?? t.clientX;
-    const y = t.locationY ?? t.clientY;
+    const { x, y } = mapTouchToSvg(e);
     currentPath.current = `M ${x.toFixed(0)} ${y.toFixed(0)}`;
     setPaths(p => [...p, currentPath.current]);
     isDrawing.current = true;
@@ -153,9 +176,7 @@ export default function LessonScreen({ navigation, route }: ScreenProps<'Lesson'
 
   const onTouchMove = useCallback((e: any) => {
     if (!isDrawing.current) return;
-    const t = e.nativeEvent.touches?.[0] || e.nativeEvent;
-    const x = t.locationX ?? t.clientX;
-    const y = t.locationY ?? t.clientY;
+    const { x, y } = mapTouchToSvg(e);
     currentPath.current += ` L ${x.toFixed(0)} ${y.toFixed(0)}`;
     setPaths(p => { const n = [...p]; n[n.length - 1] = currentPath.current; return n; });
   }, []);
@@ -194,7 +215,7 @@ export default function LessonScreen({ navigation, route }: ScreenProps<'Lesson'
           <Text style={s.backText}>←</Text>
         </Pressable>
         <Text style={s.title}>Trace Letter  <Text style={[s.letterBig, { color: data.color }]}>{letter}</Text></Text>
-        <Pressable style={s.audioBtn}><Text style={{ fontSize: 22 }}>🔊</Text></Pressable>
+        <View style={{ width: 46 }} /> {/* spacer */}
       </View>
 
       {/* Hint */}
@@ -206,6 +227,7 @@ export default function LessonScreen({ navigation, route }: ScreenProps<'Lesson'
       {/* Canvas */}
       <View
         style={s.canvas}
+        onLayout={e => { layoutRef.current = e.nativeEvent.layout; }}
         onStartShouldSetResponder={() => true}
         onMoveShouldSetResponder={() => true}
         onResponderGrant={onTouchStart}
@@ -253,7 +275,13 @@ export default function LessonScreen({ navigation, route }: ScreenProps<'Lesson'
         <KButton color={C.mint} shadowColor={C.mintDeep} size="md" fullWidth onPress={finish} style={{ flex: 1, marginHorizontal: 12 }}>
           Check Score ✓
         </KButton>
-        <View style={s.iconBtn}><Text style={{ fontSize: 24 }}>💡</Text></View>
+        <Pressable style={[s.iconBtn, { backgroundColor: C.yellow }]} onPress={() => {
+          import('expo-speech').then(Speech => {
+            Speech.speak(letter, { rate: 0.8, pitch: 1.2 });
+          });
+        }}>
+          <Text style={{ fontSize: 24 }}>🔊</Text>
+        </Pressable>
       </View>
 
       {/* Score popup */}

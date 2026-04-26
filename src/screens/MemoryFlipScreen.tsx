@@ -4,7 +4,6 @@ import {
   View, Text, StyleSheet, Pressable,
   Animated, Dimensions, Easing, ScrollView
 } from 'react-native';
-import * as Speech from 'expo-speech';
 import PhoneSafe from '../components/PhoneSafe';
 import { C } from '../theme';
 import GameHeader from '../components/GameHeader';
@@ -164,9 +163,6 @@ export default function MemoryFlipScreen({ navigation }: ScreenProps<'MemoryFlip
       if (isMatch) {
         setTimeout(() => {
           playSound(deck[idx].sound);
-          Speech.stop();
-          Speech.speak(`Awesome! You found the ${deck[idx].name}!`, { rate: 1.0, pitch: 1.1 });
-
           setStatuses(prev => prev.map((s, i) =>
             i === firstIdx || i === idx ? 'matched' : s
           ) as CardStatus[]);

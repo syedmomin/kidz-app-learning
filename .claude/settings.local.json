@@ -51,7 +51,14 @@
       "Bash(head -43 src/screens/ColorMatchScreen.tsx)",
       "Bash(tail -n +761 src/screens/ColorMatchScreen.tsx)",
       "Read(//tmp/**)",
-      "Bash(npx tsc *)"
+      "Bash(npx tsc *)",
+      "WebSearch",
+      "WebFetch(domain:soundbible.com)",
+      "WebFetch(domain:freeanimalsounds.org)",
+      "WebFetch(domain:github.com)",
+      "Bash(curl -s \"https://raw.githubusercontent.com/kevva/play-animal-sounds/master/sounds.json\")",
+      "WebFetch(domain:www.freesoundslibrary.com)",
+      "WebFetch(domain:sounddino.com)"
     ],
     "additionalDirectories": [
       "\\tmp"

@@ -5,7 +5,6 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Audio } from 'expo-av';
-import * as Speech from 'expo-speech';
 import { ANIMALS, Animal } from '../data/animals';
 import { ScreenProps } from '../navigation/types';
 import { C } from '../theme';
@@ -54,28 +53,13 @@ function useSound() {
     }
   }, []);
 
-  const speak = useCallback((animal: Animal) => {
-    Speech.stop();
-    // Say name first, then fun fact after a short pause
-    Speech.speak(animal.name, {
-      rate: 0.82,
-      pitch: 1.25,
-      onDone: () => {
-        setTimeout(() => {
-          Speech.speak(animal.fact, { rate: 0.8, pitch: 1.1 });
-        }, 300);
-      },
-    });
-  }, []);
-
   useEffect(() => {
     return () => {
       soundRef.current?.unloadAsync();
-      Speech.stop();
     };
   }, []);
 
-  return { play, speak, playingId };
+  return { play, playingId };
 }
 
 // ─── Tab Bar ─────────────────────────────────────────────────────────────────
@@ -227,9 +211,8 @@ const gc = StyleSheet.create({
 
 type AnswerState = 'idle' | 'correct' | 'wrong';
 
-function QuizMode({ play, speak }: {
+function QuizMode({ play }: {
   play: (source: any, id: string) => Promise<void>;
-  speak: (animal: Animal) => void;
 }) {
   const [correct, setCorrect] = useState<Animal>(() => nextQuizAnimal());
   const [options, setOptions] = useState<Animal[]>(() => buildOptions(correct));
@@ -272,9 +255,7 @@ function QuizMode({ play, speak }: {
       setState('correct');
       setShowBurst(true);
 
-      // Play local sound asset then speak the animal name + fun fact
       play(correct.sound, correct.id);
-      speak(correct);
 
       // Bounce + wiggle image
       Animated.sequence([
@@ -417,7 +398,7 @@ const qz = StyleSheet.create({
 export default function AnimalScreen({ navigation }: ScreenProps<'Animals'>) {
   // Quiz is the default tab
   const [mode, setMode] = useState<'quiz' | 'gallery'>('quiz');
-  const { play, speak, playingId } = useSound();
+  const { play, playingId } = useSound();
   const headerY = useRef(new Animated.Value(-50)).current;
   const headerOpacity = useRef(new Animated.Value(0)).current;
 
@@ -451,7 +432,7 @@ export default function AnimalScreen({ navigation }: ScreenProps<'Animals'>) {
 
       {/* Content */}
       {mode === 'quiz' ? (
-        <QuizMode play={play} speak={speak} />
+        <QuizMode play={play} />
       ) : (
         <FlatList
           data={ANIMALS}

@@ -88,7 +88,7 @@ export default function ExploreScreen({ navigation }: ScreenProps<'Explore'>) {
 
       <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
         <View style={s.grid}>
-          {renderCard(0, AlphabetsCard, 'Category', 'abc')}
+          {renderCard(0, AlphabetsCard, 'Category', undefined, 'Letters')}
           {renderCard(1, AnimalsCard, 'Animals', 'lion')}
           {renderCard(2, MusicCard, 'Music', 'happy')}
           {renderCard(3, StoriesCard, 'Story', 'twinkle')}
