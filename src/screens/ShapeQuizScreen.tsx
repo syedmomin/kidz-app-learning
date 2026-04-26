@@ -10,39 +10,7 @@ import { shuffle } from '../utils';
 import { useGameScreen } from '../hooks/useGameScreen';
 import type { ScreenProps } from '../navigation/types';
 
-import {
-  SvgCircleShape, SvgSquareShape, SvgTriangleShape, SvgStarShape, SvgHeartShape,
-  SvgOvalShape, SvgDiamondShape, SvgHexagonShape, SvgPentagonShape, SvgCrossShape,
-  SvgCrescentShape, SvgArrowShape, SvgTrapezoidShape, SvgParallelogramShape, SvgOctagonShape,
-  SvgHeptagonShape, SvgKiteShape, SvgSemiCircleShape, SvgDropShape, SvgPieShape
-} from '../components/Illustrations';
-
-// ─── All shapes ───────────────────────────────────────────────────────────────
-
-interface ShapeDef { name: string; color: string; render: (f: string) => React.ReactNode }
-
-const SHAPES: ShapeDef[] = [
-  { name: 'Circle',         color: '#FF5E5E', render: f => <SvgCircleShape fill={f} /> },
-  { name: 'Square',         color: '#5E8BFF', render: f => <SvgSquareShape fill={f} /> },
-  { name: 'Triangle',       color: '#5EE39F', render: f => <SvgTriangleShape fill={f} /> },
-  { name: 'Star',           color: '#FFEB3B', render: f => <SvgStarShape fill={f} /> },
-  { name: 'Heart',          color: '#FF5EC1', render: f => <SvgHeartShape fill={f} /> },
-  { name: 'Oval',           color: '#FF9800', render: f => <SvgOvalShape fill={f} /> },
-  { name: 'Diamond',        color: '#9C27B0', render: f => <SvgDiamondShape fill={f} /> },
-  { name: 'Hexagon',        color: '#00BCD4', render: f => <SvgHexagonShape fill={f} /> },
-  { name: 'Pentagon',       color: '#4CAF50', render: f => <SvgPentagonShape fill={f} /> },
-  { name: 'Cross',          color: '#FF5722', render: f => <SvgCrossShape fill={f} /> },
-  { name: 'Crescent',       color: '#FFD54F', render: f => <SvgCrescentShape fill={f} /> },
-  { name: 'Arrow',          color: '#FF5252', render: f => <SvgArrowShape fill={f} /> },
-  { name: 'Trapezoid',      color: '#4CAF50', render: f => <SvgTrapezoidShape fill={f} /> },
-  { name: 'Parallelogram',  color: '#2196F3', render: f => <SvgParallelogramShape fill={f} /> },
-  { name: 'Octagon',        color: '#9C27B0', render: f => <SvgOctagonShape fill={f} /> },
-  { name: 'Heptagon',       color: '#00BCD4', render: f => <SvgHeptagonShape fill={f} /> },
-  { name: 'Kite',           color: '#E91E63', render: f => <SvgKiteShape fill={f} /> },
-  { name: 'Semi-Circle',    color: '#8BC34A', render: f => <SvgSemiCircleShape fill={f} /> },
-  { name: 'Drop',           color: '#03A9F4', render: f => <SvgDropShape fill={f} /> },
-  { name: 'Pie',            color: '#FFC107', render: f => <SvgPieShape fill={f} /> },
-];
+import { SHAPES, type ShapeDef } from '../data/GameAssets';
 
 const TOTAL = 200;
 

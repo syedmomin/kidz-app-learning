@@ -11,42 +11,11 @@ import { useGameScreen } from '../hooks/useGameScreen';
 import { shuffle } from '../utils';
 import type { ScreenProps } from '../navigation/types';
 
-import {
-  SvgCat, SvgSun, SvgApple, SvgBall, SvgStar, SvgTree, SvgMoon,
-  SvgCar, SvgFish, SvgHouse, SvgBook, SvgHeart, SvgCloud,
-  SvgCup, SvgKey, SvgHat, SvgSock, SvgLeaf, SvgIce, SvgBed,
-  SvgDoor, SvgRing, SvgBird
-} from '../components/Illustrations';
+import { WORD_BANK, type WordRound } from '../data/GameAssets';
 
-// ─── Round Bank ───────────────────────────────────────────────────────────────
+type Round = WordRound;
 
-interface Round { word: string; options: string[]; Illus: () => React.ReactNode; bg: string }
-
-const BANK: Round[] = [
-  { word: 'CAT',   options: ['CAT','BAT','DOG','RAT'],         Illus: SvgCat,   bg: '#FFF3E0' },
-  { word: 'SUN',   options: ['SUN','MOON','SKY','STAR'],       Illus: SvgSun,   bg: '#FFFDE7' },
-  { word: 'APPLE', options: ['APPLE','BANANA','GRAPE','PEAR'], Illus: SvgApple, bg: '#FFEBEE' },
-  { word: 'BALL',  options: ['BALL','BAT','GAME','TOY'],       Illus: SvgBall,  bg: '#E3F2FD' },
-  { word: 'STAR',  options: ['STAR','SUN','MOON','PLANET'],    Illus: SvgStar,  bg: '#FFFDE7' },
-  { word: 'TREE',  options: ['TREE','LEAF','FLOWER','PLANT'],  Illus: SvgTree,  bg: '#E8F5E9' },
-  { word: 'MOON',  options: ['MOON','SUN','STAR','NIGHT'],     Illus: SvgMoon,  bg: '#F3E5F5' },
-  { word: 'CAR',   options: ['CAR','BUS','BIKE','TRAIN'],      Illus: SvgCar,   bg: '#FFEBEE' },
-  { word: 'FISH',  options: ['FISH','SHARK','CRAB','FROG'],    Illus: SvgFish,  bg: '#E0F7FA' },
-  { word: 'HOUSE', options: ['HOUSE','HOME','TENT','DOOR'],    Illus: SvgHouse, bg: '#FFF9C4' },
-  { word: 'BOOK',  options: ['BOOK','PAPER','PEN','READ'],     Illus: SvgBook,  bg: '#E8EAF6' },
-  { word: 'HEART', options: ['HEART','LOVE','STAR','RED'],     Illus: SvgHeart, bg: '#FCE4EC' },
-  { word: 'CLOUD', options: ['CLOUD','SKY','RAIN','SUN'],      Illus: SvgCloud, bg: '#E3F2FD' },
-  { word: 'CUP',   options: ['CUP','MUG','GLASS','BOWL'],      Illus: SvgCup,   bg: '#E1F5FE' },
-  { word: 'KEY',   options: ['KEY','DOOR','LOCK','RING'],      Illus: SvgKey,   bg: '#FFFDE7' },
-  { word: 'HAT',   options: ['HAT','CAP','HEAD','HAIR'],       Illus: SvgHat,   bg: '#F3E5F5' },
-  { word: 'SOCK',  options: ['SOCK','SHOE','FOOT','BOOT'],     Illus: SvgSock,  bg: '#E8F5E9' },
-  { word: 'LEAF',  options: ['LEAF','TREE','GREEN','PLANT'],   Illus: SvgLeaf,  bg: '#F1F8E9' },
-  { word: 'ICE',   options: ['ICE','COLD','SNOW','CREAM'],     Illus: SvgIce,   bg: '#FFF3E0' },
-  { word: 'BED',   options: ['BED','SLEEP','ROOM','NIGHT'],    Illus: SvgBed,   bg: '#E3F2FD' },
-  { word: 'DOOR',  options: ['DOOR','HOME','WALL','WOOD'],     Illus: SvgDoor,  bg: '#EFEBE9' },
-  { word: 'RING',  options: ['RING','HAND','GOLD','STAR'],     Illus: SvgRing,  bg: '#E0F7FA' },
-  { word: 'BIRD',  options: ['BIRD','FLY','SKY','WING'],       Illus: SvgBird,  bg: '#E1F5FE' },
-];
+const BANK = WORD_BANK;
 
 const TOTAL = 100;
 

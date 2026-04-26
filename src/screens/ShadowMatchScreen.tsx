@@ -6,41 +6,14 @@ import { C } from '../theme';
 import GameHeader from '../components/GameHeader';
 import type { ScreenProps } from '../navigation/types';
 
-import { 
-  SvgCat, SvgSun, SvgApple, SvgBall, SvgStar, 
-  SvgTree, SvgMoon, SvgCar, SvgFish, SvgHouse,
-  SvgHeart, SvgCloud, SvgCup, SvgKey, SvgHat,
-  SvgSock, SvgLeaf, SvgIce, SvgBed, SvgDoor, SvgRing
-} from '../components/Illustrations';
+import { SHADOW_ITEMS, type ShadowItem } from '../data/GameAssets';
 
 const TOTAL = 100;
 const { width } = Dimensions.get('window');
 
-interface ItemDef { id: string; name: string; render: (isShadow?: boolean) => React.ReactNode }
+type ItemDef = ShadowItem;
 
-const ITEMS: ItemDef[] = [
-  { id: 'cat',   name: 'Cat',   render: (s) => <SvgCat isShadow={s} /> },
-  { id: 'sun',   name: 'Sun',   render: (s) => <SvgSun isShadow={s} /> },
-  { id: 'apple', name: 'Apple', render: (s) => <SvgApple isShadow={s} /> },
-  { id: 'ball',  name: 'Ball',  render: (s) => <SvgBall isShadow={s} /> },
-  { id: 'star',  name: 'Star',  render: (s) => <SvgStar isShadow={s} /> },
-  { id: 'tree',  name: 'Tree',  render: (s) => <SvgTree isShadow={s} /> },
-  { id: 'moon',  name: 'Moon',  render: (s) => <SvgMoon isShadow={s} /> },
-  { id: 'car',   name: 'Car',   render: (s) => <SvgCar isShadow={s} /> },
-  { id: 'fish',  name: 'Fish',  render: (s) => <SvgFish isShadow={s} /> },
-  { id: 'house', name: 'House', render: (s) => <SvgHouse isShadow={s} /> },
-  { id: 'heart', name: 'Heart', render: (s) => <SvgHeart isShadow={s} /> },
-  { id: 'cloud', name: 'Cloud', render: (s) => <SvgCloud isShadow={s} /> },
-  { id: 'cup',   name: 'Cup',   render: (s) => <SvgCup isShadow={s} /> },
-  { id: 'key',   name: 'Key',   render: (s) => <SvgKey isShadow={s} /> },
-  { id: 'hat',   name: 'Hat',   render: (s) => <SvgHat isShadow={s} /> },
-  { id: 'sock',  name: 'Sock',  render: (s) => <SvgSock isShadow={s} /> },
-  { id: 'leaf',  name: 'Leaf',  render: (s) => <SvgLeaf isShadow={s} /> },
-  { id: 'ice',   name: 'Ice Cream', render: (s) => <SvgIce isShadow={s} /> },
-  { id: 'bed',   name: 'Bed',   render: (s) => <SvgBed isShadow={s} /> },
-  { id: 'door',  name: 'Door',  render: (s) => <SvgDoor isShadow={s} /> },
-  { id: 'ring',  name: 'Ring',  render: (s) => <SvgRing isShadow={s} /> },
-];
+const ITEMS = SHADOW_ITEMS;
 
 function shuffle<T>(arr: T[]): T[] { return [...arr].sort(() => Math.random() - 0.5); }
 

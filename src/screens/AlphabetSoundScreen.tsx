@@ -3,54 +3,15 @@ import { View, Text, StyleSheet, Pressable, Animated } from 'react-native';
 import * as Speech from 'expo-speech';
 import PhoneSafe from '../components/PhoneSafe';
 import GameHeader from '../components/GameHeader';
-import {
-  SvgApple, SvgBall, SvgCar, SvgDog, SvgEgg, SvgFish, SvgGrape, SvgHouse,
-  SvgIce, SvgJar, SvgKite, SvgLeaf, SvgMoon, SvgNest, SvgOwl, SvgPig,
-  SvgQuilt, SvgRocket, SvgSun, SvgTrain, SvgUmbrella, SvgVase, SvgWatch,
-  SvgXylophone, SvgYak, SvgZebra,
-} from '../components/Illustrations';
 import { C } from '../theme';
 import { shuffle } from '../utils';
 import { useGameScreen } from '../hooks/useGameScreen';
 import type { ScreenProps } from '../navigation/types';
+import { ALPHABET_ITEMS, type AlphabetItem } from '../data/GameAssets';
 
-// ─── Game Data ────────────────────────────────────────────────────────────────
+type WordItem = AlphabetItem;
 
-interface WordItem {
-  word: string;
-  letter: string;
-  color: string;
-  render: () => React.ReactNode;
-}
-
-const WORDS: WordItem[] = [
-  { word: 'Apple',     letter: 'A', color: '#FF5252', render: () => <SvgApple /> },
-  { word: 'Ball',      letter: 'B', color: '#42A5F5', render: () => <SvgBall /> },
-  { word: 'Car',       letter: 'C', color: '#EF5350', render: () => <SvgCar /> },
-  { word: 'Dog',       letter: 'D', color: '#D2691E', render: () => <SvgDog /> },
-  { word: 'Egg',       letter: 'E', color: '#FFF9C4', render: () => <SvgEgg /> },
-  { word: 'Fish',      letter: 'F', color: '#FF9800', render: () => <SvgFish /> },
-  { word: 'Grapes',    letter: 'G', color: '#9C27B0', render: () => <SvgGrape /> },
-  { word: 'House',     letter: 'H', color: '#F44336', render: () => <SvgHouse /> },
-  { word: 'Ice Cream', letter: 'I', color: '#E91E63', render: () => <SvgIce /> },
-  { word: 'Jar',       letter: 'J', color: '#00BCD4', render: () => <SvgJar /> },
-  { word: 'Kite',      letter: 'K', color: '#E91E63', render: () => <SvgKite /> },
-  { word: 'Leaf',      letter: 'L', color: '#8BC34A', render: () => <SvgLeaf /> },
-  { word: 'Moon',      letter: 'M', color: '#FFD54F', render: () => <SvgMoon /> },
-  { word: 'Nest',      letter: 'N', color: '#795548', render: () => <SvgNest /> },
-  { word: 'Owl',       letter: 'O', color: '#8D6E63', render: () => <SvgOwl /> },
-  { word: 'Pig',       letter: 'P', color: '#FFB3C1', render: () => <SvgPig /> },
-  { word: 'Quilt',     letter: 'Q', color: '#FF8A65', render: () => <SvgQuilt /> },
-  { word: 'Rocket',    letter: 'R', color: '#EF5350', render: () => <SvgRocket /> },
-  { word: 'Sun',       letter: 'S', color: '#FFD54F', render: () => <SvgSun /> },
-  { word: 'Train',     letter: 'T', color: '#1E88E5', render: () => <SvgTrain /> },
-  { word: 'Umbrella',  letter: 'U', color: '#7C4DFF', render: () => <SvgUmbrella /> },
-  { word: 'Vase',      letter: 'V', color: '#42A5F5', render: () => <SvgVase /> },
-  { word: 'Watch',     letter: 'W', color: '#E8EAF6', render: () => <SvgWatch /> },
-  { word: 'Xylophone', letter: 'X', color: '#F44336', render: () => <SvgXylophone /> },
-  { word: 'Yak',       letter: 'Y', color: '#5D4037', render: () => <SvgYak /> },
-  { word: 'Zebra',     letter: 'Z', color: '#fff',    render: () => <SvgZebra /> },
-];
+const WORDS = ALPHABET_ITEMS;
 
 const ALL_LETTERS = WORDS.map(w => w.letter);
 

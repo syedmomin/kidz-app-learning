@@ -8,40 +8,15 @@ import { shuffle } from '../utils';
 import GameHeader from '../components/GameHeader';
 import { useAudio } from '../hooks/useAudio';
 import type { ScreenProps } from '../navigation/types';
+import { MATH_ICONS, MATH_BASE_POOL, type MathQuestion, type MathOp } from '../data/GameAssets';
 
 const { width: SW } = Dimensions.get('window');
-const TOTAL = 50; // Increased to 50 rounds
+const TOTAL = 50;
 
-type Op = '+' | '−' | '×';
-interface Question { a: number; b: number; op: Op; answer: number; options: number[] }
+type Op = MathOp;
+type Question = MathQuestion;
 
-const MATH_ICONS = ['🍎', '⭐', '🎈', '🍪', '🦁', '🍦', '🍓', '🥕', '🍭', '🍔'];
-
-function makeOptions(answer: number, op: Op): number[] {
-  const offsets = op === '×' ? [-answer, answer, 2, -2, 3, -3] : [-2, -1, 1, 2, 3, -3];
-  const wrongs  = new Set<number>();
-  for (const d of shuffle(offsets)) {
-    const w = answer + d;
-    if (w !== answer && w >= 0 && w <= 99) wrongs.add(w);
-    if (wrongs.size === 3) break;
-  }
-  let pad = 1;
-  while (wrongs.size < 3) { wrongs.add(answer + pad * 5); pad++; }
-  return shuffle([answer, ...[...wrongs].slice(0, 3)]);
-}
-
-function makeQ(a: number, b: number, op: Op): Question {
-  const answer = op === '+' ? a + b : op === '−' ? a - b : a * b;
-  return { a, b, op, answer, options: makeOptions(answer, op) };
-}
-
-const BASE_POOL: Question[] = [
-  makeQ(1,1,'+'), makeQ(2,1,'+'), makeQ(3,2,'+'), makeQ(5,1,'+'), makeQ(4,3,'+'),
-  makeQ(2,2,'+'), makeQ(6,2,'+'), makeQ(1,4,'+'), makeQ(3,3,'+'), makeQ(8,1,'+'),
-  makeQ(2,1,'−'), makeQ(5,2,'−'), makeQ(6,3,'−'), makeQ(4,1,'−'), makeQ(7,2,'−'),
-  makeQ(3,3,'−'), makeQ(9,3,'−'), makeQ(8,4,'−'), makeQ(5,5,'−'), makeQ(10,2,'−'),
-  makeQ(1,2,'×'), makeQ(2,2,'×'), makeQ(3,1,'×'), makeQ(2,3,'×'), makeQ(4,2,'×'),
-];
+const BASE_POOL = MATH_BASE_POOL;
 
 function buildPool(): Question[] {
   const result: Question[] = [];

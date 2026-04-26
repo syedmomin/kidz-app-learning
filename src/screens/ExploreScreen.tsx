@@ -24,11 +24,13 @@ import SoundMatchCard  from '../components/cards/SoundMatchCard';
 import LetterBalloonPopCard  from '../components/cards/LetterBalloonPopCard';
 import AlphabetSoundCard   from '../components/cards/AlphabetSoundCard';
 
+import { ANIMAL_SOUNDS, MUSIC_FILES } from '../data/GameAssets';
+
 const SOUNDS = {
-  abc: require('../../assets/music/abc_tts.mp3'),
-  lion: require('../../assets/sounds/lion.mp3'),
-  happy: require('../../assets/music/happy.mp3'),
-  twinkle: require('../../assets/music/twinkle_tts.mp3'),
+  abc: MUSIC_FILES.abc,
+  lion: ANIMAL_SOUNDS.lion,
+  happy: MUSIC_FILES.happy,
+  twinkle: MUSIC_FILES.twinkle,
 };
 
 export default function ExploreScreen({ navigation }: ScreenProps<'Explore'>) {
