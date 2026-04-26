@@ -8,10 +8,8 @@ import { useProgress } from '../store/ProgressStore';
 import { useAudio } from '../hooks/useAudio';
 import type { ScreenProps } from '../navigation/types';
 
-import AlphabetsCard  from '../components/cards/AlphabetsCard';
 import AnimalsCard    from '../components/cards/AnimalsCard';
 import MusicCard      from '../components/cards/MusicCard';
-import StoriesCard    from '../components/cards/StoriesCard';
 import ColoringCard   from '../components/cards/ColoringCard';
 import NumbersCard    from '../components/cards/NumbersCard';
 import MathQuizCard   from '../components/cards/MathQuizCard';
@@ -96,26 +94,24 @@ export default function ExploreScreen({ navigation }: ScreenProps<'Explore'>) {
 
       <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
         <View style={s.grid}>
-          {renderCard(0, AlphabetsCard, 'Category', undefined, 'Letters')}
+          {renderCard(0, LetterTraceCard, 'LetterTrace', undefined, 'Trace the letter')}
           {renderCard(1, AnimalsCard, 'Animals', 'lion')}
           {renderCard(2, MusicCard, 'Music', 'happy')}
-          {renderCard(3, StoriesCard, 'Story', 'twinkle')}
+          {renderCard(3, ColoringCard, 'ColorMatch', undefined, 'Coloring')}
           {renderCard(4, MathQuizCard, 'NumberQuiz', undefined, 'Math Quiz')}
           {renderCard(5, WordMatchCard, 'WordMatch', undefined, 'Word Match')}
-          {renderCard(6, ColoringCard, 'ColorMatch', undefined, 'Coloring')}
-          {renderCard(7, NumbersCard, 'Numbers', undefined, 'Numbers')}
-          {renderCard(8, MemoryFlipCard, 'MemoryFlip', undefined, 'Memory Flip')}
-          {renderCard(9, ShapeQuizCard, 'ShapeQuiz', undefined, 'Shape Quiz')}
-          {renderCard(10, BalloonPopCard, 'BalloonPop', undefined, 'Balloon Pop')}
-          {renderCard(11, ShadowMatchCard, 'ShadowMatch', undefined, 'Shadow Match')}
-          {renderCard(12, SoundMatchCard, 'SoundMatch', undefined, 'Sound Match')}
-          {renderCard(13, LetterBalloonPopCard, 'LetterBalloonPop', undefined, 'Letter Pop')}
-          {renderCard(14, AlphabetSoundCard, 'AlphabetSound', undefined, 'A for Apple')}
-          {renderCard(15, LetterTraceCard, 'LetterTrace', undefined, 'Trace the letter')}
-          {renderCard(16, ColorMixCard, 'ColorMix', undefined, 'Color Mix Lab')}
-          {renderCard(17, PatternQuestCard, 'PatternQuest', undefined, 'Pattern Quest')}
-          {renderCard(18, ClockReadCard, 'ClockRead', undefined, 'Clock Reader')}
-          {renderCard(19, EmotionMatchCard, 'EmotionMatch', undefined, 'Emotion Match')}
+          {renderCard(6, NumbersCard, 'Numbers', undefined, 'Numbers')}
+          {renderCard(7, MemoryFlipCard, 'MemoryFlip', undefined, 'Memory Flip')}
+          {renderCard(8, ShapeQuizCard, 'ShapeQuiz', undefined, 'Shape Quiz')}
+          {renderCard(9, BalloonPopCard, 'BalloonPop', undefined, 'Balloon Pop')}
+          {renderCard(10, ShadowMatchCard, 'ShadowMatch', undefined, 'Shadow Match')}
+          {renderCard(11, SoundMatchCard, 'SoundMatch', undefined, 'Sound Match')}
+          {renderCard(12, LetterBalloonPopCard, 'LetterBalloonPop', undefined, 'Letter Pop')}
+          {renderCard(13, AlphabetSoundCard, 'AlphabetSound', undefined, 'A for Apple')}
+          {renderCard(14, ColorMixCard, 'ColorMix', undefined, 'Color Mix Lab')}
+          {renderCard(15, PatternQuestCard, 'PatternQuest', undefined, 'Pattern Quest')}
+          {renderCard(16, ClockReadCard, 'ClockRead', undefined, 'Clock Reader')}
+          {renderCard(17, EmotionMatchCard, 'EmotionMatch', undefined, 'Emotion Match')}
         </View>
         <View style={{ height: 24 }}/>
       </ScrollView>
