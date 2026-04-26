@@ -36,14 +36,28 @@ function useSound() {
   const soundRef = useRef<Audio.Sound | null>(null);
   const [playingId, setPlayingId] = useState<string | null>(null);
 
-  const play = useCallback(async (source: any, id: string) => {
+  const play = useCallback(async (animal: Animal) => {
     try {
       if (soundRef.current) {
         await soundRef.current.unloadAsync();
         soundRef.current = null;
       }
-      setPlayingId(id);
-      const { sound } = await Audio.Sound.createAsync(source, { shouldPlay: true });
+      setPlayingId(animal.id);
+      
+      if (!animal.sound) {
+        // Fallback to Speech if no sound file
+        const Speech = await import('expo-speech');
+        Speech.speak(animal.name, {
+          rate: 1.0,
+          pitch: 1.2,
+          onDone: () => setPlayingId(null),
+          onError: () => setPlayingId(null),
+          onStopped: () => setPlayingId(null),
+        });
+        return;
+      }
+
+      const { sound } = await Audio.Sound.createAsync(animal.sound, { shouldPlay: true });
       soundRef.current = sound;
       sound.setOnPlaybackStatusUpdate((status) => {
         if (status.isLoaded && status.didJustFinish) setPlayingId(null);
@@ -177,7 +191,6 @@ function GalleryCard({ item, playing, onPress }: { item: Animal; playing: boolea
             )}
           </View>
           <View style={[gc.footer, { backgroundColor: item.bgGradient[0] + 'AA' }]}>
-            <Text style={gc.emoji}>{item.emoji}</Text>
             <View style={{ flex: 1 }}>
               <Text style={gc.name}>{item.name}</Text>
               <Text style={gc.fact} numberOfLines={1}>{item.fact}</Text>
@@ -202,7 +215,6 @@ const gc = StyleSheet.create({
   },
   playTxt: { fontSize: 20 },
   footer: { padding: 10, flexDirection: 'row', alignItems: 'center', gap: 6 },
-  emoji: { fontSize: 22 },
   name: { fontSize: 13, fontWeight: '900', color: C.ink },
   fact: { fontSize: 10, color: C.inkSoft, marginTop: 1 },
 });
@@ -212,7 +224,7 @@ const gc = StyleSheet.create({
 type AnswerState = 'idle' | 'correct' | 'wrong';
 
 function QuizMode({ play }: {
-  play: (source: any, id: string) => Promise<void>;
+  play: (animal: Animal) => Promise<void>;
 }) {
   const [correct, setCorrect] = useState<Animal>(() => nextQuizAnimal());
   const [options, setOptions] = useState<Animal[]>(() => buildOptions(correct));
@@ -255,7 +267,7 @@ function QuizMode({ play }: {
       setState('correct');
       setShowBurst(true);
 
-      play(correct.sound, correct.id);
+      play(correct);
 
       // Bounce + wiggle image
       Animated.sequence([
@@ -340,7 +352,7 @@ function QuizMode({ play }: {
         <View style={qz.optGrid}>
           {options.map((animal) => (
             <Pressable key={animal.id} style={optionStyle(animal)} onPress={() => handleSelect(animal)}>
-              <Text style={qz.optEmoji}>{animal.emoji}</Text>
+              <Image source={typeof animal.image === 'string' ? { uri: animal.image } : animal.image} style={qz.optImg} />
               <Text style={qz.optName}>{animal.name}</Text>
               {state === 'correct' && animal.id === correct.id && <Text style={qz.tick}>✅</Text>}
               {state === 'wrong' && animal.id === selected && <Text style={qz.tick}>❌</Text>}
@@ -384,7 +396,7 @@ const qz = StyleSheet.create({
   },
   optCorrect: { backgroundColor: '#E8F5E9', borderColor: '#00C853' },
   optWrong: { backgroundColor: '#FFEBEE', borderColor: '#F44336' },
-  optEmoji: { fontSize: 28 },
+  optImg: { width: 32, height: 32, borderRadius: 8, resizeMode: 'cover' },
   optName: { flex: 1, fontSize: 16, fontWeight: '800', color: C.ink },
   tick: { fontSize: 20 },
   tryAgainTxt: {
@@ -444,7 +456,7 @@ export default function AnimalScreen({ navigation }: ScreenProps<'Animals'>) {
             <GalleryCard
               item={item}
               playing={playingId === item.id}
-              onPress={() => play(item.sound, item.id)}
+              onPress={() => play(item)}
             />
           )}
         />

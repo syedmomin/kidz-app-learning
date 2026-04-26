@@ -1,7 +1,7 @@
 // src/screens/MemoryFlipScreen.tsx
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import {
-  View, Text, StyleSheet, Pressable,
+  View, Text, StyleSheet, Pressable, Image,
   Animated, Dimensions, Easing, ScrollView
 } from 'react-native';
 import PhoneSafe from '../components/PhoneSafe';
@@ -10,38 +10,22 @@ import GameHeader from '../components/GameHeader';
 import { shuffle } from '../utils';
 import { useAudio } from '../hooks/useAudio';
 import type { ScreenProps } from '../navigation/types';
+import { ANIMALS } from '../data/animals';
 
 const { width: SW } = Dimensions.get('window');
 const PAD = 10;
 const GAP = 8;
 
-const PAIRS_DATA = [
-  { emoji: '🐱', sound: require('../../assets/sounds/cat.mp3'), name: 'Cat' },
-  { emoji: '🐶', sound: require('../../assets/sounds/dog.mp3'), name: 'Dog' },
-  { emoji: '🐸', sound: require('../../assets/sounds/frog.mp3'), name: 'Frog' },
-  { emoji: '🦁', sound: require('../../assets/sounds/lion.mp3'), name: 'Lion' },
-  { emoji: '🐼', sound: require('../../assets/sounds/panda.mp3'), name: 'Panda' },
-  { emoji: '🦊', sound: require('../../assets/sounds/fox.mp3'), name: 'Fox' },
-  { emoji: '🐧', sound: require('../../assets/sounds/penguin.mp3'), name: 'Penguin' },
-  { emoji: '🐘', sound: require('../../assets/sounds/elephant.mp3'), name: 'Elephant' },
-  { emoji: '🐵', sound: require('../../assets/sounds/monkey.mp3'), name: 'Monkey' },
-  { emoji: '🦓', sound: require('../../assets/sounds/zebra.mp3'), name: 'Zebra' },
-  { emoji: '🦒', sound: require('../../assets/sounds/giraffe.mp3'), name: 'Giraffe' },
-  { emoji: '🐯', sound: require('../../assets/sounds/tiger.mp3'), name: 'Tiger' },
-  { emoji: '🦉', sound: require('../../assets/sounds/owl.mp3'), name: 'Owl' },
-  { emoji: '🐻', sound: require('../../assets/sounds/bear.mp3'), name: 'Bear' },
-  { emoji: '🐺', sound: require('../../assets/sounds/wolf.mp3'), name: 'Wolf' },
-];
 
-interface Card { id: number; pairIdx: number; emoji: string; sound: any; name: string }
 
+interface Card { id: number; pairIdx: number; image: any; sound?: any; name: string }
 
 function buildDeck(pairCount: number): Card[] {
-  const selectedPairs = shuffle(PAIRS_DATA).slice(0, pairCount);
+  const selectedPairs = shuffle(ANIMALS).slice(0, pairCount);
   const deck = [...selectedPairs, ...selectedPairs].map((p, i) => ({
     id: i,
-    pairIdx: PAIRS_DATA.indexOf(p),
-    emoji: p.emoji,
+    pairIdx: ANIMALS.indexOf(p),
+    image: p.image,
     sound: p.sound,
     name: p.name,
   }));
@@ -92,7 +76,7 @@ function MemCard({ card, status, onPress, width, height }: {
           <Text style={[mc.backQ, { fontSize: width * 0.4 }]}>🐾</Text>
         </Animated.View>
         <Animated.View style={[mc.side, { backgroundColor: status === 'matched' ? '#5EE39F' : '#fff', opacity: frontOp, transform: [{ rotateY: frontRot }] }]}>
-          <Text style={[mc.emoji, { fontSize: width * 0.5 }]}>{card.emoji}</Text>
+          <Image source={card.image} style={[mc.cardImg, { width: width * 0.8, height: width * 0.8, borderRadius: 10 }]} />
           {status === 'matched' && <Text style={[mc.tick, { fontSize: width * 0.2 }]}>✅</Text>}
         </Animated.View>
       </Animated.View>
@@ -162,7 +146,13 @@ export default function MemoryFlipScreen({ navigation }: ScreenProps<'MemoryFlip
 
       if (isMatch) {
         setTimeout(() => {
-          playSound(deck[idx].sound);
+          if (deck[idx].sound) {
+            playSound(deck[idx].sound);
+          } else {
+            import('expo-speech').then(Speech => {
+              Speech.speak(deck[idx].name, { rate: 1.0, pitch: 1.2 });
+            });
+          }
           setStatuses(prev => prev.map((s, i) =>
             i === firstIdx || i === idx ? 'matched' : s
           ) as CardStatus[]);
@@ -219,7 +209,7 @@ export default function MemoryFlipScreen({ navigation }: ScreenProps<'MemoryFlip
 const mc = StyleSheet.create({
   side: { position: 'absolute', width: '100%', height: '100%', borderRadius: 12, alignItems: 'center', justifyContent: 'center', backfaceVisibility: 'hidden', elevation: 4, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 3 },
   backQ: {},
-  emoji: {},
+  cardImg: { resizeMode: 'cover' },
   tick: { position: 'absolute', top: 2, right: 4 },
 });
 

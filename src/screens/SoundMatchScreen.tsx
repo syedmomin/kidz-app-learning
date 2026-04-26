@@ -35,13 +35,18 @@ function buildOptions(correct: Animal): Animal[] {
 function useAnimalSound() {
   const soundRef = useRef<Audio.Sound | null>(null);
 
-  const play = useCallback(async (source: any) => {
+  const play = useCallback(async (animal: Animal) => {
     try {
       if (soundRef.current) {
         await soundRef.current.unloadAsync();
         soundRef.current = null;
       }
-      const { sound } = await Audio.Sound.createAsync(source, { shouldPlay: true });
+      if (!animal.sound) {
+        const Speech = await import('expo-speech');
+        Speech.speak(animal.name, { rate: 1.0, pitch: 1.2 });
+        return;
+      }
+      const { sound } = await Audio.Sound.createAsync(animal.sound, { shouldPlay: true });
       soundRef.current = sound;
     } catch (e) {
       console.log('Sound error:', e);
@@ -88,7 +93,7 @@ export default function SoundMatchScreen({ navigation }: ScreenProps<'SoundMatch
     
     // Auto-play sound after short delay
     setTimeout(() => {
-      play(animal.sound);
+      play(animal);
     }, 500);
   }, [round, play]);
 
@@ -100,7 +105,7 @@ export default function SoundMatchScreen({ navigation }: ScreenProps<'SoundMatch
     if (isWon || selectedWrong.includes(animal.id)) return;
     
     // Play the tapped animal's sound
-    play(animal.sound);
+    play(animal);
 
     if (animal.id === currentAnimal?.id) {
       // Correct!
@@ -143,7 +148,7 @@ export default function SoundMatchScreen({ navigation }: ScreenProps<'SoundMatch
   };
 
   const replaySound = () => {
-    if (currentAnimal) play(currentAnimal.sound);
+    if (currentAnimal) play(currentAnimal);
   };
 
   if (gameOver) {
