@@ -26,7 +26,11 @@ import ColorMixCard      from '../components/cards/ColorMixCard';
 import PatternQuestCard  from '../components/cards/PatternQuestCard';
 import ClockReadCard     from '../components/cards/ClockReadCard';
 import EmotionMatchCard  from '../components/cards/EmotionMatchCard';
-import ArabicCard        from '../components/cards/ArabicCard';
+import ArabicQaidaCard   from '../components/cards/ArabicQaidaCard';
+import ArabicSurahCard   from '../components/cards/ArabicSurahCard';
+import ArabicDuaCard     from '../components/cards/ArabicDuaCard';
+import NamazCard         from '../components/cards/NamazCard';
+import AsmaCard          from '../components/cards/AsmaCard';
 
 import { ANIMAL_SOUNDS, MUSIC_FILES } from '../data/GameAssets';
 
@@ -41,8 +45,8 @@ export default function ExploreScreen({ navigation }: ScreenProps<'Explore'>) {
   const { p, touchStreak } = useProgress();
   const { playSound } = useAudio();
   
-  const fadeAnims = useRef([...Array(20)].map(() => new Animated.Value(0))).current;
-  const slideAnims = useRef([...Array(20)].map(() => new Animated.Value(30))).current;
+  const fadeAnims = useRef([...Array(23)].map(() => new Animated.Value(0))).current;
+  const slideAnims = useRef([...Array(23)].map(() => new Animated.Value(30))).current;
 
   useEffect(() => { 
     touchStreak(); 
@@ -113,7 +117,11 @@ export default function ExploreScreen({ navigation }: ScreenProps<'Explore'>) {
           {renderCard(15, PatternQuestCard, 'PatternQuest', undefined, 'Pattern Quest')}
           {renderCard(16, ClockReadCard, 'ClockRead', undefined, 'Clock Reader')}
           {renderCard(17, EmotionMatchCard, 'EmotionMatch', undefined, 'Emotion Match')}
-          {renderCard(18, ArabicCard, 'ArabicHome', undefined, 'Arabic Learning')}
+          {renderCard(18, ArabicQaidaCard, 'ArabicQaida', undefined, 'Arabic Qaida')}
+          {renderCard(19, ArabicSurahCard, 'ArabicSurah', undefined, 'Quran Surahs')}
+          {renderCard(20, ArabicDuaCard, 'ArabicDua', undefined, 'Daily Duas')}
+          {renderCard(21, NamazCard, 'Namaz', undefined, 'Namaz Learning')}
+          {renderCard(22, AsmaCard, 'Asma', undefined, 'Asma ul Husna')}
         </View>
         <View style={{ height: 24 }}/>
       </ScrollView>
