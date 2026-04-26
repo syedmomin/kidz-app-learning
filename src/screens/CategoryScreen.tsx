@@ -3,6 +3,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
 import PhoneSafe from '../components/PhoneSafe';
 import { C } from '../theme';
+import GameHeader from '../components/GameHeader';
 import { Star } from '../components/Icons';
 import { useProgress } from '../store/ProgressStore';
 import type { ScreenProps } from '../navigation/types';
@@ -16,14 +17,12 @@ export default function CategoryScreen({ navigation }: ScreenProps<'Category'>) 
 
   return (
     <PhoneSafe bg="#FFE9DC">
-      <View style={s.header}>
-        <Pressable onPress={() => navigation.goBack()} style={s.back}><Text style={s.backT}>←</Text></Pressable>
-        <View style={{ flex: 1 }}>
-          <Text style={s.title}>Letters</Text>
-          <Text style={s.sub}>{p.lettersCompleted.length} / 26 learned</Text>
-        </View>
-        <View style={s.stars}><Star size={18}/><Text style={s.starsT}>{p.stars}</Text></View>
-      </View>
+      <GameHeader
+        onBack={() => navigation.goBack()}
+        title="Letters"
+        subtitle={`${p.lettersCompleted.length} / 26 learned`}
+        right={<View style={s.stars}><Star size={18}/><Text style={s.starsT}>{p.stars}</Text></View>}
+      />
 
       <Pressable onPress={() => navigation.navigate('Lesson', { letter: next })} style={s.banner}>
         <View style={{ flex: 1 }}>
@@ -55,11 +54,6 @@ export default function CategoryScreen({ navigation }: ScreenProps<'Category'>) 
 }
 
 const s = StyleSheet.create({
-  header: { flexDirection: 'row', alignItems: 'center', padding: 14, gap: 10 },
-  back: { width: 44, height: 44, borderRadius: 22, backgroundColor: '#fff', borderWidth: 3, borderColor: C.ink, alignItems: 'center', justifyContent: 'center' },
-  backT: { fontSize: 20, fontWeight: '900', color: C.ink },
-  title: { fontWeight: '900', fontSize: 24, color: C.ink },
-  sub: { fontWeight: '700', fontSize: 12, color: C.inkSoft },
   stars: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderWidth: 3, borderColor: C.ink, borderRadius: 999, paddingHorizontal: 10, paddingVertical: 4 },
   starsT: { fontWeight: '900', fontSize: 14, color: C.ink, marginLeft: 4 },
   banner: { flexDirection: 'row', alignItems: 'center', backgroundColor: C.coral, borderWidth: 4, borderColor: C.ink, borderRadius: 24, margin: 14, padding: 14 },

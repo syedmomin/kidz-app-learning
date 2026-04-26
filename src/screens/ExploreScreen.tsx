@@ -19,7 +19,9 @@ import WordMatchCard  from '../components/cards/WordMatchCard';
 import MemoryFlipCard from '../components/cards/MemoryFlipCard';
 import ShapeQuizCard  from '../components/cards/ShapeQuizCard';
 import BalloonPopCard from '../components/cards/BalloonPopCard';
-import OddOneOutCard  from '../components/cards/OddOneOutCard';
+import ShadowMatchCard  from '../components/cards/ShadowMatchCard';
+import SoundMatchCard  from '../components/cards/SoundMatchCard';
+import LetterBalloonPopCard  from '../components/cards/LetterBalloonPopCard';
 
 const SOUNDS = {
   abc: require('../../assets/music/abc_tts.mp3'),
@@ -32,8 +34,8 @@ export default function ExploreScreen({ navigation }: ScreenProps<'Explore'>) {
   const { p, touchStreak } = useProgress();
   const { playSound } = useAudio();
   
-  const fadeAnims = useRef([...Array(12)].map(() => new Animated.Value(0))).current;
-  const slideAnims = useRef([...Array(12)].map(() => new Animated.Value(30))).current;
+  const fadeAnims = useRef([...Array(14)].map(() => new Animated.Value(0))).current;
+  const slideAnims = useRef([...Array(14)].map(() => new Animated.Value(30))).current;
 
   useEffect(() => { 
     touchStreak(); 
@@ -97,7 +99,9 @@ export default function ExploreScreen({ navigation }: ScreenProps<'Explore'>) {
           {renderCard(8, MemoryFlipCard, 'MemoryFlip', undefined, 'Memory Flip')}
           {renderCard(9, ShapeQuizCard, 'ShapeQuiz', undefined, 'Shape Quiz')}
           {renderCard(10, BalloonPopCard, 'BalloonPop', undefined, 'Balloon Pop')}
-          {renderCard(11, OddOneOutCard, 'OddOneOut', undefined, 'Odd One Out')}
+          {renderCard(11, ShadowMatchCard, 'ShadowMatch', undefined, 'Shadow Match')}
+          {renderCard(12, SoundMatchCard, 'SoundMatch', undefined, 'Sound Match')}
+          {renderCard(13, LetterBalloonPopCard, 'LetterBalloonPop', undefined, 'Letter Pop')}
         </View>
         <View style={{ height: 24 }}/>
       </ScrollView>

@@ -19,7 +19,6 @@ import NumbersScreen from './src/screens/NumbersScreen';
 import ColorMatchScreen from './src/screens/ColorMatchScreen';
 import WordMatchScreen from './src/screens/WordMatchScreen';
 import StoryScreen from './src/screens/StoryScreen';
-import MiniGamesScreen from './src/screens/MiniGamesScreen';
 import RewardScreen from './src/screens/RewardScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
 import SettingsScreen from './src/screens/SettingsScreen';
@@ -30,7 +29,9 @@ import NumberQuizScreen  from './src/screens/NumberQuizScreen';
 import MemoryFlipScreen  from './src/screens/MemoryFlipScreen';
 import ShapeQuizScreen   from './src/screens/ShapeQuizScreen';
 import BalloonPopScreen  from './src/screens/BalloonPopScreen';
-import OddOneOutScreen   from './src/screens/OddOneOutScreen';
+import ShadowMatchScreen   from './src/screens/ShadowMatchScreen';
+import SoundMatchScreen   from './src/screens/SoundMatchScreen';
+import LetterBalloonPopScreen   from './src/screens/LetterBalloonPopScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -59,7 +60,6 @@ export default function App() {
               <Stack.Screen name="ColorMatch" component={ColorMatchScreen}/>
               <Stack.Screen name="WordMatch" component={WordMatchScreen}/>
               <Stack.Screen name="Story" component={StoryScreen}/>
-              <Stack.Screen name="Games" component={MiniGamesScreen}/>
               <Stack.Screen name="Reward" component={RewardScreen}/>
               <Stack.Screen name="Profile" component={ProfileScreen}/>
               <Stack.Screen name="Settings" component={SettingsScreen}/>
@@ -70,7 +70,9 @@ export default function App() {
               <Stack.Screen name="MemoryFlip"  component={MemoryFlipScreen}/>
               <Stack.Screen name="ShapeQuiz"   component={ShapeQuizScreen}/>
               <Stack.Screen name="BalloonPop"  component={BalloonPopScreen}/>
-              <Stack.Screen name="OddOneOut"   component={OddOneOutScreen}/>
+              <Stack.Screen name="ShadowMatch"   component={ShadowMatchScreen}/>
+              <Stack.Screen name="SoundMatch"   component={SoundMatchScreen}/>
+              <Stack.Screen name="LetterBalloonPop"   component={LetterBalloonPopScreen}/>
             </Stack.Navigator>
           </NavigationContainer>
         </ProgressProvider>

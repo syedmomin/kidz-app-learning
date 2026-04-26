@@ -4,6 +4,8 @@ import { View, Text, StyleSheet, Pressable, Animated, Dimensions, Easing } from 
 import * as Speech from 'expo-speech';
 import PhoneSafe from '../components/PhoneSafe';
 import { C } from '../theme';
+import { shuffle } from '../utils';
+import GameHeader from '../components/GameHeader';
 import { useAudio } from '../hooks/useAudio';
 import type { ScreenProps } from '../navigation/types';
 
@@ -14,8 +16,6 @@ type Op = '+' | '−' | '×';
 interface Question { a: number; b: number; op: Op; answer: number; options: number[] }
 
 const MATH_ICONS = ['🍎', '⭐', '🎈', '🍪', '🦁', '🍦', '🍓', '🥕', '🍭', '🍔'];
-
-function shuffle<T>(arr: T[]): T[] { return [...arr].sort(() => Math.random() - 0.5); }
 
 function makeOptions(answer: number, op: Op): number[] {
   const offsets = op === '×' ? [-answer, answer, 2, -2, 3, -3] : [-2, -1, 1, 2, 3, -3];
@@ -141,11 +141,7 @@ export default function NumberQuizScreen({ navigation }: ScreenProps<'NumberQuiz
 
   return (
     <PhoneSafe bg="#EEF2FF">
-      <View style={s.header}>
-        <Pressable onPress={() => navigation.goBack()} style={s.back}><Text style={s.backT}>←</Text></Pressable>
-        <Text style={s.title}>Math Challenge! 🧮</Text>
-        <View style={[s.scorePill, { backgroundColor: opDark }]}><Text style={s.scoreT}>⭐ {score}</Text></View>
-      </View>
+      <GameHeader onBack={() => navigation.goBack()} title="Math Challenge! 🧮" score={score} scoreBg={opDark} scoreTextColor="#fff" />
 
       {/* Progress Bar Removed as requested */}
 
@@ -197,12 +193,6 @@ export default function NumberQuizScreen({ navigation }: ScreenProps<'NumberQuiz
 }
 
 const s = StyleSheet.create({
-  header:       { flexDirection: 'row', alignItems: 'center', padding: 14, gap: 8 },
-  back:         { width: 44, height: 44, borderRadius: 22, backgroundColor: '#fff', elevation: 4, alignItems: 'center', justifyContent: 'center' },
-  backT:        { fontSize: 22, fontWeight: '900', color: C.ink },
-  title:        { flex: 1, textAlign: 'center', fontWeight: '900', fontSize: 22, color: C.ink },
-  scorePill:    { borderRadius: 20, paddingHorizontal: 15, paddingVertical: 6, elevation: 4 },
-  scoreT:       { fontWeight: '900', fontSize: 16, color: '#fff' },
   mascotArea:   { alignItems: 'center', height: 100, justifyContent: 'center' },
   mascot:       { fontSize: 55 },
   streakText:   { fontSize: 14, fontWeight: '900', color: '#FF5722', marginTop: 4 },

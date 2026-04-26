@@ -5,6 +5,7 @@ import Svg, { Circle, Path } from 'react-native-svg';
 import PhoneSafe from '../components/PhoneSafe';
 import { Star, Coin } from '../components/Icons';
 import { C } from '../theme';
+import GameHeader from '../components/GameHeader';
 import { useProgress } from '../store/ProgressStore';
 import type { ScreenProps } from '../navigation/types';
 
@@ -35,11 +36,7 @@ export default function ProfileScreen({ navigation }: ScreenProps<'Profile'>) {
 
   return (
     <PhoneSafe bg="#FFF6E0">
-      <View style={s.header}>
-        <Pressable onPress={() => navigation.goBack()} style={s.back}><Text style={s.backT}>←</Text></Pressable>
-        <Text style={s.title}>My Profile</Text>
-        <View style={{ width: 44 }}/>
-      </View>
+      <GameHeader onBack={() => navigation.goBack()} title="My Profile" />
 
       <ScrollView contentContainerStyle={{ padding: 16 }}>
         <View style={s.card}>
@@ -89,10 +86,6 @@ function Row({ icon, label, val }: { icon: React.ReactNode; label: string; val: 
 }
 
 const s = StyleSheet.create({
-  header: { flexDirection: 'row', alignItems: 'center', padding: 14 },
-  back: { width: 44, height: 44, borderRadius: 22, backgroundColor: '#fff', borderWidth: 3, borderColor: C.ink, alignItems: 'center', justifyContent: 'center' },
-  backT: { fontSize: 20, fontWeight: '900', color: C.ink },
-  title: { flex: 1, textAlign: 'center', fontWeight: '900', fontSize: 22, color: C.ink },
   card: { alignItems: 'center', backgroundColor: '#fff', borderWidth: 4, borderColor: C.ink, borderRadius: 24, padding: 16 },
   name: { fontSize: 26, fontWeight: '900', color: C.ink, marginTop: 8, textAlign: 'center', borderBottomWidth: 2, borderColor: C.ink, minWidth: 160, paddingVertical: 4 },
   streakT: { fontSize: 14, fontWeight: '800', color: C.coralDeep, marginTop: 6 },

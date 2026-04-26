@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import {
-  View, Text, StyleSheet, Pressable, ScrollView,
-  Animated, Dimensions, Alert,
+  View, Text, StyleSheet, Pressable,
+  Animated, Dimensions, Alert, PanResponder,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Path, Circle, Ellipse, Rect, Polygon } from 'react-native-svg';
@@ -386,6 +386,39 @@ const PAGES: Page[] = [
   ]},
 ];
 
+// ─── Hit Testing ─────────────────────────────────────────────────────────────
+
+function pointInPolygon(x: number, y: number, pts: string): boolean {
+  const coords = pts.trim().split(/[\s,]+/).map(Number);
+  const vx: number[] = [], vy: number[] = [];
+  for (let i = 0; i < coords.length; i += 2) { vx.push(coords[i]); vy.push(coords[i + 1]); }
+  let inside = false;
+  for (let i = 0, j = vx.length - 1; i < vx.length; j = i++) {
+    if (((vy[i] > y) !== (vy[j] > y)) && (x < (vx[j] - vx[i]) * (y - vy[i]) / (vy[j] - vy[i]) + vx[i]))
+      inside = !inside;
+  }
+  return inside;
+}
+
+function hitTest(region: Region, x: number, y: number): boolean {
+  switch (region.k) {
+    case 'circle':
+      return Math.hypot(x - region.cx, y - region.cy) <= region.r;
+    case 'ellipse': {
+      const dx = x - region.cx, dy = y - region.cy;
+      return (dx * dx) / (region.rx * region.rx) + (dy * dy) / (region.ry * region.ry) <= 1;
+    }
+    case 'rect':
+      return x >= region.x && x <= region.x + region.w && y >= region.y && y <= region.y + region.h;
+    case 'poly':
+      return pointInPolygon(x, y, region.pts);
+    case 'path':
+      return false; // paths use SVG onPress fallback
+    default:
+      return false;
+  }
+}
+
 // ─── Render SVG Region ────────────────────────────────────────────────────────
 
 const INK = '#2D2A4A';
@@ -399,7 +432,7 @@ function RenderRegion({ region, fill, onPress }: { region: Region; fill: string;
     strokeWidth: SW3,
     strokeLinejoin: 'round' as const,
     strokeLinecap: 'round' as const,
-    onPress: isDecor ? undefined : onPress,
+    onPress: region.k === 'path' && !isDecor ? onPress : undefined,
   };
   switch (region.k) {
     case 'circle':
@@ -566,6 +599,32 @@ export default function ColorMatchScreen({ navigation }: ScreenProps<'ColorMatch
 
   const activeColor = isEraser ? ERASER : color;
 
+  // PanResponder converts raw touch pixels → SVG viewBox coords (0-300)
+  // and hits the correct region regardless of device scale.
+  const panResponder = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderGrant: (evt) => handleTouch(evt.nativeEvent.locationX, evt.nativeEvent.locationY),
+      onPanResponderMove: (evt) => handleTouch(evt.nativeEvent.locationX, evt.nativeEvent.locationY),
+    })
+  ).current;
+
+  const handleTouch = useCallback((px: number, py: number) => {
+    const scale = 300 / CANVAS;
+    const svgX = px * scale;
+    const svgY = py * scale;
+    // Test regions in reverse order so top-painted regions get hit first
+    for (let i = page.regions.length - 1; i >= 0; i--) {
+      const r = page.regions[i];
+      if (r.defaultFill === 'none') continue;
+      if (hitTest(r, svgX, svgY)) {
+        paint(r.id);
+        return;
+      }
+    }
+  }, [page, paint]);
+
   return (
     <SafeAreaView style={s.root}>
       {/* Header */}
@@ -591,8 +650,13 @@ export default function ColorMatchScreen({ navigation }: ScreenProps<'ColorMatch
 
       {/* SVG Canvas */}
       <View style={s.canvasWrap}>
-        <View ref={canvasRef} style={[s.canvas, { backgroundColor: '#FFFFFF' }]} collapsable={false}>
-          <Svg width={CANVAS} height={CANVAS} viewBox="0 0 300 300">
+        <View
+          ref={canvasRef}
+          style={[s.canvas, { backgroundColor: '#FFFFFF' }]}
+          collapsable={false}
+          {...panResponder.panHandlers}
+        >
+          <Svg width={CANVAS} height={CANVAS} viewBox="0 0 300 300" pointerEvents="none">
             {page.regions.map(region => (
               <RenderRegion
                 key={region.id}

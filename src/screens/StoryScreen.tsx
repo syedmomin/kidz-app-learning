@@ -5,6 +5,7 @@ import Svg, { Circle, Path, Rect } from 'react-native-svg';
 import PhoneSafe from '../components/PhoneSafe';
 import Mango from '../components/Mango';
 import { C } from '../theme';
+import GameHeader from '../components/GameHeader';
 import { useProgress } from '../store/ProgressStore';
 import type { ScreenProps } from '../navigation/types';
 
@@ -31,11 +32,11 @@ export default function StoryScreen({ navigation }: ScreenProps<'Story'>) {
 
   return (
     <PhoneSafe bg={p.bg}>
-      <View style={s.header}>
-        <Pressable onPress={() => navigation.goBack()} style={s.back}><Text style={s.backT}>←</Text></Pressable>
-        <Text style={s.title}>Mango's Big Day</Text>
-        <View style={s.pg}><Text style={s.pgT}>{page + 1}/{PAGES.length}</Text></View>
-      </View>
+      <GameHeader
+        onBack={() => navigation.goBack()}
+        title="Mango's Big Day"
+        right={<View style={s.pg}><Text style={s.pgT}>{page + 1}/{PAGES.length}</Text></View>}
+      />
 
       <View style={[s.scene, { backgroundColor: '#fff' }]}>
         <Svg width="100%" height="100%" viewBox="0 0 300 320">
@@ -63,10 +64,6 @@ export default function StoryScreen({ navigation }: ScreenProps<'Story'>) {
 }
 
 const s = StyleSheet.create({
-  header: { flexDirection: 'row', alignItems: 'center', padding: 14 },
-  back: { width: 44, height: 44, borderRadius: 22, backgroundColor: '#fff', borderWidth: 3, borderColor: C.ink, alignItems: 'center', justifyContent: 'center' },
-  backT: { fontSize: 20, fontWeight: '900', color: C.ink },
-  title: { flex: 1, textAlign: 'center', fontWeight: '900', fontSize: 20, color: C.ink },
   pg: { backgroundColor: '#fff', borderWidth: 3, borderColor: C.ink, borderRadius: 999, paddingHorizontal: 10, paddingVertical: 4 },
   pgT: { fontWeight: '900', fontSize: 13, color: C.ink },
   scene: { margin: 14, height: 260, borderWidth: 4, borderColor: C.ink, borderRadius: 28, overflow: 'hidden', position: 'relative' },

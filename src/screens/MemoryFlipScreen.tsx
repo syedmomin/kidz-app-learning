@@ -7,6 +7,8 @@ import {
 import * as Speech from 'expo-speech';
 import PhoneSafe from '../components/PhoneSafe';
 import { C } from '../theme';
+import GameHeader from '../components/GameHeader';
+import { shuffle } from '../utils';
 import { useAudio } from '../hooks/useAudio';
 import type { ScreenProps } from '../navigation/types';
 
@@ -34,7 +36,6 @@ const PAIRS_DATA = [
 
 interface Card { id: number; pairIdx: number; emoji: string; sound: any; name: string }
 
-function shuffle<T>(arr: T[]): T[] { return [...arr].sort(() => Math.random() - 0.5); }
 
 function buildDeck(pairCount: number): Card[] {
   const selectedPairs = shuffle(PAIRS_DATA).slice(0, pairCount);
@@ -185,11 +186,11 @@ export default function MemoryFlipScreen({ navigation }: ScreenProps<'MemoryFlip
 
   return (
     <PhoneSafe bg="#E3F2FD">
-      <View style={s.header}>
-        <Pressable onPress={() => navigation.goBack()} style={s.back}><Text style={s.backT}>←</Text></Pressable>
-        <Text style={s.title}>Animal Memory! 🐶</Text>
-        <View style={s.lvPill}><Text style={s.lvT}>Level {level}</Text></View>
-      </View>
+      <GameHeader
+        onBack={() => navigation.goBack()}
+        title="Animal Memory! 🐶"
+        right={<View style={s.lvPill}><Text style={s.lvT}>Level {level}</Text></View>}
+      />
 
       <View style={s.gridContainer}>
         {isDone ? (
@@ -227,10 +228,6 @@ const mc = StyleSheet.create({
 });
 
 const s = StyleSheet.create({
-  header: { flexDirection: 'row', alignItems: 'center', padding: 16, gap: 10 },
-  back: { width: 44, height: 44, borderRadius: 22, backgroundColor: '#fff', elevation: 4, alignItems: 'center', justifyContent: 'center' },
-  backT: { fontSize: 22, fontWeight: '900', color: C.ink },
-  title: { flex: 1, textAlign: 'center', fontWeight: '900', fontSize: 22, color: C.ink },
   lvPill: { backgroundColor: '#FF8A65', borderRadius: 20, paddingHorizontal: 15, paddingVertical: 6, elevation: 4 },
   lvT: { fontWeight: '900', fontSize: 14, color: '#fff' },
   gridContainer: { flex: 1 },

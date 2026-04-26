@@ -8,7 +8,6 @@ export type RootStackParamList = {
   ColorMatch: undefined;
   WordMatch: undefined;
   Story: undefined;
-  Games: undefined;
   Reward: { from?: string; stars?: number } | undefined;
   Profile: undefined;
   Settings: undefined;
@@ -19,7 +18,9 @@ export type RootStackParamList = {
   MemoryFlip: undefined;
   ShapeQuiz:  undefined;
   BalloonPop: undefined;
-  OddOneOut:  undefined;
+  ShadowMatch:  undefined;
+  SoundMatch: undefined;
+  LetterBalloonPop: undefined;
 };
 
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';

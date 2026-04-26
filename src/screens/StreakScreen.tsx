@@ -1,8 +1,9 @@
 // src/screens/StreakScreen.tsx — daily streak calendar view
 import React from 'react';
-import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import PhoneSafe from '../components/PhoneSafe';
 import { C } from '../theme';
+import GameHeader from '../components/GameHeader';
 import { useProgress } from '../store/ProgressStore';
 import type { ScreenProps } from '../navigation/types';
 
@@ -14,11 +15,7 @@ export default function StreakScreen({ navigation }: ScreenProps<'Streak'>) {
 
   return (
     <PhoneSafe bg="#FFE9B0">
-      <View style={s.header}>
-        <Pressable onPress={() => navigation.goBack()} style={s.back}><Text style={s.backT}>←</Text></Pressable>
-        <Text style={s.title}>My Streak</Text>
-        <View style={{ width: 44 }}/>
-      </View>
+      <GameHeader onBack={() => navigation.goBack()} title="My Streak" />
 
       <View style={s.hero}>
         <Text style={s.fire}>🔥</Text>
@@ -48,10 +45,6 @@ export default function StreakScreen({ navigation }: ScreenProps<'Streak'>) {
 }
 
 const s = StyleSheet.create({
-  header: { flexDirection: 'row', alignItems: 'center', padding: 14 },
-  back: { width: 44, height: 44, borderRadius: 22, backgroundColor: '#fff', borderWidth: 3, borderColor: C.ink, alignItems: 'center', justifyContent: 'center' },
-  backT: { fontSize: 20, fontWeight: '900', color: C.ink },
-  title: { flex: 1, textAlign: 'center', fontWeight: '900', fontSize: 22, color: C.ink },
   hero: { alignItems: 'center', padding: 22, backgroundColor: C.coral, margin: 16, borderWidth: 4, borderColor: C.ink, borderRadius: 28 },
   fire: { fontSize: 60 },
   big: { fontSize: 80, fontWeight: '900', color: C.cream, lineHeight: 88 },

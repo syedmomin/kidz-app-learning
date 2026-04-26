@@ -4,6 +4,7 @@ import { View, Text, StyleSheet, Pressable, Animated, Dimensions, Easing } from 
 import * as Speech from 'expo-speech';
 import PhoneSafe from '../components/PhoneSafe';
 import { C } from '../theme';
+import GameHeader from '../components/GameHeader';
 import { useAudio } from '../hooks/useAudio';
 import type { ScreenProps } from '../navigation/types';
 
@@ -210,11 +211,7 @@ export default function BalloonPopScreen({ navigation }: ScreenProps<'BalloonPop
       <Cloud top={220} delay={5000} />
       <Cloud top={380} delay={2000} />
 
-      <View style={s.header}>
-        <Pressable onPress={() => navigation.goBack()} style={s.back}><Text style={s.backT}>←</Text></Pressable>
-        <Text style={s.title}>Balloon Pop! 🎈</Text>
-        <View style={s.scorePill}><Text style={s.scoreT}>⭐ {score}</Text></View>
-      </View>
+      <GameHeader onBack={() => navigation.goBack()} title="Balloon Pop! 🎈" score={score} scoreBg="#FFEB3B" />
 
       {/* Progress Bar Removed as requested */}
 
@@ -258,12 +255,6 @@ const b = StyleSheet.create({
 });
 
 const s = StyleSheet.create({
-  header:       { flexDirection: 'row', alignItems: 'center', padding: 14, gap: 10, zIndex: 10 },
-  back:         { width: 44, height: 44, borderRadius: 22, backgroundColor: '#fff', elevation: 4, alignItems: 'center', justifyContent: 'center' },
-  backT:        { fontSize: 22, fontWeight: '900', color: C.ink },
-  title:        { flex: 1, textAlign: 'center', fontWeight: '900', fontSize: 24, color: '#fff', textShadowColor: 'rgba(0,0,0,0.2)', textShadowOffset: { width: 0, height: 2 }, textShadowRadius: 4 },
-  scorePill:    { backgroundColor: '#FFEB3B', borderRadius: 20, paddingHorizontal: 15, paddingVertical: 6, elevation: 4 },
-  scoreT:       { fontWeight: '900', fontSize: 16, color: C.ink },
   targetArea:   { alignItems: 'center', marginTop: 10, gap: 8 },
   targetLbl:    { fontSize: 18, fontWeight: '900', color: '#fff' },
   targetBadge:  { width: 100, height: 100, borderRadius: 50, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center', elevation: 10, shadowColor: '#000', shadowOffset: { width: 0, height: 5 }, shadowOpacity: 0.2, shadowRadius: 8 },

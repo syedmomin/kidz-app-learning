@@ -5,6 +5,7 @@ import Svg, { Path, Ellipse } from 'react-native-svg';
 import PhoneSafe from '../components/PhoneSafe';
 import { KButton } from '../components/ui';
 import { C } from '../theme';
+import GameHeader from '../components/GameHeader';
 import { useProgress } from '../store/ProgressStore';
 import type { ScreenProps } from '../navigation/types';
 
@@ -30,11 +31,7 @@ export default function NumbersScreen({ navigation }: ScreenProps<'Numbers'>) {
 
   return (
     <PhoneSafe bg="#D9F0FF">
-      <View style={s.header}>
-        <Pressable onPress={() => navigation.goBack()} style={s.back}><Text style={s.backT}>←</Text></Pressable>
-        <Text style={s.title}>Count the apples!</Text>
-        <View style={{ width: 44 }}/>
-      </View>
+      <GameHeader onBack={() => navigation.goBack()} title="Count the apples!" />
 
       <View style={s.numBox}><Text style={s.num}>{picked.size}</Text></View>
 
@@ -70,10 +67,6 @@ export default function NumbersScreen({ navigation }: ScreenProps<'Numbers'>) {
 }
 
 const s = StyleSheet.create({
-  header: { flexDirection: 'row', alignItems: 'center', padding: 14, gap: 10 },
-  back: { width: 44, height: 44, borderRadius: 22, backgroundColor: '#fff', borderWidth: 3, borderColor: C.ink, alignItems: 'center', justifyContent: 'center' },
-  backT: { fontSize: 20, fontWeight: '900', color: C.ink },
-  title: { flex: 1, textAlign: 'center', fontWeight: '900', fontSize: 20, color: C.ink },
   numBox: { margin: 16, height: 130, backgroundColor: C.yellow, borderWidth: 4, borderColor: C.ink, borderRadius: 28, alignItems: 'center', justifyContent: 'center' },
   num: { fontSize: 110, fontWeight: '900', color: C.ink },
   apples: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-around', padding: 16, backgroundColor: C.cream, marginHorizontal: 16, borderWidth: 4, borderColor: C.ink, borderRadius: 28 },
