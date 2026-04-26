@@ -22,6 +22,7 @@ import BalloonPopCard from '../components/cards/BalloonPopCard';
 import ShadowMatchCard  from '../components/cards/ShadowMatchCard';
 import SoundMatchCard  from '../components/cards/SoundMatchCard';
 import LetterBalloonPopCard  from '../components/cards/LetterBalloonPopCard';
+import AlphabetSoundCard   from '../components/cards/AlphabetSoundCard';
 
 const SOUNDS = {
   abc: require('../../assets/music/abc_tts.mp3'),
@@ -34,8 +35,8 @@ export default function ExploreScreen({ navigation }: ScreenProps<'Explore'>) {
   const { p, touchStreak } = useProgress();
   const { playSound } = useAudio();
   
-  const fadeAnims = useRef([...Array(14)].map(() => new Animated.Value(0))).current;
-  const slideAnims = useRef([...Array(14)].map(() => new Animated.Value(30))).current;
+  const fadeAnims = useRef([...Array(15)].map(() => new Animated.Value(0))).current;
+  const slideAnims = useRef([...Array(15)].map(() => new Animated.Value(30))).current;
 
   useEffect(() => { 
     touchStreak(); 
@@ -102,6 +103,7 @@ export default function ExploreScreen({ navigation }: ScreenProps<'Explore'>) {
           {renderCard(11, ShadowMatchCard, 'ShadowMatch', undefined, 'Shadow Match')}
           {renderCard(12, SoundMatchCard, 'SoundMatch', undefined, 'Sound Match')}
           {renderCard(13, LetterBalloonPopCard, 'LetterBalloonPop', undefined, 'Letter Pop')}
+          {renderCard(14, AlphabetSoundCard, 'AlphabetSound', undefined, 'A for Apple')}
         </View>
         <View style={{ height: 24 }}/>
       </ScrollView>

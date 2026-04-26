@@ -5,7 +5,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Audio } from 'expo-av';
-import { ANIMALS, Animal } from '../data/animals';
+import { ANIMALS, Animal } from '../components/animals';
 import { ScreenProps } from '../navigation/types';
 import { C } from '../theme';
 

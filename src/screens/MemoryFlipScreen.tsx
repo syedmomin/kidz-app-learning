@@ -10,7 +10,7 @@ import GameHeader from '../components/GameHeader';
 import { shuffle } from '../utils';
 import { useAudio } from '../hooks/useAudio';
 import type { ScreenProps } from '../navigation/types';
-import { ANIMALS } from '../data/animals';
+import { ANIMALS } from '../components/animals';
 
 const { width: SW } = Dimensions.get('window');
 const PAD = 10;
