@@ -38,6 +38,12 @@ import ColorMixScreen   from './src/screens/ColorMixScreen';
 import PatternQuestScreen from './src/screens/PatternQuestScreen';
 import ClockReadScreen    from './src/screens/ClockReadScreen';
 import EmotionMatchScreen from './src/screens/EmotionMatchScreen';
+import ArabicHomeScreen   from './src/screens/ArabicHomeScreen';
+import ArabicQaidaScreen  from './src/screens/ArabicQaidaScreen';
+import ArabicSurahScreen  from './src/screens/ArabicSurahScreen';
+import ArabicDuaScreen    from './src/screens/ArabicDuaScreen';
+import NamazScreen        from './src/screens/NamazScreen';
+import AsmaScreen         from './src/screens/AsmaScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -85,6 +91,12 @@ export default function App() {
               <Stack.Screen name="PatternQuest" component={PatternQuestScreen}/>
               <Stack.Screen name="ClockRead"    component={ClockReadScreen}/>
               <Stack.Screen name="EmotionMatch" component={EmotionMatchScreen}/>
+              <Stack.Screen name="ArabicHome"  component={ArabicHomeScreen}/>
+              <Stack.Screen name="ArabicQaida" component={ArabicQaidaScreen}/>
+              <Stack.Screen name="ArabicSurah" component={ArabicSurahScreen}/>
+              <Stack.Screen name="ArabicDua"   component={ArabicDuaScreen}/>
+              <Stack.Screen name="Namaz"       component={NamazScreen}/>
+              <Stack.Screen name="Asma"        component={AsmaScreen}/>
             </Stack.Navigator>
           </NavigationContainer>
         </ProgressProvider>

@@ -27,6 +27,12 @@ export type RootStackParamList = {
   PatternQuest: undefined;
   ClockRead: undefined;
   EmotionMatch: undefined;
+  ArabicHome: undefined;
+  ArabicQaida: undefined;
+  ArabicSurah: undefined;
+  ArabicDua: undefined;
+  Namaz: undefined;
+  Asma: undefined;
 };
 
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';

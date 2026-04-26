@@ -26,6 +26,7 @@ import ColorMixCard      from '../components/cards/ColorMixCard';
 import PatternQuestCard  from '../components/cards/PatternQuestCard';
 import ClockReadCard     from '../components/cards/ClockReadCard';
 import EmotionMatchCard  from '../components/cards/EmotionMatchCard';
+import ArabicCard        from '../components/cards/ArabicCard';
 
 import { ANIMAL_SOUNDS, MUSIC_FILES } from '../data/GameAssets';
 
@@ -112,6 +113,7 @@ export default function ExploreScreen({ navigation }: ScreenProps<'Explore'>) {
           {renderCard(15, PatternQuestCard, 'PatternQuest', undefined, 'Pattern Quest')}
           {renderCard(16, ClockReadCard, 'ClockRead', undefined, 'Clock Reader')}
           {renderCard(17, EmotionMatchCard, 'EmotionMatch', undefined, 'Emotion Match')}
+          {renderCard(18, ArabicCard, 'ArabicHome', undefined, 'Arabic Learning')}
         </View>
         <View style={{ height: 24 }}/>
       </ScrollView>
