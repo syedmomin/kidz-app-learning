@@ -24,27 +24,64 @@ const PRIMARY: Hue[] = [
   { id: 'blue',   name: 'Blue',   emoji: '🐳', color: '#2196F3' },
   { id: 'white',  name: 'White',  emoji: '☁️', color: '#FFFFFF' },
   { id: 'black',  name: 'Black',  emoji: '🌑', color: '#1A1A2E' },
+  { id: 'orange', name: 'Orange', emoji: '🍊', color: '#FF8C00' },
+  { id: 'green',  name: 'Green',  emoji: '🌿', color: '#4CAF50' },
+  { id: 'purple', name: 'Purple', emoji: '🍇', color: '#9C27B0' },
 ];
+
+const ORDER = ['red', 'yellow', 'blue', 'white', 'black', 'orange', 'green', 'purple'];
 
 type Mix = { name: string; emoji: string; color: string };
 
-// Order-independent mix lookup
+// Order-independent mix lookup. Keys MUST follow ORDER above.
 const MIX_TABLE: Record<string, Mix> = {
-  'red+yellow':  { name: 'Orange',     emoji: '🍊', color: '#FF8C00' },
-  'red+blue':    { name: 'Purple',     emoji: '🍇', color: '#9C27B0' },
-  'blue+yellow': { name: 'Green',      emoji: '🌿', color: '#4CAF50' },
-  'red+white':   { name: 'Pink',       emoji: '🌸', color: '#FFB6C1' },
-  'blue+white':  { name: 'Sky Blue',   emoji: '💧', color: '#88C5F2' },
-  'yellow+white':{ name: 'Cream',      emoji: '🥛', color: '#FFF1A8' },
-  'black+white': { name: 'Gray',       emoji: '🐭', color: '#9E9E9E' },
-  'red+black':   { name: 'Maroon',     emoji: '🍷', color: '#7A1F1F' },
-  'blue+black':  { name: 'Navy',       emoji: '🌌', color: '#0D1B4A' },
-  'yellow+black':{ name: 'Olive',      emoji: '🫒', color: '#7A6A1F' },
+  // Primary + Primary
+  'red+yellow':    { name: 'Orange',   emoji: '🍊', color: '#FF8C00' },
+  'red+blue':      { name: 'Purple',   emoji: '🍇', color: '#9C27B0' },
+  'yellow+blue':   { name: 'Green',    emoji: '🌿', color: '#4CAF50' },
+
+  // Primary + White (lighter / pastel)
+  'red+white':     { name: 'Pink',     emoji: '🌸', color: '#FFB6C1' },
+  'yellow+white':  { name: 'Cream',    emoji: '🥛', color: '#FFF1A8' },
+  'blue+white':    { name: 'Sky Blue', emoji: '💧', color: '#88C5F2' },
+
+  // Primary + Black (deeper / darker)
+  'red+black':     { name: 'Maroon',   emoji: '🍷', color: '#7A1F1F' },
+  'yellow+black':  { name: 'Olive',    emoji: '🫒', color: '#7A6A1F' },
+  'blue+black':    { name: 'Navy',     emoji: '🌌', color: '#0D1B4A' },
+
+  // White + Black
+  'white+black':   { name: 'Gray',     emoji: '🐭', color: '#9E9E9E' },
+
+  // Primary + Secondary droplet
+  'red+orange':    { name: 'Crimson',  emoji: '🌹', color: '#DC143C' },
+  'red+green':     { name: 'Brown',    emoji: '🪵', color: '#8B5A2B' },
+  'red+purple':    { name: 'Magenta',  emoji: '💗', color: '#FF2EAA' },
+  'yellow+orange': { name: 'Gold',     emoji: '🪙', color: '#FFB700' },
+  'yellow+green':  { name: 'Lime',     emoji: '🍋', color: '#9ACD32' },
+  'yellow+purple': { name: 'Bronze',   emoji: '🥉', color: '#A07A20' },
+  'blue+orange':   { name: 'Cocoa',    emoji: '🌰', color: '#7A4A1F' },
+  'blue+green':    { name: 'Teal',     emoji: '🐢', color: '#008B8B' },
+  'blue+purple':   { name: 'Indigo',   emoji: '🫐', color: '#4B0082' },
+
+  // Secondary + White (pastel)
+  'white+orange':  { name: 'Peach',    emoji: '🍑', color: '#FFCBA4' },
+  'white+green':   { name: 'Mint',     emoji: '🌱', color: '#A8E6B0' },
+  'white+purple':  { name: 'Lavender', emoji: '💜', color: '#C8A2D8' },
+
+  // Secondary + Black (deep)
+  'black+orange':  { name: 'Sienna',   emoji: '🍂', color: '#A0522D' },
+  'black+green':   { name: 'Forest',   emoji: '🌲', color: '#1F4F1F' },
+  'black+purple':  { name: 'Plum',     emoji: '🍆', color: '#5A2A5A' },
+
+  // Secondary + Secondary
+  'orange+green':  { name: 'Khaki',    emoji: '🥖', color: '#A0945A' },
+  'orange+purple': { name: 'Russet',   emoji: '🍁', color: '#80461B' },
+  'green+purple':  { name: 'Slate',    emoji: '🪨', color: '#5F6F6F' },
 };
 
 function mixKey(a: string, b: string) {
-  const order = ['red', 'yellow', 'blue', 'white', 'black'];
-  const ai = order.indexOf(a), bi = order.indexOf(b);
+  const ai = ORDER.indexOf(a), bi = ORDER.indexOf(b);
   return (ai <= bi) ? `${a}+${b}` : `${b}+${a}`;
 }
 
@@ -176,26 +213,65 @@ function DropletButton({ hue, locked, onPress }: { hue: Hue; locked: boolean; on
   );
 }
 const db = StyleSheet.create({
-  btn:       { alignItems: 'center', marginHorizontal: 4 },
+  btn:       { alignItems: 'center', marginHorizontal: 3, marginVertical: 4, width: 76 },
   btnDim:    { opacity: 0.4 },
-  dropShape: { width: 64, height: 78, borderTopLeftRadius: 32, borderTopRightRadius: 32, borderBottomLeftRadius: 32, borderBottomRightRadius: 32, borderWidth: 3, alignItems: 'center', justifyContent: 'center', elevation: 5, shadowColor: '#000', shadowOffset: { width: 0, height: 3 }, shadowOpacity: 0.18, shadowRadius: 4 },
-  emoji:     { fontSize: 26 },
-  label:     { marginTop: 4, fontWeight: '900', fontSize: 12, color: C.ink },
+  dropShape: { width: 56, height: 70, borderTopLeftRadius: 28, borderTopRightRadius: 28, borderBottomLeftRadius: 28, borderBottomRightRadius: 28, borderWidth: 3, alignItems: 'center', justifyContent: 'center', elevation: 5, shadowColor: '#000', shadowOffset: { width: 0, height: 3 }, shadowOpacity: 0.18, shadowRadius: 4 },
+  emoji:     { fontSize: 22 },
+  label:     { marginTop: 3, fontWeight: '900', fontSize: 11, color: C.ink },
 });
 
 // ─── Rounds ────────────────────────────────────────────────────────────────
+//
+// 50 rounds are generated by walking the mix table multiple times.
+// Difficulty grows: Tier 1 (primaries) → Tier 2 (with white/black) → Tier 3
+// (using the new orange/green/purple droplets). Each tier is shuffled so the
+// same combo never appears twice in a row.
 
-const ROUNDS: { target: keyof typeof MIX_TABLE | string; hint: string }[] = [
-  { target: 'red+yellow',   hint: 'Mix to make Orange! 🍊' },
-  { target: 'blue+yellow',  hint: 'Mix to make Green! 🌿' },
-  { target: 'red+blue',     hint: 'Mix to make Purple! 🍇' },
-  { target: 'red+white',    hint: 'Mix to make Pink! 🌸' },
-  { target: 'blue+white',   hint: 'Mix to make Sky Blue! 💧' },
-  { target: 'black+white',  hint: 'Mix to make Gray! 🐭' },
-  { target: 'red+black',    hint: 'Mix to make Maroon! 🍷' },
-  { target: 'red+yellow',   hint: 'Make Orange again! 🍊' },
+function shuffle<T>(arr: T[]): T[] { return [...arr].sort(() => Math.random() - 0.5); }
+
+const TIER_1: string[] = [
+  'red+yellow', 'yellow+blue', 'red+blue',
+  'red+white', 'yellow+white', 'blue+white',
+  'white+black',
+];
+const TIER_2: string[] = [
+  'red+black', 'yellow+black', 'blue+black',
+  'white+orange', 'white+green', 'white+purple',
+  'red+orange', 'yellow+orange', 'blue+green',
+  'red+purple', 'yellow+green', 'blue+purple',
+];
+const TIER_3: string[] = [
+  'red+green', 'blue+orange', 'yellow+purple',  // complementary → browns
+  'black+orange', 'black+green', 'black+purple',
+  'orange+green', 'orange+purple', 'green+purple',
 ];
 
+function buildRounds(): string[] {
+  const list: string[] = [];
+  // Tier 1 twice (~14)
+  list.push(...shuffle(TIER_1), ...shuffle(TIER_1));
+  // Tier 2 twice (~24) → total 38
+  list.push(...shuffle(TIER_2), ...shuffle(TIER_2));
+  // Tier 3 once (~9) → total 47
+  list.push(...shuffle(TIER_3));
+  // Top up with random picks from tier 2/3 to reach 50
+  const fill = shuffle([...TIER_2, ...TIER_3]);
+  while (list.length < 50) list.push(fill[list.length % fill.length]);
+  // De-duplicate consecutive entries by swapping with a later one
+  for (let i = 1; i < list.length; i++) {
+    if (list[i] === list[i - 1]) {
+      for (let j = i + 1; j < list.length; j++) {
+        if (list[j] !== list[i - 1] && list[j] !== list[i + 1]) {
+          [list[i], list[j]] = [list[j], list[i]];
+          break;
+        }
+      }
+    }
+  }
+  return list.slice(0, 50);
+}
+
+const ROUNDS = buildRounds();
 const TOTAL = ROUNDS.length;
 
 // ─── Screen ────────────────────────────────────────────────────────────────
@@ -218,8 +294,14 @@ export default function ColorMixScreen({ navigation }: ScreenProps<'ColorMix'>) 
   const promptOp  = useRef(new Animated.Value(0)).current;
   const promptSlide = useRef(new Animated.Value(30)).current;
 
-  const targetMix = MIX_TABLE[ROUNDS[round].target];
+  const targetKey = ROUNDS[round];
+  const targetMix = MIX_TABLE[targetKey];
   const currentMix = computeMix(first, second);
+
+  const hintFor = (key: string) => {
+    const m = MIX_TABLE[key];
+    return m ? `Mix to make ${m.name}! ${m.emoji}` : 'Mix two colors!';
+  };
 
   useEffect(() => {
     promptOp.setValue(0);
@@ -230,7 +312,7 @@ export default function ColorMixScreen({ navigation }: ScreenProps<'ColorMix'>) 
     ]).start();
 
     Speech.stop();
-    Speech.speak(ROUNDS[round].hint, { rate: 0.95, pitch: 1.1 });
+    Speech.speak(hintFor(targetKey), { rate: 0.95, pitch: 1.1 });
   }, [round]);
 
   const animateFill = (level: number) => {
@@ -324,7 +406,7 @@ export default function ColorMixScreen({ navigation }: ScreenProps<'ColorMix'>) 
   const pourAgain = () => {
     if (showWin) return;
     Speech.stop();
-    Speech.speak(ROUNDS[round].hint, { rate: 0.95, pitch: 1.1 });
+    Speech.speak(hintFor(targetKey), { rate: 0.95, pitch: 1.1 });
   };
 
   const liquidColor = currentMix?.color ?? 'rgba(255,255,255,0.05)';
