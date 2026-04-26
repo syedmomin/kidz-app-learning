@@ -33,6 +33,8 @@ import ShadowMatchScreen   from './src/screens/ShadowMatchScreen';
 import SoundMatchScreen   from './src/screens/SoundMatchScreen';
 import LetterBalloonPopScreen   from './src/screens/LetterBalloonPopScreen';
 import AlphabetSoundScreen   from './src/screens/AlphabetSoundScreen';
+import LetterTraceScreen   from './src/screens/LetterTraceScreen';
+import ColorMixScreen   from './src/screens/ColorMixScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -75,6 +77,8 @@ export default function App() {
               <Stack.Screen name="SoundMatch"   component={SoundMatchScreen}/>
               <Stack.Screen name="LetterBalloonPop"   component={LetterBalloonPopScreen}/>
               <Stack.Screen name="AlphabetSound"   component={AlphabetSoundScreen}/>
+              <Stack.Screen name="LetterTrace"   component={LetterTraceScreen}/>
+              <Stack.Screen name="ColorMix"   component={ColorMixScreen}/>
             </Stack.Navigator>
           </NavigationContainer>
         </ProgressProvider>

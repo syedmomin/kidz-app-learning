@@ -23,6 +23,8 @@ import ShadowMatchCard  from '../components/cards/ShadowMatchCard';
 import SoundMatchCard  from '../components/cards/SoundMatchCard';
 import LetterBalloonPopCard  from '../components/cards/LetterBalloonPopCard';
 import AlphabetSoundCard   from '../components/cards/AlphabetSoundCard';
+import LetterTraceCard   from '../components/cards/LetterTraceCard';
+import ColorMixCard   from '../components/cards/ColorMixCard';
 
 import { ANIMAL_SOUNDS, MUSIC_FILES } from '../data/GameAssets';
 
@@ -37,8 +39,8 @@ export default function ExploreScreen({ navigation }: ScreenProps<'Explore'>) {
   const { p, touchStreak } = useProgress();
   const { playSound } = useAudio();
   
-  const fadeAnims = useRef([...Array(15)].map(() => new Animated.Value(0))).current;
-  const slideAnims = useRef([...Array(15)].map(() => new Animated.Value(30))).current;
+  const fadeAnims = useRef([...Array(17)].map(() => new Animated.Value(0))).current;
+  const slideAnims = useRef([...Array(17)].map(() => new Animated.Value(30))).current;
 
   useEffect(() => { 
     touchStreak(); 
@@ -106,6 +108,8 @@ export default function ExploreScreen({ navigation }: ScreenProps<'Explore'>) {
           {renderCard(12, SoundMatchCard, 'SoundMatch', undefined, 'Sound Match')}
           {renderCard(13, LetterBalloonPopCard, 'LetterBalloonPop', undefined, 'Letter Pop')}
           {renderCard(14, AlphabetSoundCard, 'AlphabetSound', undefined, 'A for Apple')}
+          {renderCard(15, LetterTraceCard, 'LetterTrace', undefined, 'Trace the letter')}
+          {renderCard(16, ColorMixCard, 'ColorMix', undefined, 'Color Mix Lab')}
         </View>
         <View style={{ height: 24 }}/>
       </ScrollView>

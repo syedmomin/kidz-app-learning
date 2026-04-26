@@ -22,6 +22,8 @@ export type RootStackParamList = {
   SoundMatch: undefined;
   LetterBalloonPop: undefined;
   AlphabetSound: undefined;
+  LetterTrace: undefined;
+  ColorMix: undefined;
 };
 
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
