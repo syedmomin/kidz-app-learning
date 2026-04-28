@@ -1,6 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="300" height="200" viewBox="0 0 300 200">
-  <rect width="300" height="200" rx="30" fill="#FFF9C4"/>
-  <path d="M70 50 H230 V150 H70 Z" fill="white" stroke="#FBC02D" stroke-width="4"/>
-  <line x1="150" y1="50" x2="150" y2="150" stroke="#FBC02D" stroke-width="4"/>
-  <text x="180" y="100" font-size="40">📚</text>
-</svg>
