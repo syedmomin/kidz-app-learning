@@ -8,30 +8,7 @@ import { useProgress } from '../store/ProgressStore';
 import { useAudio } from '../hooks/useAudio';
 import type { ScreenProps } from '../navigation/types';
 
-import AnimalsCard    from '../components/cards/AnimalsCard';
-import MusicCard      from '../components/cards/MusicCard';
-import ColoringCard   from '../components/cards/ColoringCard';
-import NumbersCard    from '../components/cards/NumbersCard';
-import MathQuizCard   from '../components/cards/MathQuizCard';
-import WordMatchCard  from '../components/cards/WordMatchCard';
-import MemoryFlipCard from '../components/cards/MemoryFlipCard';
-import ShapeQuizCard  from '../components/cards/ShapeQuizCard';
-import BalloonPopCard from '../components/cards/BalloonPopCard';
-import ShadowMatchCard  from '../components/cards/ShadowMatchCard';
-import SoundMatchCard  from '../components/cards/SoundMatchCard';
-import LetterBalloonPopCard  from '../components/cards/LetterBalloonPopCard';
-import AlphabetSoundCard   from '../components/cards/AlphabetSoundCard';
-import LetterTraceCard   from '../components/cards/LetterTraceCard';
-import ColorMixCard      from '../components/cards/ColorMixCard';
-import PatternQuestCard  from '../components/cards/PatternQuestCard';
-import ClockReadCard     from '../components/cards/ClockReadCard';
-import EmotionMatchCard  from '../components/cards/EmotionMatchCard';
-import ArabicQaidaCard   from '../components/cards/ArabicQaidaCard';
-import ArabicSurahCard   from '../components/cards/ArabicSurahCard';
-import ArabicDuaCard     from '../components/cards/ArabicDuaCard';
-import NamazCard         from '../components/cards/NamazCard';
-import AsmaCard          from '../components/cards/AsmaCard';
-
+import ExploreCard from '../components/cards/ExploreCard';
 import { ANIMAL_SOUNDS, MUSIC_FILES } from '../data/GameAssets';
 
 const SOUNDS = {
@@ -41,47 +18,64 @@ const SOUNDS = {
   twinkle: MUSIC_FILES.twinkle,
 };
 
+const EXPLORE_DATA = [
+  { target: 'LetterTrace',     title: 'Trace Letters', image: require('../../../assets/images/card_alphabets.png'),  bg: '#E3F2FD', speech: 'Trace the letter' },
+  { target: 'Animals',         title: 'Animals',       image: require('../../../assets/images/card_animals.png'),    bg: '#E8F5E9', sound: 'lion', isNew: true },
+  { target: 'Music',           title: 'Music',         image: require('../../../assets/images/card_music.png'),      bg: '#F3E5F5', sound: 'happy' },
+  { target: 'ColorMatch',      title: 'Coloring',      image: require('../../../assets/images/card_coloring.png'),   bg: '#FCE4EC', speech: 'Coloring' },
+  { target: 'NumberQuiz',      title: 'Math Quiz',     image: require('../../../assets/images/card_math.png'),       bg: '#FFF3E0', speech: 'Math Quiz' },
+  { target: 'WordMatch',       title: 'Word Match',    image: require('../../../assets/images/card_word_match.png'), bg: '#F1F8E9', speech: 'Word Match' },
+  { target: 'Numbers',         title: 'Numbers',       image: require('../../../assets/images/card_numbers.png'),    bg: '#FFFDE7', speech: 'Numbers' },
+  { target: 'MemoryFlip',      title: 'Memory Flip',   image: require('../../../assets/images/card_memory.png'),     bg: '#E1F5FE', speech: 'Memory Flip' },
+  { target: 'ShapeQuiz',       title: 'Shape Quiz',    image: require('../../../assets/images/card_shapes.png'),     bg: '#FFF9C4', speech: 'Shape Quiz' },
+  { target: 'BalloonPop',      title: 'Balloon Pop',   image: require('../../../assets/images/card_balloons.png'),   bg: '#E0F7FA', speech: 'Balloon Pop' },
+  { target: 'ShadowMatch',     title: 'Shadow Match',  image: require('../../../assets/images/card_shadow.png'),    bg: '#F3E5F5', speech: 'Shadow Match' },
+  { target: 'SoundMatch',      title: 'Sound Match',   image: require('../../../assets/images/card_sound.png'),     bg: '#FCE4EC', speech: 'Sound Match' },
+  { target: 'LetterBalloonPop', title: 'Letter Pop',    image: require('../../../assets/images/card_balloons.png'),   bg: '#E8EAF6', speech: 'Letter Pop' },
+  { target: 'AlphabetSound',   title: 'A for Apple',   image: require('../../../assets/images/card_alphabets.png'),  bg: '#E0F2F1', speech: 'A for Apple' },
+  { target: 'ColorMix',        title: 'Color Mix',     image: require('../../../assets/images/card_colormix.png'),   bg: '#E8F5E9', speech: 'Color Mix Lab' },
+  { target: 'PatternQuest',    title: 'Patterns',      image: require('../../../assets/images/card_patterns.png'),   bg: '#FFF3E0', speech: 'Pattern Quest' },
+  { target: 'ClockRead',       title: 'Clock Reader',  image: require('../../../assets/images/card_clock.png'),      bg: '#E1F5FE', speech: 'Clock Reader' },
+  { target: 'EmotionMatch',    title: 'Emotions',      image: require('../../../assets/images/card_emotions.png'),   bg: '#E0F2F1', speech: 'Emotion Match' },
+  { target: 'ArabicQaida',     title: 'Arabic Qaida',  image: require('../../../assets/images/card_arabic_qaida.png'), bg: '#FFF4E0', speech: 'Arabic Qaida' },
+  { target: 'ArabicSurah',     title: 'Quran Surahs',  image: require('../../../assets/images/card_arabic_surah.png'), bg: '#E8F5E9', speech: 'Quran Surahs' },
+  { target: 'ArabicDua',       title: 'Daily Duas',    image: require('../../../assets/images/card_arabic_dua.png'),   bg: '#EEE8FF', speech: 'Daily Duas' },
+  { target: 'Namaz',           title: 'Namaz Learn',   image: require('../../../assets/images/card_namaz.png'),        bg: '#E3F2FD', speech: 'Namaz Learning' },
+  { target: 'Asma',            title: 'Asma ul Husna', image: require('../../../assets/images/card_asma.png'),         bg: '#E1F5FE', speech: 'Asma ul Husna' },
+];
+
 export default function ExploreScreen({ navigation }: ScreenProps<'Explore'>) {
   const { p, touchStreak } = useProgress();
   const { playSound } = useAudio();
   
-  const fadeAnims = useRef([...Array(23)].map(() => new Animated.Value(0))).current;
-  const slideAnims = useRef([...Array(23)].map(() => new Animated.Value(30))).current;
+  const fadeAnims = useRef(EXPLORE_DATA.map(() => new Animated.Value(0))).current;
+  const slideAnims = useRef(EXPLORE_DATA.map(() => new Animated.Value(30))).current;
 
   useEffect(() => { 
     touchStreak(); 
-    // Staggered entrance animation
-    Animated.stagger(100, fadeAnims.map((anim, i) => 
+    Animated.stagger(80, fadeAnims.map((anim, i) => 
       Animated.parallel([
-        Animated.timing(anim, { toValue: 1, duration: 500, useNativeDriver: true }),
-        Animated.timing(slideAnims[i], { toValue: 0, duration: 500, useNativeDriver: true })
+        Animated.timing(anim, { toValue: 1, duration: 400, useNativeDriver: true }),
+        Animated.timing(slideAnims[i], { toValue: 0, duration: 400, useNativeDriver: true })
       ])
     )).start();
   }, []);
 
-  const handlePress = (target: keyof any, soundKey?: keyof typeof SOUNDS, speechText?: string) => {
-    if (soundKey) {
-      playSound(SOUNDS[soundKey]);
+  const handlePress = (target: string, soundKey?: string, speechText?: string) => {
+    if (soundKey && (SOUNDS as any)[soundKey]) {
+      playSound((SOUNDS as any)[soundKey]);
     } else if (speechText) {
       Speech.stop();
       Speech.speak(speechText, { rate: 0.9, pitch: 1.1 });
     }
     
-    // Navigate after a small delay to let the sound start
     setTimeout(() => {
       navigation.navigate(target as any);
     }, 150);
   };
 
-  const renderCard = (index: number, Component: React.ElementType, target: string, soundKey?: keyof typeof SOUNDS, speechText?: string) => (
-    <Animated.View style={[s.col, { opacity: fadeAnims[index], transform: [{ translateY: slideAnims[index] }] }]}>
-      <Component onPress={() => handlePress(target, soundKey, speechText)} />
-    </Animated.View>
-  );
-
   return (
     <SafeAreaView style={s.root} edges={['top']}>
-      {/* ── Header ── */}
       <View style={s.header}>
         <View>
           <Text style={s.appName}>KidzNKidz ✨</Text>
@@ -99,29 +93,20 @@ export default function ExploreScreen({ navigation }: ScreenProps<'Explore'>) {
 
       <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
         <View style={s.grid}>
-          {renderCard(0, LetterTraceCard, 'LetterTrace', undefined, 'Trace the letter')}
-          {renderCard(1, AnimalsCard, 'Animals', 'lion')}
-          {renderCard(2, MusicCard, 'Music', 'happy')}
-          {renderCard(3, ColoringCard, 'ColorMatch', undefined, 'Coloring')}
-          {renderCard(4, MathQuizCard, 'NumberQuiz', undefined, 'Math Quiz')}
-          {renderCard(5, WordMatchCard, 'WordMatch', undefined, 'Word Match')}
-          {renderCard(6, NumbersCard, 'Numbers', undefined, 'Numbers')}
-          {renderCard(7, MemoryFlipCard, 'MemoryFlip', undefined, 'Memory Flip')}
-          {renderCard(8, ShapeQuizCard, 'ShapeQuiz', undefined, 'Shape Quiz')}
-          {renderCard(9, BalloonPopCard, 'BalloonPop', undefined, 'Balloon Pop')}
-          {renderCard(10, ShadowMatchCard, 'ShadowMatch', undefined, 'Shadow Match')}
-          {renderCard(11, SoundMatchCard, 'SoundMatch', undefined, 'Sound Match')}
-          {renderCard(12, LetterBalloonPopCard, 'LetterBalloonPop', undefined, 'Letter Pop')}
-          {renderCard(13, AlphabetSoundCard, 'AlphabetSound', undefined, 'A for Apple')}
-          {renderCard(14, ColorMixCard, 'ColorMix', undefined, 'Color Mix Lab')}
-          {renderCard(15, PatternQuestCard, 'PatternQuest', undefined, 'Pattern Quest')}
-          {renderCard(16, ClockReadCard, 'ClockRead', undefined, 'Clock Reader')}
-          {renderCard(17, EmotionMatchCard, 'EmotionMatch', undefined, 'Emotion Match')}
-          {renderCard(18, ArabicQaidaCard, 'ArabicQaida', undefined, 'Arabic Qaida')}
-          {renderCard(19, ArabicSurahCard, 'ArabicSurah', undefined, 'Quran Surahs')}
-          {renderCard(20, ArabicDuaCard, 'ArabicDua', undefined, 'Daily Duas')}
-          {renderCard(21, NamazCard, 'Namaz', undefined, 'Namaz Learning')}
-          {renderCard(22, AsmaCard, 'Asma', undefined, 'Asma ul Husna')}
+          {EXPLORE_DATA.map((item, i) => (
+            <Animated.View 
+              key={item.target} 
+              style={[s.col, { opacity: fadeAnims[i], transform: [{ translateY: slideAnims[i] }] }]}
+            >
+              <ExploreCard 
+                title={item.title}
+                image={item.image}
+                backgroundColor={item.bg}
+                isNew={item.isNew}
+                onPress={() => handlePress(item.target, item.sound, item.speech)}
+              />
+            </Animated.View>
+          ))}
         </View>
         <View style={{ height: 24 }}/>
       </ScrollView>
