@@ -1,65 +1,73 @@
 import React from 'react';
 import { Pressable, View, Text, Image, StyleSheet, ImageSourcePropType } from 'react-native';
-import { BlurView } from 'expo-blur';
 import { C } from '../../theme';
 
 interface ExploreCardProps {
   onPress: () => void;
   image: ImageSourcePropType;
   title: string;
-  backgroundColor?: string;
+  stepNumber?: number;
   isNew?: boolean;
 }
 
-export default function ExploreCard({ onPress, image, title, backgroundColor = 'rgba(255, 255, 255, 0.4)', isNew }: ExploreCardProps) {
+export default function ExploreCard({ onPress, image, title, stepNumber, isNew }: ExploreCardProps) {
   return (
     <Pressable 
       onPress={onPress} 
       style={({ pressed }) => [
         s.card, 
-        { opacity: pressed ? 0.9 : 1, transform: [{ scale: pressed ? 0.96 : 1 }] }
+        { transform: [{ scale: pressed ? 0.95 : 1 }] }
       ]}
     >
-      <BlurView intensity={60} tint="light" style={s.blur}>
-        {isNew && (
-          <View style={s.newBadge}>
-            <Text style={s.newT}>NEW</Text>
-          </View>
-        )}
-        <View style={[s.imgBox, { backgroundColor }]}>
+      {isNew && (
+        <View style={s.newBadge}>
+          <Text style={s.newT}>NEW</Text>
+        </View>
+      )}
+      
+      {stepNumber && (
+        <View style={s.stepBadge}>
+          <Text style={s.stepT}>{stepNumber}</Text>
+        </View>
+      )}
+
+      <View style={s.content}>
+        <View style={s.imgBox}>
           <Image source={image} style={s.img} />
         </View>
-        <View style={s.footer}>
-          <Text style={s.name}>{title}</Text>
-        </View>
-      </BlurView>
+        <Text style={s.name}>{title}</Text>
+      </View>
+      
+      {/* Little triangle tail to make it look like a bubble */}
+      <View style={s.tail} />
     </Pressable>
   );
 }
 
 const s = StyleSheet.create({
   card: { 
-    borderRadius: 24, 
-    overflow: 'hidden', 
-    backgroundColor: 'rgba(255, 255, 255, 0.2)', 
-    borderWidth: 1.5, 
-    borderColor: 'rgba(255, 255, 255, 0.5)', 
-    shadowColor: '#000', 
-    shadowOffset: { width: 0, height: 10 }, 
-    shadowOpacity: 0.1, 
-    shadowRadius: 20, 
-    elevation: 5 
+    backgroundColor: '#fff',
+    borderRadius: 18,
+    padding: 6,
+    width: 120,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 6,
+    elevation: 8,
+    alignItems: 'center',
   },
-  blur: {
-    flex: 1,
+  content: {
+    alignItems: 'center',
   },
   imgBox: { 
-    height: 130, 
+    width: 100,
+    height: 90,
+    borderRadius: 12,
+    backgroundColor: '#F8F9FA',
     justifyContent: 'center', 
     alignItems: 'center',
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
-    margin: 6,
+    marginBottom: 4,
     overflow: 'hidden',
   },
   img: { 
@@ -67,27 +75,41 @@ const s = StyleSheet.create({
     height: '90%', 
     resizeMode: 'contain' 
   },
-  footer: { 
-    paddingHorizontal: 12, 
-    paddingVertical: 12, 
-    alignItems: 'center',
-  },
   name: { 
-    fontWeight: '900', 
-    fontSize: 16, 
-    color: C.ink,
+    fontWeight: '800', 
+    fontSize: 13, 
+    color: '#444',
     textAlign: 'center'
+  },
+  stepBadge: {
+    position: 'absolute',
+    top: -8,
+    right: -8,
+    backgroundColor: '#FF8FB1',
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: '#fff',
+    zIndex: 20,
+  },
+  stepT: {
+    color: '#fff',
+    fontWeight: '900',
+    fontSize: 12,
   },
   newBadge: { 
     position: 'absolute', 
-    top: 12, 
-    right: 12, 
-    zIndex: 10, 
-    backgroundColor: C.coral, 
-    borderRadius: 999, 
-    paddingHorizontal: 10, 
-    paddingVertical: 4,
-    borderWidth: 2,
+    top: -10, 
+    left: -10, 
+    zIndex: 20, 
+    backgroundColor: '#FF6B6B', 
+    borderRadius: 8, 
+    paddingHorizontal: 6, 
+    paddingVertical: 2,
+    borderWidth: 1.5,
     borderColor: '#fff',
   },
   newT: { 
@@ -95,5 +117,18 @@ const s = StyleSheet.create({
     fontWeight: '900', 
     fontSize: 10 
   },
+  tail: {
+    position: 'absolute',
+    bottom: -8,
+    width: 0,
+    height: 0,
+    borderLeftWidth: 8,
+    borderRightWidth: 8,
+    borderTopWidth: 8,
+    borderLeftColor: 'transparent',
+    borderRightColor: 'transparent',
+    borderTopColor: '#fff',
+  }
 });
+
 
