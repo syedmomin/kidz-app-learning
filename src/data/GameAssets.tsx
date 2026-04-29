@@ -360,6 +360,42 @@ export const MUSIC_TRACKS: MusicTrack[] = [
     file: MUSIC_FILES.itsy,
   },
   {
+    id: '13', title: 'London Bridge', type: 'poem', emoji: '🌉',
+    color: '#E0F2F1', dark: '#00695C',
+    lyrics: [
+      'London Bridge is falling down,',
+      'Falling down, falling down.',
+      'London Bridge is falling down,',
+      'My fair lady!',
+    ],
+    file: null, // We will use Speech for these new ones
+  },
+  {
+    id: '14', title: 'Rain Rain Go Away', type: 'poem', emoji: '☔',
+    color: '#E1F5FE', dark: '#0277BD',
+    lyrics: [
+      'Rain, rain, go away,',
+      'Come again another day.',
+      'Little Johnny wants to play,',
+      'Rain, rain, go away!',
+    ],
+    file: null,
+  },
+  {
+    id: '15', title: 'Head & Shoulders', type: 'poem', emoji: '🧘',
+    color: '#F3E5F5', dark: '#6A1B9A',
+    lyrics: [
+      'Head, shoulders, knees, and toes,',
+      'Knees and toes!',
+      'Head, shoulders, knees, and toes,',
+      'Knees and toes!',
+      'And eyes and ears and mouth and nose,',
+      'Head, shoulders, knees, and toes,',
+      'Knees and toes!',
+    ],
+    file: null,
+  },
+  {
     id: '9', title: 'Happy Tune', type: 'song', emoji: '😊',
     color: '#FFF9C4', dark: '#F57F17',
     lyrics: ['🎵 A fun happy melody 🎵', 'Perfect for dancing and singing!', '🎶 La la la la la 🎶'],

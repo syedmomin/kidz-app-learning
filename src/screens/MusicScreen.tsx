@@ -1,254 +1,153 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
   View, Text, StyleSheet, Pressable, ScrollView,
-  Animated, Dimensions,
+  Animated, Dimensions, Easing,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Audio } from 'expo-av';
+import * as Speech from 'expo-speech';
 import { C } from '../theme';
 import type { ScreenProps } from '../navigation/types';
 
-const { width: SW } = Dimensions.get('window');
+const { width: SW, height: SH } = Dimensions.get('window');
 
 import { MUSIC_TRACKS, type MusicTrack } from '../data/GameAssets';
 
 type Track = MusicTrack;
-
 const TRACKS = MUSIC_TRACKS;
 
-// ─── Floating Notes Animation ─────────────────────────────────────────────────
+// ─── Floating Notes & Bubbles ───────────────────────────────────────────────────
 
-function FloatingNote({ color }: { color: string }) {
+function FloatingNote() {
   const y = useRef(new Animated.Value(0)).current;
-  const x = useRef(new Animated.Value(Math.random() * SW)).current;
+  const x = useRef(new Animated.Value(Math.random() * (SW - 40))).current;
   const opacity = useRef(new Animated.Value(0)).current;
-  const notes = ['🎵', '🎶', '♪', '♫', '🎼'];
-  const note = notes[Math.floor(Math.random() * notes.length)];
+  const notes = ['🎵', '🎶', '✨', '🎈', '🍭', '🌈'];
+  const char = notes[Math.floor(Math.random() * notes.length)];
 
   useEffect(() => {
     const loop = () => {
       y.setValue(0);
       opacity.setValue(0);
       Animated.sequence([
-        Animated.timing(opacity, { toValue: 1, duration: 400, useNativeDriver: true }),
+        Animated.timing(opacity, { toValue: 1, duration: 600, useNativeDriver: true }),
         Animated.parallel([
-          Animated.timing(y, { toValue: -200, duration: 2500, useNativeDriver: true }),
-          Animated.timing(opacity, { toValue: 0, duration: 2500, useNativeDriver: true }),
+          Animated.timing(y, { toValue: -300, duration: 4000, useNativeDriver: true }),
+          Animated.timing(opacity, { toValue: 0, duration: 4000, useNativeDriver: true }),
         ]),
       ]).start(loop);
     };
-    const timer = setTimeout(loop, Math.random() * 2000);
+    const timer = setTimeout(loop, Math.random() * 3000);
     return () => clearTimeout(timer);
   }, []);
 
   return (
-    <Animated.Text
-      style={{
-        position: 'absolute',
-        bottom: 60,
-        left: (Math.random() * (SW - 40)),
-        fontSize: 22,
-        opacity,
-        transform: [{ translateY: y }],
-        pointerEvents: 'none',
-      } as any}
-    >
-      {note}
+    <Animated.Text style={[s.floatingChar, { left: x, opacity, transform: [{ translateY: y }] }]}>
+      {char}
     </Animated.Text>
   );
 }
 
-// ─── Mini waveform bars (playing indicator) ───────────────────────────────────
+// ─── Waveform ──────────────────────────────────────────────────────────────────
 
-function WaveBars({ color }: { color: string }) {
-  const bars = [useRef(new Animated.Value(0.3)).current,
-                useRef(new Animated.Value(0.3)).current,
-                useRef(new Animated.Value(0.3)).current,
-                useRef(new Animated.Value(0.3)).current];
+function Waveform({ color, active }: { color: string; active: boolean }) {
+  const anims = [useRef(new Animated.Value(0.3)).current, useRef(new Animated.Value(0.3)).current, 
+                 useRef(new Animated.Value(0.3)).current, useRef(new Animated.Value(0.3)).current,
+                 useRef(new Animated.Value(0.3)).current];
 
   useEffect(() => {
-    bars.forEach((b, i) => {
-      Animated.loop(
-        Animated.sequence([
-          Animated.delay(i * 120),
-          Animated.timing(b, { toValue: 1, duration: 300, useNativeDriver: true }),
-          Animated.timing(b, { toValue: 0.2, duration: 300, useNativeDriver: true }),
-        ])
-      ).start();
-    });
-  }, []);
+    if (active) {
+      anims.forEach((a, i) => {
+        Animated.loop(
+          Animated.sequence([
+            Animated.delay(i * 100),
+            Animated.timing(a, { toValue: 1, duration: 400, useNativeDriver: true }),
+            Animated.timing(a, { toValue: 0.3, duration: 400, useNativeDriver: true }),
+          ])
+        ).start();
+      });
+    } else {
+      anims.forEach(a => a.stopAnimation());
+    }
+  }, [active]);
 
   return (
-    <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 3, height: 20 }}>
-      {bars.map((b, i) => (
-        <Animated.View
-          key={i}
-          style={{
-            width: 4, height: 16, borderRadius: 2,
-            backgroundColor: color,
-            transform: [{ scaleY: b }],
-          }}
-        />
+    <View style={s.waveWrap}>
+      {anims.map((a, i) => (
+        <Animated.View key={i} style={[s.waveBar, { backgroundColor: color, transform: [{ scaleY: a }] }]} />
       ))}
     </View>
   );
 }
 
-// ─── Player Modal ─────────────────────────────────────────────────────────────
+// ─── Player Component ──────────────────────────────────────────────────────────
 
-function PlayerCard({
-  track, isPlaying, onPlayPause, onClose,
-}: {
-  track: Track; isPlaying: boolean; onPlayPause: () => void; onClose: () => void;
+function PremiumPlayer({ track, isPlaying, onToggle, onClose, useGirlVoice }: { 
+  track: Track; isPlaying: boolean; onToggle: () => void; onClose: () => void; useGirlVoice: boolean;
 }) {
-  const slideY = useRef(new Animated.Value(300)).current;
-  const emojiSpin = useRef(new Animated.Value(0)).current;
-  const spinLoop = useRef<Animated.CompositeAnimation | null>(null);
+  const rotate = useRef(new Animated.Value(0)).current;
+  const slideY = useRef(new Animated.Value(500)).current;
 
   useEffect(() => {
-    Animated.spring(slideY, { toValue: 0, useNativeDriver: true, speed: 14, bounciness: 10 }).start();
+    Animated.spring(slideY, { toValue: 0, damping: 15, stiffness: 60, useNativeDriver: true }).start();
   }, []);
 
   useEffect(() => {
     if (isPlaying) {
-      spinLoop.current = Animated.loop(
-        Animated.sequence([
-          Animated.timing(emojiSpin, { toValue: 1, duration: 800, useNativeDriver: true }),
-          Animated.timing(emojiSpin, { toValue: 0, duration: 800, useNativeDriver: true }),
-        ])
-      );
-      spinLoop.current.start();
+      Animated.loop(
+        Animated.timing(rotate, { toValue: 1, duration: 3000, easing: Easing.linear, useNativeDriver: true })
+      ).start();
     } else {
-      spinLoop.current?.stop();
-      emojiSpin.setValue(0);
+      rotate.stopAnimation();
     }
   }, [isPlaying]);
 
-  const emojiScale = emojiSpin.interpolate({ inputRange: [0, 0.5, 1], outputRange: [1, 1.2, 1] });
+  const spin = rotate.interpolate({ inputRange: [0, 1], outputRange: ['0deg', '360deg'] });
 
   return (
-    <Animated.View style={[pl.card, { backgroundColor: track.color, transform: [{ translateY: slideY }] }]}>
-      {/* Header */}
-      <View style={pl.header}>
-        <View style={[pl.typeBadge, { backgroundColor: track.dark }]}>
-          <Text style={pl.typeText}>{track.type === 'poem' ? '📖 Poem' : '🎵 Song'}</Text>
+    <Animated.View style={[p.card, { transform: [{ translateY: slideY }] }]}>
+      <View style={[p.bg, { backgroundColor: track.color }]} />
+      
+      <View style={p.header}>
+        <View style={[p.badge, { backgroundColor: track.dark }]}>
+          <Text style={p.badgeT}>{track.type === 'poem' ? '📖 Rhyme' : '🎵 Song'}</Text>
         </View>
-        <Pressable onPress={onClose} style={pl.closeBtn}>
-          <Text style={pl.closeText}>✕</Text>
-        </Pressable>
+        <Pressable onPress={onClose} style={p.closeBtn}><Text style={p.closeT}>✕</Text></Pressable>
       </View>
 
-      {/* Big emoji */}
-      <Animated.Text style={[pl.bigEmoji, { transform: [{ scale: emojiScale }] }]}>
-        {track.emoji}
-      </Animated.Text>
+      <View style={p.main}>
+        <Animated.View style={[p.disk, { borderColor: track.dark, transform: [{ rotate: spin }] }]}>
+          <Text style={p.diskEmoji}>{track.emoji}</Text>
+          <View style={[p.diskCenter, { backgroundColor: track.dark }]} />
+        </Animated.View>
+        
+        <View style={p.info}>
+          <Text style={[p.title, { color: track.dark }]}>{track.title}</Text>
+          {useGirlVoice && track.type === 'poem' && (
+            <View style={p.girlTag}>
+              <Text style={p.girlTagEmoji}>👧</Text>
+              <Text style={p.girlTagText}>Girl Voice ON</Text>
+            </View>
+          )}
+        </View>
+      </View>
 
-      <Text style={[pl.trackTitle, { color: track.dark }]}>{track.title}</Text>
-
-      {/* Lyrics scroll */}
-      <ScrollView style={pl.lyricsBox} showsVerticalScrollIndicator={false}>
+      <ScrollView style={p.lyricsBox} contentContainerStyle={p.lyricsContent}>
         {track.lyrics.map((line, i) => (
-          <Text key={i} style={pl.lyricLine}>{line}</Text>
+          <Text key={i} style={[p.lyricLine, { color: track.dark }]}>{line}</Text>
         ))}
       </ScrollView>
 
-      {/* Controls */}
-      <View style={pl.controls}>
-        <Pressable
-          onPress={onPlayPause}
-          style={[pl.playBtn, { backgroundColor: track.dark }]}
-        >
-          <Text style={pl.playBtnText}>{isPlaying ? '⏸' : '▶'}</Text>
+      <View style={p.footer}>
+        <Waveform color={track.dark} active={isPlaying} />
+        <Pressable onPress={onToggle} style={[p.playBtn, { backgroundColor: track.dark }]}>
+          <Text style={p.playIcon}>{isPlaying ? '⏸' : '▶'}</Text>
         </Pressable>
-        {isPlaying && <WaveBars color={track.dark} />}
+        <Waveform color={track.dark} active={isPlaying} />
       </View>
     </Animated.View>
   );
 }
-
-const pl = StyleSheet.create({
-  card: {
-    borderRadius: 32, padding: 20, marginHorizontal: 16, marginBottom: 12,
-    elevation: 10,
-    shadowColor: '#000', shadowOffset: { width: 0, height: 6 }, shadowOpacity: 0.18, shadowRadius: 14,
-  },
-  header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 },
-  typeBadge: { borderRadius: 20, paddingHorizontal: 12, paddingVertical: 5 },
-  typeText: { color: '#fff', fontWeight: '800', fontSize: 12 },
-  closeBtn: {
-    width: 32, height: 32, borderRadius: 16,
-    backgroundColor: 'rgba(0,0,0,0.12)', alignItems: 'center', justifyContent: 'center',
-  },
-  closeText: { fontSize: 14, fontWeight: '900', color: '#fff' },
-  bigEmoji: { fontSize: 70, textAlign: 'center', marginVertical: 8 },
-  trackTitle: { fontSize: 22, fontWeight: '900', textAlign: 'center', marginBottom: 14 },
-  lyricsBox: { maxHeight: 160, backgroundColor: 'rgba(255,255,255,0.55)', borderRadius: 16, padding: 14, marginBottom: 16 },
-  lyricLine: { fontSize: 15, fontWeight: '700', color: C.ink, lineHeight: 26, textAlign: 'center' },
-  controls: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 18 },
-  playBtn: {
-    width: 64, height: 64, borderRadius: 32,
-    alignItems: 'center', justifyContent: 'center',
-    elevation: 4, shadowColor: '#000', shadowOffset: { width: 0, height: 3 }, shadowOpacity: 0.2, shadowRadius: 6,
-  },
-  playBtnText: { fontSize: 28 },
-});
-
-// ─── Track Card (list item) ───────────────────────────────────────────────────
-
-function TrackCard({ track, isPlaying, onPress }: { track: Track; isPlaying: boolean; onPress: () => void }) {
-  const scale = useRef(new Animated.Value(1)).current;
-
-  const handlePress = () => {
-    Animated.sequence([
-      Animated.spring(scale, { toValue: 0.94, useNativeDriver: true, speed: 60 }),
-      Animated.spring(scale, { toValue: 1, useNativeDriver: true, speed: 20 }),
-    ]).start();
-    onPress();
-  };
-
-  return (
-    <Animated.View style={{ transform: [{ scale }] }}>
-      <Pressable onPress={handlePress} style={[tc.card, { backgroundColor: track.color }, isPlaying && { borderColor: track.dark, borderWidth: 3 }]}>
-        <View style={[tc.emojiBox, { backgroundColor: track.dark }]}>
-          <Text style={tc.emoji}>{track.emoji}</Text>
-        </View>
-        <View style={{ flex: 1 }}>
-          <Text style={tc.title}>{track.title}</Text>
-          <View style={[tc.badge, { backgroundColor: track.dark + '33' }]}>
-            <Text style={[tc.badgeText, { color: track.dark }]}>
-              {track.type === 'poem' ? '📖 Poem' : '🎵 Song'} • {track.lyrics.length} lines
-            </Text>
-          </View>
-        </View>
-        <View style={tc.right}>
-          {isPlaying
-            ? <WaveBars color={track.dark} />
-            : <View style={[tc.playCircle, { backgroundColor: track.dark }]}>
-                <Text style={tc.playIcon}>▶</Text>
-              </View>
-          }
-        </View>
-      </Pressable>
-    </Animated.View>
-  );
-}
-
-const tc = StyleSheet.create({
-  card: {
-    flexDirection: 'row', alignItems: 'center', gap: 14,
-    marginHorizontal: 16, marginBottom: 12,
-    borderRadius: 22, padding: 14, borderWidth: 2, borderColor: 'transparent',
-    elevation: 4, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 6,
-  },
-  emojiBox: { width: 52, height: 52, borderRadius: 16, alignItems: 'center', justifyContent: 'center' },
-  emoji: { fontSize: 26 },
-  title: { fontSize: 16, fontWeight: '900', color: C.ink, marginBottom: 4 },
-  badge: { alignSelf: 'flex-start', borderRadius: 10, paddingHorizontal: 8, paddingVertical: 3 },
-  badgeText: { fontSize: 11, fontWeight: '700' },
-  right: { width: 44, alignItems: 'center', justifyContent: 'center' },
-  playCircle: { width: 36, height: 36, borderRadius: 18, alignItems: 'center', justifyContent: 'center' },
-  playIcon: { fontSize: 14, color: '#fff' },
-});
 
 // ─── Main Screen ──────────────────────────────────────────────────────────────
 
@@ -256,169 +155,197 @@ export default function MusicScreen({ navigation }: ScreenProps<'Music'>) {
   const [activeId, setActiveId] = useState<string | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [filter, setFilter] = useState<'all' | 'poem' | 'song'>('all');
+  const [useGirlVoice, setUseGirlVoice] = useState(true);
+  
   const soundRef = useRef<Audio.Sound | null>(null);
-  const headerAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    Animated.spring(headerAnim, { toValue: 1, useNativeDriver: true, speed: 8, bounciness: 10 }).start();
-    return () => { soundRef.current?.unloadAsync(); };
+    return () => {
+      soundRef.current?.unloadAsync();
+      Speech.stop();
+    };
   }, []);
 
-  const loadAndPlay = async (track: Track) => {
-    try {
-      if (soundRef.current) {
-        await soundRef.current.stopAsync();
-        await soundRef.current.unloadAsync();
-        soundRef.current = null;
-      }
-      setActiveId(track.id);
-      setIsPlaying(true);
-      const { sound } = await Audio.Sound.createAsync(track.file, { shouldPlay: true });
-      soundRef.current = sound;
-      sound.setOnPlaybackStatusUpdate((status) => {
-        if (status.isLoaded && status.didJustFinish) {
-          setIsPlaying(false);
-        }
-      });
-    } catch (e) {
-      console.log('Audio error', e);
-      setIsPlaying(false);
-    }
-  };
-
-  const togglePlayPause = async () => {
-    if (!soundRef.current) return;
-    if (isPlaying) {
-      await soundRef.current.pauseAsync();
-      setIsPlaying(false);
-    } else {
-      await soundRef.current.playAsync();
-      setIsPlaying(true);
-    }
-  };
-
-  const handleCardPress = (track: Track) => {
-    if (activeId === track.id) {
-      togglePlayPause();
-    } else {
-      loadAndPlay(track);
-    }
-  };
-
-  const closePlayer = async () => {
+  const stopAll = async () => {
     if (soundRef.current) {
       await soundRef.current.stopAsync();
       await soundRef.current.unloadAsync();
       soundRef.current = null;
     }
-    setActiveId(null);
+    Speech.stop();
     setIsPlaying(false);
   };
 
-  const activeTrack = TRACKS.find((t) => t.id === activeId);
-  const filtered = filter === 'all' ? TRACKS : TRACKS.filter((t) => t.type === filter);
+  const playPoemTTS = (track: Track) => {
+    Speech.speak(track.lyrics.join('. '), {
+      rate: 0.85,
+      pitch: 1.25, // Higher pitch for girl voice
+      onDone: () => setIsPlaying(false),
+      onStopped: () => setIsPlaying(false),
+      onError: () => setIsPlaying(false),
+    });
+  };
 
-  const headerTranslate = headerAnim.interpolate({ inputRange: [0, 1], outputRange: [-50, 0] });
+  const handleTrackPress = async (track: Track) => {
+    if (activeId === track.id) {
+      if (isPlaying) {
+        if (track.type === 'poem' && (!track.file || useGirlVoice)) {
+          Speech.stop();
+          setIsPlaying(false);
+        } else if (soundRef.current) {
+          await soundRef.current.pauseAsync();
+          setIsPlaying(false);
+        }
+      } else {
+        if (track.type === 'poem' && (!track.file || useGirlVoice)) {
+          playPoemTTS(track);
+          setIsPlaying(true);
+        } else if (soundRef.current) {
+          await soundRef.current.playAsync();
+          setIsPlaying(true);
+        }
+      }
+      return;
+    }
+
+    // New track
+    await stopAll();
+    setActiveId(track.id);
+    setIsPlaying(true);
+
+    if (track.type === 'poem' && (!track.file || useGirlVoice)) {
+      playPoemTTS(track);
+    } else if (track.file) {
+      const { sound } = await Audio.Sound.createAsync(track.file, { shouldPlay: true });
+      soundRef.current = sound;
+      sound.setOnPlaybackStatusUpdate((s) => {
+        if (s.isLoaded && s.didJustFinish) setIsPlaying(false);
+      });
+    }
+  };
+
+  const activeTrack = TRACKS.find(t => t.id === activeId);
+  const filtered = filter === 'all' ? TRACKS : TRACKS.filter(t => t.type === filter);
 
   return (
     <SafeAreaView style={s.root}>
-      {/* bg blobs */}
-      <View style={s.blob1} />
-      <View style={s.blob2} />
-      <View style={s.blob3} />
+      {/* Background blobs */}
+      <View style={[s.blob, { top: -50, left: -50, backgroundColor: '#FFD1DC' }]} />
+      <View style={[s.blob, { bottom: -50, right: -50, backgroundColor: '#B2EBF2' }]} />
 
-      {/* Floating notes when playing */}
-      {isPlaying && [1, 2, 3, 4].map((k) => (
-        <FloatingNote key={k} color={activeTrack?.dark ?? C.purple} />
-      ))}
-
-      {/* Header */}
-      <Animated.View style={[s.header, { opacity: headerAnim, transform: [{ translateY: headerTranslate }] }]}>
+      <View style={s.header}>
         <Pressable onPress={() => navigation.goBack()} style={s.backBtn}>
           <Text style={s.backIcon}>←</Text>
         </Pressable>
-        <View style={{ flex: 1, alignItems: 'center' }}>
-          <Text style={s.title}>🎵 Music & Poems</Text>
-          <Text style={s.subtitle}>{TRACKS.length} songs & rhymes!</Text>
+        <View style={s.titleBox}>
+          <Text style={s.title}>Music & Poems 🎶</Text>
+          <Text style={s.subtitle}>Listen and Sing Along!</Text>
         </View>
-        <View style={{ width: 44 }} />
-      </Animated.View>
+        <Pressable onPress={() => setUseGirlVoice(!useGirlVoice)} style={[s.voiceToggle, useGirlVoice && s.voiceToggleActive]}>
+          <Text style={s.voiceEmoji}>{useGirlVoice ? '👧' : '👨'}</Text>
+        </Pressable>
+      </View>
 
-      {/* Filter tabs */}
-      <View style={s.filterRow}>
-        {(['all', 'poem', 'song'] as const).map((f) => (
-          <Pressable
-            key={f}
-            onPress={() => setFilter(f)}
-            style={[s.filterBtn, filter === f && s.filterActive]}
-          >
-            <Text style={[s.filterText, filter === f && s.filterTextActive]}>
-              {f === 'all' ? '🎼 All' : f === 'poem' ? '📖 Poems' : '🎵 Songs'}
+      {/* Filter Tabs */}
+      <View style={s.filterBar}>
+        {(['all', 'poem', 'song'] as const).map(f => (
+          <Pressable key={f} onPress={() => setFilter(f)} style={[s.tab, filter === f && s.tabActive]}>
+            <Text style={[s.tabT, filter === f && s.tabTActive]}>
+              {f === 'all' ? 'All' : f === 'poem' ? 'Rhymes' : 'Songs'}
             </Text>
           </Pressable>
         ))}
       </View>
 
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 30 }}>
-        {/* Active player card */}
+      <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
         {activeTrack && (
-          <PlayerCard
-            track={activeTrack}
-            isPlaying={isPlaying}
-            onPlayPause={togglePlayPause}
-            onClose={closePlayer}
+          <PremiumPlayer 
+            track={activeTrack} 
+            isPlaying={isPlaying} 
+            onToggle={() => handleTrackPress(activeTrack)} 
+            onClose={stopAll}
+            useGirlVoice={useGirlVoice}
           />
         )}
 
-        {/* Track list */}
-        <Text style={s.sectionLabel}>
-          {filter === 'all' ? 'All Tracks' : filter === 'poem' ? '📖 Nursery Rhymes' : '🎵 Fun Songs'}
-        </Text>
-        {filtered.map((track) => (
-          <TrackCard
-            key={track.id}
-            track={track}
-            isPlaying={activeId === track.id && isPlaying}
-            onPress={() => handleCardPress(track)}
-          />
-        ))}
+        <View style={s.list}>
+          {filtered.map(t => (
+            <Pressable 
+              key={t.id} 
+              onPress={() => handleTrackPress(t)} 
+              style={[s.item, { backgroundColor: t.color }, activeId === t.id && { borderColor: t.dark, borderWidth: 3 }]}
+            >
+              <View style={[s.itemEmojiBox, { backgroundColor: t.dark }]}>
+                <Text style={s.itemEmoji}>{t.emoji}</Text>
+              </View>
+              <View style={s.itemInfo}>
+                <Text style={s.itemTitle}>{t.title}</Text>
+                <Text style={[s.itemSub, { color: t.dark }]}>{t.type === 'poem' ? 'Rhyme 📖' : 'Song 🎵'}</Text>
+              </View>
+              {activeId === t.id && isPlaying ? <Waveform color={t.dark} active={true} /> : <Text style={s.playHint}>▶</Text>}
+            </Pressable>
+          ))}
+        </View>
       </ScrollView>
+
+      {/* Floating particles */}
+      {isPlaying && [1,2,3,4,5].map(i => <FloatingNote key={i} />)}
     </SafeAreaView>
   );
 }
 
+const p = StyleSheet.create({
+  card: { marginHorizontal: 20, borderRadius: 40, padding: 24, elevation: 12, shadowOpacity: 0.2, overflow: 'hidden', marginBottom: 20 },
+  bg: { ...StyleSheet.absoluteFillObject, opacity: 0.9 },
+  header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 },
+  badge: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 20 },
+  badgeT: { color: '#fff', fontWeight: '900', fontSize: 12 },
+  closeBtn: { width: 32, height: 32, borderRadius: 16, backgroundColor: 'rgba(0,0,0,0.1)', alignItems: 'center', justifyContent: 'center' },
+  closeT: { color: '#fff', fontWeight: '900' },
+  main: { flexDirection: 'row', alignItems: 'center', gap: 20, marginBottom: 20 },
+  disk: { width: 100, height: 100, borderRadius: 50, borderWidth: 6, backgroundColor: '#333', alignItems: 'center', justifyContent: 'center', elevation: 8 },
+  diskEmoji: { fontSize: 40 },
+  diskCenter: { position: 'absolute', width: 20, height: 20, borderRadius: 10, borderWidth: 2, borderColor: '#fff' },
+  info: { flex: 1 },
+  title: { fontSize: 24, fontWeight: '900' },
+  girlTag: { flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 4, backgroundColor: 'rgba(255,255,255,0.4)', alignSelf: 'flex-start', paddingHorizontal: 8, paddingVertical: 2, borderRadius: 10 },
+  girlTagEmoji: { fontSize: 14 },
+  girlTagText: { fontSize: 11, fontWeight: '800', color: '#E91E63' },
+  lyricsBox: { maxHeight: 120, backgroundColor: 'rgba(255,255,255,0.3)', borderRadius: 20, padding: 12 },
+  lyricsContent: { alignItems: 'center' },
+  lyricLine: { fontSize: 15, fontWeight: '800', lineHeight: 24, textAlign: 'center' },
+  footer: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 20, marginTop: 20 },
+  playBtn: { width: 64, height: 64, borderRadius: 32, alignItems: 'center', justifyContent: 'center', elevation: 6 },
+  playIcon: { fontSize: 28, color: '#fff' },
+});
+
 const s = StyleSheet.create({
-  root: { flex: 1, backgroundColor: '#F5F0FF' },
-  blob1: { position: 'absolute', top: -40, right: -40, width: 160, height: 160, borderRadius: 80, backgroundColor: '#CE93D822' },
-  blob2: { position: 'absolute', top: 140, left: -60, width: 180, height: 180, borderRadius: 90, backgroundColor: '#80DEEA22' },
-  blob3: { position: 'absolute', bottom: 100, right: -50, width: 150, height: 150, borderRadius: 75, backgroundColor: '#FFCC8022' },
-  header: {
-    flexDirection: 'row', alignItems: 'center',
-    paddingHorizontal: 16, paddingVertical: 14, marginBottom: 6,
-  },
-  backBtn: {
-    width: 44, height: 44, borderRadius: 22, backgroundColor: '#fff',
-    alignItems: 'center', justifyContent: 'center',
-    elevation: 4, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.12, shadowRadius: 4,
-  },
-  backIcon: { fontSize: 22, color: C.ink, fontWeight: '700' },
+  root: { flex: 1, backgroundColor: '#F8F9FF' },
+  blob: { position: 'absolute', width: 200, height: 200, borderRadius: 100, opacity: 0.3 },
+  header: { flexDirection: 'row', alignItems: 'center', padding: 20, gap: 16 },
+  backBtn: { width: 44, height: 44, borderRadius: 22, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center', elevation: 4 },
+  backIcon: { fontSize: 22, fontWeight: '900' },
+  titleBox: { flex: 1 },
   title: { fontSize: 24, fontWeight: '900', color: C.ink },
-  subtitle: { fontSize: 12, color: C.inkSoft, marginTop: 1, fontWeight: '600' },
-  filterRow: {
-    flexDirection: 'row', gap: 8, paddingHorizontal: 16, marginBottom: 14,
-  },
-  filterBtn: {
-    flex: 1, paddingVertical: 10, borderRadius: 16,
-    backgroundColor: '#E8E0FF', alignItems: 'center',
-  },
-  filterActive: {
-    backgroundColor: C.purple,
-    elevation: 3, shadowColor: C.purple, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.3, shadowRadius: 4,
-  },
-  filterText: { fontSize: 13, fontWeight: '700', color: C.inkSoft },
-  filterTextActive: { color: '#fff' },
-  sectionLabel: {
-    fontSize: 16, fontWeight: '900', color: C.ink,
-    paddingHorizontal: 20, marginBottom: 10, marginTop: 4,
-  },
+  subtitle: { fontSize: 13, color: C.inkSoft, fontWeight: '700' },
+  voiceToggle: { width: 48, height: 48, borderRadius: 24, backgroundColor: '#E0E7FF', alignItems: 'center', justifyContent: 'center', borderWidth: 2, borderColor: '#C7D2FE' },
+  voiceToggleActive: { backgroundColor: '#FFD1DC', borderColor: '#F48FB1' },
+  voiceEmoji: { fontSize: 24 },
+  filterBar: { flexDirection: 'row', marginHorizontal: 20, gap: 10, marginBottom: 16 },
+  tab: { flex: 1, paddingVertical: 10, borderRadius: 15, backgroundColor: '#ECEEFB', alignItems: 'center' },
+  tabActive: { backgroundColor: '#4F46E5' },
+  tabT: { fontSize: 14, fontWeight: '800', color: '#8E94B7' },
+  tabTActive: { color: '#fff' },
+  scroll: { paddingBottom: 40 },
+  list: { paddingHorizontal: 20 },
+  item: { flexDirection: 'row', alignItems: 'center', padding: 14, borderRadius: 24, marginBottom: 12, elevation: 2 },
+  itemEmojiBox: { width: 50, height: 50, borderRadius: 18, alignItems: 'center', justifyContent: 'center' },
+  itemEmoji: { fontSize: 26 },
+  itemInfo: { flex: 1, marginLeft: 14 },
+  itemTitle: { fontSize: 17, fontWeight: '900', color: C.ink },
+  itemSub: { fontSize: 12, fontWeight: '800', marginTop: 2 },
+  playHint: { fontSize: 16, color: 'rgba(0,0,0,0.2)', fontWeight: '900' },
+  waveWrap: { flexDirection: 'row', alignItems: 'flex-end', gap: 3, height: 20 },
+  waveBar: { width: 4, height: 20, borderRadius: 2 },
+  floatingChar: { position: 'absolute', bottom: 100, fontSize: 24, zIndex: 10 },
 });
