@@ -42,6 +42,7 @@ const EXPLORE_DATA = [
   { target: 'ArabicDua',       title: 'Daily Duas',    image: require('../../assets/images/card_arabic_dua.png'),   bg: '#EEE8FF', speech: 'Daily Duas' },
   { target: 'Namaz',           title: 'Namaz Learn',   image: require('../../assets/images/card_namaz.png'),        bg: '#E3F2FD', speech: 'Namaz Learning' },
   { target: 'Asma',            title: 'Asma ul Husna', image: require('../../assets/images/card_asma.png'),         bg: '#E1F5FE', speech: 'Asma ul Husna' },
+  { target: 'BrainStorm',      title: 'Brain Storm',   image: require('../../assets/images/card_math.png'),       bg: '#FFF3E0', speech: 'Brain Storming Game', isNew: true },
 ];
 
 export default function ExploreScreen({ navigation }: ScreenProps<'Explore'>) {
