@@ -27,58 +27,91 @@ type Lesson = {
   dots: [number, number][];
 };
 
-const DOT_HIT = 30; // px in SVG coords
+const DOT_HIT = 28; // px in SVG coords
+const MAX_STRAY = 42; // Max distance allowed from any dot to draw
 
 const LESSONS: Lesson[] = [
   {
     letter: 'A', word: 'Apple', emoji: '🍎', bg: '#FFE6E6', ink: '#FF5252',
     guide: 'M 70 260 L 150 50 L 230 260 M 100 190 L 200 190',
-    dots: [[70,260],[100,200],[125,140],[150,80],[175,140],[200,200],[230,260],[110,190],[150,190],[190,190]],
+    dots: [
+      [70, 260], [85, 220], [100, 180], [115, 140], [130, 100], [150, 50], // Left leg
+      [165, 100], [180, 140], [195, 180], [210, 220], [230, 260], // Right leg
+      [110, 190], [135, 190], [165, 190], [190, 190] // Crossbar
+    ],
   },
   {
     letter: 'B', word: 'Bear', emoji: '🐻', bg: '#FFE9D6', ink: '#FF8A4C',
     guide: 'M 90 50 L 90 260 M 90 50 Q 200 50 200 110 Q 200 155 90 155 Q 220 155 220 210 Q 220 260 90 260',
-    dots: [[90,50],[90,110],[90,155],[90,210],[90,260],[140,50],[180,80],[180,130],[140,155],[180,180],[180,230],[140,260]],
+    dots: [
+      [90, 50], [90, 90], [90, 130], [90, 170], [90, 210], [90, 260], // Vertical line
+      [130, 50], [170, 60], [200, 90], [200, 120], [170, 145], [130, 155], // Top bump
+      [130, 155], [180, 165], [220, 190], [220, 230], [180, 255], [130, 260] // Bottom bump
+    ],
   },
   {
     letter: 'C', word: 'Cat', emoji: '🐱', bg: '#FFEED6', ink: '#FFB347',
     guide: 'M 230 90 Q 150 30 80 90 Q 30 155 80 220 Q 150 280 230 220',
-    dots: [[230,90],[180,55],[130,50],[90,75],[55,120],[50,160],[60,200],[100,235],[150,250],[200,240],[230,220]],
+    dots: [
+      [230, 90], [200, 60], [150, 45], [100, 60], [70, 100], [50, 155], [70, 210], [100, 250], [150, 265], [200, 250], [230, 220]
+    ],
   },
   {
     letter: 'D', word: 'Dog', emoji: '🐶', bg: '#FFF6CC', ink: '#D69E00',
     guide: 'M 90 50 L 90 260 M 90 50 Q 230 50 230 155 Q 230 260 90 260',
-    dots: [[90,50],[90,110],[90,155],[90,210],[90,260],[150,55],[200,80],[225,130],[225,180],[200,230],[150,255]],
+    dots: [
+      [90, 50], [90, 100], [90, 155], [90, 210], [90, 260], // Vertical
+      [130, 50], [180, 70], [220, 110], [230, 155], [220, 200], [180, 240], [130, 260] // Curve
+    ],
   },
   {
     letter: 'E', word: 'Elephant', emoji: '🐘', bg: '#E5F0FF', ink: '#3FB5FF',
     guide: 'M 220 50 L 80 50 L 80 260 L 220 260 M 80 155 L 200 155',
-    dots: [[220,50],[150,50],[80,50],[80,110],[80,155],[80,210],[80,260],[150,260],[220,260],[120,155],[170,155]],
+    dots: [
+      [220, 50], [150, 50], [80, 50], [80, 100], [80, 155], [80, 210], [80, 260], [150, 260], [220, 260], // Outer frame
+      [120, 155], [160, 155], [200, 155] // Middle bar
+    ],
   },
   {
     letter: 'H', word: 'House', emoji: '🏠', bg: '#E0F7E5', ink: '#3CB57F',
     guide: 'M 80 50 L 80 260 M 220 50 L 220 260 M 80 155 L 220 155',
-    dots: [[80,50],[80,110],[80,155],[80,210],[80,260],[220,50],[220,110],[220,155],[220,210],[220,260],[110,155],[150,155],[190,155]],
+    dots: [
+      [80, 50], [80, 100], [80, 155], [80, 210], [80, 260], // Left leg
+      [220, 50], [220, 100], [220, 155], [220, 210], [220, 260], // Right leg
+      [120, 155], [150, 155], [180, 155] // Bridge
+    ],
   },
   {
     letter: 'I', word: 'Ice cream', emoji: '🍦', bg: '#E5F0FF', ink: '#5E8BFF',
     guide: 'M 80 50 L 220 50 M 150 50 L 150 260 M 80 260 L 220 260',
-    dots: [[80,50],[150,50],[220,50],[150,90],[150,140],[150,190],[150,260],[80,260],[150,260],[220,260]],
+    dots: [
+      [80, 50], [120, 50], [150, 50], [180, 50], [220, 50], // Top
+      [150, 100], [150, 155], [150, 210], // Stem
+      [80, 260], [120, 260], [150, 260], [180, 260], [220, 260] // Bottom
+    ],
   },
   {
     letter: 'L', word: 'Lion', emoji: '🦁', bg: '#FFF6CC', ink: '#FFCD2E',
     guide: 'M 90 50 L 90 260 L 230 260',
-    dots: [[90,50],[90,100],[90,150],[90,200],[90,260],[140,260],[185,260],[230,260]],
+    dots: [
+      [90, 50], [90, 100], [90, 155], [90, 210], [90, 260], // Vertical
+      [140, 260], [190, 260], [230, 260] // Horizontal
+    ],
   },
   {
     letter: 'O', word: 'Owl', emoji: '🦉', bg: '#F0E5FF', ink: '#8857E0',
     guide: 'M 150 50 Q 240 50 240 155 Q 240 260 150 260 Q 60 260 60 155 Q 60 50 150 50',
-    dots: [[150,50],[200,60],[230,100],[240,155],[230,210],[200,250],[150,260],[100,250],[70,210],[60,155],[70,100],[100,60]],
+    dots: [
+      [150, 50], [200, 60], [240, 110], [240, 155], [240, 200], [200, 250], [150, 265], [100, 250], [60, 200], [60, 155], [60, 110], [100, 60]
+    ],
   },
   {
     letter: 'T', word: 'Train', emoji: '🚂', bg: '#FFE5F0', ink: '#FF6B6B',
     guide: 'M 70 50 L 230 50 M 150 50 L 150 260',
-    dots: [[70,50],[110,50],[150,50],[190,50],[230,50],[150,90],[150,140],[150,190],[150,260]],
+    dots: [
+      [70, 50], [110, 50], [150, 50], [190, 50], [230, 50], // Top
+      [150, 100], [150, 155], [150, 210], [150, 260] // Stem
+    ],
   },
 ];
 
@@ -116,7 +149,7 @@ function ColorSwatch({ color, selected, onPress }: { color: string; selected: bo
     <Pressable onPress={() => {
       Animated.sequence([
         Animated.spring(scale, { toValue: 1.3, useNativeDriver: true, speed: 60 }),
-        Animated.spring(scale, { toValue: 1,    useNativeDriver: true, speed: 30 }),
+        Animated.spring(scale, { toValue: 1, useNativeDriver: true, speed: 30 }),
       ]).start();
       onPress();
     }}>
@@ -127,8 +160,8 @@ function ColorSwatch({ color, selected, onPress }: { color: string; selected: bo
   );
 }
 const cs = StyleSheet.create({
-  dot:   { width: 38, height: 38, borderRadius: 19, borderWidth: 2.5, borderColor: C.ink, marginHorizontal: 4, alignItems: 'center', justifyContent: 'center' },
-  sel:   { borderColor: '#fff', borderWidth: 4, elevation: 6, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.3, shadowRadius: 4 },
+  dot: { width: 38, height: 38, borderRadius: 19, borderWidth: 2.5, borderColor: C.ink, marginHorizontal: 4, alignItems: 'center', justifyContent: 'center' },
+  sel: { borderColor: '#fff', borderWidth: 4, elevation: 6, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.3, shadowRadius: 4 },
   check: { fontSize: 16, color: '#fff', fontWeight: '900', textShadowColor: 'rgba(0,0,0,0.5)', textShadowOffset: { width: 1, height: 1 }, textShadowRadius: 2 },
 });
 
@@ -143,7 +176,7 @@ function PencilCursor({ x, y, visible }: { x: number; y: number; visible: boolea
   );
 }
 const pc = StyleSheet.create({
-  wrap:  { position: 'absolute', zIndex: 50 },
+  wrap: { position: 'absolute', zIndex: 50 },
   emoji: { fontSize: 32 },
 });
 
@@ -154,18 +187,18 @@ type Stroke = { color: string; points: [number, number][] };
 export default function LetterTraceScreen({ navigation }: ScreenProps<'LetterTrace'>) {
   const { addStars, playGame } = useProgress();
   const [lessonIdx, setLessonIdx] = useState(0);
-  const [strokes,   setStrokes]   = useState<Stroke[]>([]);
+  const [strokes, setStrokes] = useState<Stroke[]>([]);
   const [activePts, setActivePts] = useState<[number, number][]>([]);
-  const [color,     setColor]     = useState(PEN_COLORS[0]);
+  const [color, setColor] = useState(PEN_COLORS[0]);
   const [coveredDots, setCoveredDots] = useState<Set<number>>(new Set());
-  const [done,      setDone]      = useState(false);
+  const [done, setDone] = useState(false);
   const [particles, setParticles] = useState<{ id: number; color: string; x: number; y: number }[]>([]);
-  const [cursor,    setCursor]    = useState<{ x: number; y: number; visible: boolean }>({ x: 0, y: 0, visible: false });
+  const [cursor, setCursor] = useState<{ x: number; y: number; visible: boolean }>({ x: 0, y: 0, visible: false });
 
   const lesson = LESSONS[lessonIdx];
   const total = LESSONS.length;
   const coverage = coveredDots.size / lesson.dots.length;
-  const canFinish = coverage >= 0.7;
+  const canFinish = coverage >= 0.85;
 
   // Speak the prompt
   useEffect(() => {
@@ -217,6 +250,16 @@ export default function LetterTraceScreen({ navigation }: ScreenProps<'LetterTra
     return [px * scale, py * scale] as [number, number];
   }, []);
 
+  // Check if a point is near the letter path
+  const isNearPath = useCallback((sx: number, sy: number) => {
+    for (const dot of lesson.dots) {
+      const dx = dot[0] - sx;
+      const dy = dot[1] - sy;
+      if (Math.hypot(dx, dy) <= MAX_STRAY) return true;
+    }
+    return false;
+  }, [lesson]);
+
   // Test which dots are now covered
   const checkDots = useCallback((sx: number, sy: number) => {
     setCoveredDots(prev => {
@@ -238,18 +281,32 @@ export default function LetterTraceScreen({ navigation }: ScreenProps<'LetterTra
   const handleStart = useCallback((x: number, y: number) => {
     if (done) return;
     const [sx, sy] = toSvg(x, y);
+    if (!isNearPath(sx, sy)) {
+      setCursor({ x, y, visible: true }); // Still show cursor but don't draw
+      return;
+    }
     setActivePts([[sx, sy]]);
     setCursor({ x, y, visible: true });
     checkDots(sx, sy);
-  }, [done, toSvg, checkDots]);
+  }, [done, toSvg, checkDots, isNearPath]);
 
   const handleMove = useCallback((x: number, y: number) => {
     if (done) return;
     const [sx, sy] = toSvg(x, y);
-    setActivePts(prev => prev.length === 0 ? [[sx, sy]] : [...prev, [sx, sy]]);
     setCursor({ x, y, visible: true });
+
+    if (!isNearPath(sx, sy)) {
+      // If we stray off path, end the current stroke
+      if (activePts.length > 0) {
+        setStrokes(s => [...s, { color, points: activePts }]);
+        setActivePts([]);
+      }
+      return;
+    }
+
+    setActivePts(prev => prev.length === 0 ? [[sx, sy]] : [...prev, [sx, sy]]);
     checkDots(sx, sy);
-  }, [done, toSvg, checkDots]);
+  }, [done, toSvg, checkDots, isNearPath, activePts, color]);
 
   const handleEnd = useCallback(() => {
     setCursor(c => ({ ...c, visible: false }));
@@ -266,7 +323,7 @@ export default function LetterTraceScreen({ navigation }: ScreenProps<'LetterTra
       onStartShouldSetPanResponder: () => true,
       onMoveShouldSetPanResponder: () => true,
       onPanResponderGrant: (e) => handleStart(e.nativeEvent.locationX, e.nativeEvent.locationY),
-      onPanResponderMove:  (e) => handleMove(e.nativeEvent.locationX, e.nativeEvent.locationY),
+      onPanResponderMove: (e) => handleMove(e.nativeEvent.locationX, e.nativeEvent.locationY),
       onPanResponderRelease: handleEnd,
       onPanResponderTerminate: handleEnd,
     })
@@ -358,23 +415,23 @@ export default function LetterTraceScreen({ navigation }: ScreenProps<'LetterTra
 }
 
 const s = StyleSheet.create({
-  promptRow:    { alignItems: 'center', marginTop: -2 },
-  promptCard:   { flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderRadius: 22, paddingHorizontal: 16, paddingVertical: 8, borderWidth: 4, gap: 8, elevation: 4 },
+  promptRow: { alignItems: 'center', marginTop: -2 },
+  promptCard: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderRadius: 22, paddingHorizontal: 16, paddingVertical: 8, borderWidth: 4, gap: 8, elevation: 4 },
   promptLetter: { fontSize: 36, fontWeight: '900' },
-  promptWord:   { fontSize: 16, fontWeight: '800', color: C.ink },
-  replay:       { fontSize: 18, marginLeft: 4, opacity: 0.6 },
+  promptWord: { fontSize: 16, fontWeight: '800', color: C.ink },
+  replay: { fontSize: 18, marginLeft: 4, opacity: 0.6 },
 
 
-  canvasRow:    { alignItems: 'center', marginTop: 12 },
-  canvas:       { backgroundColor: '#fff', borderRadius: 26, overflow: 'hidden', elevation: 8, shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.12, shadowRadius: 8, borderWidth: 4, borderColor: '#fff' },
+  canvasRow: { alignItems: 'center', marginTop: 12 },
+  canvas: { backgroundColor: '#fff', borderRadius: 26, overflow: 'hidden', elevation: 8, shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.12, shadowRadius: 8, borderWidth: 4, borderColor: '#fff' },
 
-  paletteRow:   { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 14 },
+  paletteRow: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 14 },
 
-  actions:      { flexDirection: 'row', justifyContent: 'center', gap: 12, paddingHorizontal: 24, marginTop: 12, paddingBottom: 8 },
-  btn:          { flex: 1, paddingVertical: 12, borderRadius: 22, alignItems: 'center', borderWidth: 3, borderColor: C.ink, elevation: 4 },
-  btnNext:      {},
-  btnT:         { fontSize: 16, fontWeight: '900', color: C.ink },
+  actions: { flexDirection: 'row', justifyContent: 'center', gap: 12, paddingHorizontal: 24, marginTop: 12, paddingBottom: 8 },
+  btn: { flex: 1, paddingVertical: 12, borderRadius: 22, alignItems: 'center', borderWidth: 3, borderColor: C.ink, elevation: 4 },
+  btnNext: {},
+  btnT: { fontSize: 16, fontWeight: '900', color: C.ink },
 
-  winBanner:    { position: 'absolute', top: '40%', left: 0, right: 0, alignItems: 'center', zIndex: 99 },
-  winT:         { fontSize: 24, fontWeight: '900', color: C.ink, backgroundColor: '#FFD93D', paddingHorizontal: 22, paddingVertical: 12, borderRadius: 24, elevation: 8, borderWidth: 4, borderColor: '#fff' },
-});
+  winBanner: { position: 'absolute', top: '40%', left: 0, right: 0, alignItems: 'center', zIndex: 99 },
+  winT: { fontSize: 24, fontWeight: '900', color: C.ink, backgroundColor: '#FFD93D', paddingHorizontal: 22, paddingVertical: 12, borderRadius: 24, elevation: 8, borderWidth: 4, borderColor: '#fff' },
+})
