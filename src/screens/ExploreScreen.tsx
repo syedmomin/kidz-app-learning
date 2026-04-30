@@ -20,8 +20,8 @@ const SOUNDS = {
 
 // Map items to positions on the path (x is 0-100% of width, y is fixed pixel from top)
 const EXPLORE_DATA = [
-  { target: 'Animals', title: 'Animals', image: require('../../assets/images/card_animals.png'), step: 0, x: 25, y: 150 },
-  { target: 'MemoryFlip', title: 'Memory Flip', image: require('../../assets/images/card_memory.png'), step: 6, x: 75, y: 350 },
+  { target: 'Animals', title: 'Animals', image: require('../../assets/images/card_animals.png'), step: 0, x: 75, y: 150 },
+  { target: 'MemoryFlip', title: 'Memory Flip', image: require('../../assets/images/card_memory.png'), step: 6, x: 50, y: 350 },
   { target: 'ColorMix', title: 'Color Mix', image: require('../../assets/images/card_colormix.png'), step: 9, x: 70, y: 550 },
   { target: 'ShapeQuiz', title: 'Shape Quiz', image: require('../../assets/images/card_shapes.png'), step: 7, x: 30, y: 700 },
   { target: 'NumberQuiz', title: 'Math Quiz', image: require('../../assets/images/card_math.png'), step: 11, x: 70, y: 900 },
@@ -32,10 +32,22 @@ const EXPLORE_DATA = [
   { target: 'Numbers', title: 'Numbers', image: require('../../assets/images/card_numbers.png'), step: 5, x: 25, y: 1900 },
   { target: 'Music', title: 'Music', image: require('../../assets/images/card_music.png'), step: 3, x: 75, y: 2100 },
   { target: 'LetterTrace', title: 'Trace Letters', image: require('../../assets/images/card_alphabets.png'), step: 1, x: 35, y: 2350 },
+  { target: 'ColorMatch', title: 'Coloring', image: require('../../assets/images/card_coloring.png'), step: 1, x: 35, y: 2350 },
+  { target: 'SoundMatch', title: 'Sound Match', image: require('../../assets/images/card_sound.png'), step: 1, x: 35, y: 2350 },
+  { target: 'LetterBalloonPop', title: 'Letter Pop', image: require('../../assets/images/card_balloons.png'), step: 1, x: 35, y: 2350 },
+  { target: 'AlphabetSound', title: 'A for Apple', image: require('../../assets/images/card_alphabets.png'), step: 1, x: 35, y: 2350 },
+  { target: 'PatternQuest', title: 'Patterns', image: require('../../assets/images/card_patterns.png'), step: 1, x: 35, y: 2350 },
+  { target: 'ClockRead', title: 'Clock Reader', image: require('../../assets/images/card_clock.png'), step: 1, x: 35, y: 2350 },
+  { target: 'EmotionMatch', title: 'Emotions', image: require('../../assets/images/card_emotions.png'), step: 1, x: 35, y: 2350 },
+  { target: 'BrainStorm', title: 'Brain Storm', image: require('../../assets/images/card_math.png'), step: 1, x: 35, y: 2350 },
 
   // Arabic items
   { target: 'ArabicQaida', title: 'Arabic Qaida', image: require('../../assets/images/card_arabic_qaida.png'), step: 14, x: 25, y: 2500 },
   { target: 'ArabicSurah', title: 'Quran Surahs', image: require('../../assets/images/card_arabic_surah.png'), step: 15, x: 70, y: 2650 },
+  { target: 'ArabicDua', title: 'Daily Duas', image: require('../../assets/images/card_arabic_dua.png'), step: 1, x: 35, y: 2350 },
+  { target: 'Namaz', title: 'Namaz Learn', image: require('../../assets/images/card_namaz.png'), step: 1, x: 35, y: 2350 },
+  { target: 'Asma', title: 'Asma ul Husna', image: require('../../assets/images/card_asma.png'), step: 1, x: 35, y: 2350 },
+
 ];
 
 
@@ -118,7 +130,6 @@ export default function ExploreScreen({ navigation }: ScreenProps<'Explore'>) {
                 <ExploreCard
                   title={item.title}
                   image={item.image}
-                  stepNumber={item.step > 0 ? item.step : undefined}
                   onPress={() => handlePress(item.target, item.sound, item.speech)}
                 />
               </Animated.View>
