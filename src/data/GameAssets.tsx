@@ -3,7 +3,7 @@ import {
   SvgApple, SvgBall, SvgCar, SvgDog, SvgEgg, SvgFish, SvgGrape, SvgHouse,
   SvgIce, SvgJar, SvgKite, SvgLeaf, SvgMoon, SvgNest, SvgOwl, SvgPig,
   SvgQuilt, SvgRocket, SvgSun, SvgTrain, SvgUmbrella, SvgVase, SvgWatch,
-  SvgXylophone, SvgYak, SvgZebra,
+  SvgXylophone, SvgYak, SvgZebra, SvgMango,
   SvgCat, SvgStar, SvgTree, SvgHeart, SvgCloud, SvgCup, SvgKey, SvgHat,
   SvgSock, SvgBed, SvgDoor, SvgRing, SvgBird, SvgBook,
   SvgCircleShape, SvgSquareShape, SvgTriangleShape, SvgStarShape, SvgHeartShape,
@@ -198,6 +198,14 @@ export const SHADOW_ITEMS: ShadowItem[] = [
   { id: 'bed', name: 'Bed', render: (s) => <SvgBed isShadow={s} /> },
   { id: 'door', name: 'Door', render: (s) => <SvgDoor isShadow={s} /> },
   { id: 'ring', name: 'Ring', render: (s) => <SvgRing isShadow={s} /> },
+  { id: 'bird', name: 'Bird', render: () => <SvgBird /> },
+  { id: 'rocket', name: 'Rocket', render: () => <SvgRocket /> },
+  { id: 'train', name: 'Train', render: () => <SvgTrain /> },
+  { id: 'owl', name: 'Owl', render: () => <SvgOwl /> },
+  { id: 'pig', name: 'Pig', render: () => <SvgPig /> },
+  { id: 'egg', name: 'Egg', render: () => <SvgEgg /> },
+  { id: 'kite', name: 'Kite', render: () => <SvgKite /> },
+  { id: 'mango', name: 'Mango', render: (s) => <SvgMango isShadow={s} /> },
 ];
 
 // ─── Word Match Bank ──────────────────────────────────────────────────────────
@@ -226,7 +234,22 @@ export const WORD_BANK: WordRound[] = [
   { word: 'DOOR', options: ['DOOR', 'HOME', 'WALL', 'WOOD'], Illus: SvgDoor, bg: '#EFEBE9' },
   { word: 'RING', options: ['RING', 'HAND', 'GOLD', 'STAR'], Illus: SvgRing, bg: '#E0F7FA' },
   { word: 'BIRD', options: ['BIRD', 'FLY', 'SKY', 'WING'], Illus: SvgBird, bg: '#E1F5FE' },
+  { word: 'ROCKET', options: ['ROCKET', 'FLY', 'SPACE', 'MOON'], Illus: SvgRocket, bg: '#FFEBEE' },
+  { word: 'TRAIN', options: ['TRAIN', 'BUS', 'CAR', 'ROAD'], Illus: SvgTrain, bg: '#E3F2FD' },
+  { word: 'OWL', options: ['OWL', 'BIRD', 'NIGHT', 'WISE'], Illus: SvgOwl, bg: '#EFEBE9' },
+  { word: 'PIG', options: ['PIG', 'PINK', 'FARM', 'ANIMAL'], Illus: SvgPig, bg: '#FCE4EC' },
+  { word: 'EGG', options: ['EGG', 'FOOD', 'BIRD', 'WHITE'], Illus: SvgEgg, bg: '#FFF9C4' },
+  { word: 'KITE', options: ['KITE', 'FLY', 'SKY', 'WIND'], Illus: SvgKite, bg: '#F3E5F5' },
+  { word: 'NEST', options: ['NEST', 'BIRD', 'HOME', 'EGG'], Illus: SvgNest, bg: '#E8F5E9' },
+  { word: 'UMBRELLA', options: ['UMBRELLA', 'RAIN', 'SUN', 'WET'], Illus: SvgUmbrella, bg: '#F3E5F5' },
+  { word: 'VASE', options: ['VASE', 'FLOWER', 'POT', 'WATER'], Illus: SvgVase, bg: '#E1F5FE' },
+  { word: 'WATCH', options: ['WATCH', 'TIME', 'CLOCK', 'HAND'], Illus: SvgWatch, bg: '#E8EAF6' },
+  { word: 'ZEBRA', options: ['ZEBRA', 'HORSE', 'STRIPE', 'ANIMAL'], Illus: SvgZebra, bg: '#F5F5F5' },
+  { word: 'MANGO', options: ['MANGO', 'FRUIT', 'APPLE', 'PEACH'], Illus: SvgMango, bg: '#FFF3E0' },
+  { word: 'DOG', options: ['DOG', 'CAT', 'PET', 'WOLF'], Illus: SvgDog, bg: '#EFEBE9' },
+  { word: 'GRAPE', options: ['GRAPE', 'FRUIT', 'APPLE', 'PLUM'], Illus: SvgGrape, bg: '#F3E5F5' },
 ];
+
 
 // ─── Shapes ───────────────────────────────────────────────────────────────────
 

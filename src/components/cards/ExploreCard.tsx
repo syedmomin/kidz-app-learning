@@ -1,134 +1,90 @@
 import React from 'react';
 import { Pressable, View, Text, Image, StyleSheet, ImageSourcePropType } from 'react-native';
+import { BlurView } from 'expo-blur';
 import { C } from '../../theme';
 
 interface ExploreCardProps {
   onPress: () => void;
   image: ImageSourcePropType;
   title: string;
-  stepNumber?: number;
-  isNew?: boolean;
+  glassColor: string;
 }
 
-export default function ExploreCard({ onPress, image, title, stepNumber, isNew }: ExploreCardProps) {
+export default function ExploreCard({ onPress, image, title, glassColor }: ExploreCardProps) {
   return (
-    <Pressable 
-      onPress={onPress} 
+    <Pressable
+      onPress={onPress}
       style={({ pressed }) => [
-        s.card, 
-        { transform: [{ scale: pressed ? 0.95 : 1 }] }
+        s.card,
+        { transform: [{ scale: pressed ? 0.96 : 1 }] }
       ]}
     >
-      {isNew && (
-        <View style={s.newBadge}>
-          <Text style={s.newT}>NEW</Text>
+      <BlurView intensity={60} tint="light" style={s.blur}>
+        <View style={[s.glassBase, { backgroundColor: glassColor + '40' }]}>
+          <View style={s.imgWrapper}>
+            <Image source={image} style={s.img} />
+          </View>
+          <View style={s.footer}>
+            <Text style={s.title}>{title}</Text>
+          </View>
         </View>
-      )}
-      
-      {stepNumber && (
-        <View style={s.stepBadge}>
-          <Text style={s.stepT}>{stepNumber}</Text>
-        </View>
-      )}
-
-      <View style={s.content}>
-        <View style={s.imgBox}>
-          <Image source={image} style={s.img} />
-        </View>
-        <Text style={s.name}>{title}</Text>
-      </View>
-      
-      {/* Little triangle tail to make it look like a bubble */}
-      <View style={s.tail} />
+      </BlurView>
     </Pressable>
   );
 }
 
 const s = StyleSheet.create({
-  card: { 
-    backgroundColor: '#fff',
-    borderRadius: 18,
-    padding: 6,
-    width: 120,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 6,
-    elevation: 8,
-    alignItems: 'center',
-  },
-  content: {
-    alignItems: 'center',
-  },
-  imgBox: { 
-    width: 100,
-    height: 90,
-    borderRadius: 12,
-    backgroundColor: '#F8F9FA',
-    justifyContent: 'center', 
-    alignItems: 'center',
-    marginBottom: 4,
+  card: {
+    height: 160,
+    borderRadius: 24,
     overflow: 'hidden',
+    borderWidth: 1.5,
+    borderColor: 'rgba(255, 255, 255, 0.6)',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.1,
+    shadowRadius: 15,
+    elevation: 5,
   },
-  img: { 
-    width: '90%', 
-    height: '90%', 
-    resizeMode: 'contain' 
+  blur: {
+    flex: 1,
   },
-  name: { 
-    fontWeight: '800', 
-    fontSize: 13, 
-    color: '#444',
-    textAlign: 'center'
+  glassBase: {
+    flex: 1,
+    padding: 5,
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
-  stepBadge: {
-    position: 'absolute',
-    top: -8,
-    right: -8,
-    backgroundColor: '#FF8FB1',
-    width: 24,
-    height: 24,
-    borderRadius: 12,
+  imgWrapper: {
+    width: 150,
+    height: 150,
+    borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: 2,
-    borderColor: '#fff',
-    zIndex: 20,
   },
-  stepT: {
-    color: '#fff',
-    fontWeight: '900',
-    fontSize: 12,
+  img: {
+    width: '90%',
+    height: '90%',
+    resizeMode: 'contain',
+    borderRadius: 20,
   },
-  newBadge: { 
-    position: 'absolute', 
-    top: -10, 
-    left: -10, 
-    zIndex: 20, 
-    backgroundColor: '#FF6B6B', 
-    borderRadius: 8, 
-    paddingHorizontal: 6, 
-    paddingVertical: 2,
-    borderWidth: 1.5,
-    borderColor: '#fff',
-  },
-  newT: { 
-    color: '#fff', 
-    fontWeight: '900', 
-    fontSize: 10 
-  },
-  tail: {
+  footer: {
+    width: '100%',
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    paddingVertical: 4,
+    borderRadius: 10,
+    alignItems: 'center',
     position: 'absolute',
-    bottom: -8,
-    width: 0,
-    height: 0,
-    borderLeftWidth: 8,
-    borderRightWidth: 8,
-    borderTopWidth: 8,
-    borderLeftColor: 'transparent',
-    borderRightColor: 'transparent',
-    borderTopColor: '#fff',
-  }
+    bottom: 0,
+  },
+  title: {
+    fontSize: 14,
+    fontWeight: '900',
+    color: '#333',
+    textAlign: 'center',
+  },
 });
+
+
 
 

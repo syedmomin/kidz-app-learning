@@ -34,6 +34,7 @@ export type RootStackParamList = {
   Namaz: undefined;
   Asma: undefined;
   BrainStorm: undefined;
+  Coloring: undefined;
 };
 
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';

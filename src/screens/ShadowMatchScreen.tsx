@@ -8,7 +8,7 @@ import type { ScreenProps } from '../navigation/types';
 
 import { SHADOW_ITEMS, type ShadowItem } from '../data/GameAssets';
 
-const TOTAL = 200;
+const TOTAL = 500;
 const { width } = Dimensions.get('window');
 
 type ItemDef = ShadowItem;
