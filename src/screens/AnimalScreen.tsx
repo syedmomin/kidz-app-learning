@@ -93,7 +93,7 @@ export default function AnimalScreen({ navigation }: ScreenProps<'Animals'>) {
     cardScale.setValue(0.85);
     overlayOpacity.setValue(0);
     Animated.spring(cardScale, { toValue: 1, useNativeDriver: true, speed: 14, bounciness: 10 }).start();
-    
+
     // Announce the question
     Speech.stop();
     Speech.speak("Which animal is this?", { rate: 0.9, pitch: 1.1 });
@@ -118,7 +118,7 @@ export default function AnimalScreen({ navigation }: ScreenProps<'Animals'>) {
     if (animal.id === correct.id) {
       setState('correct');
       setShowBurst(true);
-      
+
       // Speak name on correct
       Speech.stop();
       Speech.speak(`Yes! That is a ${correct.name}!`, { rate: 0.9, pitch: 1.1 });
@@ -127,7 +127,7 @@ export default function AnimalScreen({ navigation }: ScreenProps<'Animals'>) {
         Animated.spring(imgScale, { toValue: 1.15, useNativeDriver: true, speed: 20 }),
         Animated.spring(imgScale, { toValue: 1, useNativeDriver: true, speed: 10 }),
       ]).start();
-      
+
       Animated.sequence([
         Animated.timing(overlayOpacity, { toValue: 0.35, duration: 200, useNativeDriver: true }),
         Animated.timing(overlayOpacity, { toValue: 0, duration: 600, useNativeDriver: true }),
@@ -173,7 +173,7 @@ export default function AnimalScreen({ navigation }: ScreenProps<'Animals'>) {
         </Pressable>
         <View style={{ flex: 1, alignItems: 'center' }}>
           <Text style={s.title}>🐾 Animals</Text>
-          <Text style={s.subtitle}>Level {Math.ceil(round/5)} • {round} Animals Learnt</Text>
+          <Text style={s.subtitle}>Level {Math.ceil(round / 5)} • {round} Animals Learnt</Text>
         </View>
         <View style={{ width: 44 }} />
       </Animated.View>
@@ -205,7 +205,6 @@ export default function AnimalScreen({ navigation }: ScreenProps<'Animals'>) {
           <View style={qz.optGrid}>
             {options.map((animal) => (
               <Pressable key={animal.id} style={optionStyle(animal)} onPress={() => handleSelect(animal)}>
-                <Image source={typeof animal.image === 'string' ? { uri: animal.image } : animal.image} style={qz.optImg} />
                 <Text style={qz.optName}>{animal.name}</Text>
                 {state === 'correct' && animal.id === correct.id && <Text style={qz.tick}>✅</Text>}
                 {state === 'wrong' && animal.id === selected && <Text style={qz.tick}>❌</Text>}
