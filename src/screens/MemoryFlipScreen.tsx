@@ -18,7 +18,7 @@ const GAP = 8;
 
 
 
-interface Card { id: number; pairIdx: number; image: any; sound?: any; name: string }
+interface Card { id: number; pairIdx: number; image: any; name: string }
 
 function buildDeck(pairCount: number): Card[] {
   const selectedPairs = shuffle(ANIMALS).slice(0, pairCount);
@@ -26,7 +26,6 @@ function buildDeck(pairCount: number): Card[] {
     id: i,
     pairIdx: ANIMALS.indexOf(p),
     image: p.image,
-    sound: p.sound,
     name: p.name,
   }));
   return shuffle(deck);
@@ -146,13 +145,9 @@ export default function MemoryFlipScreen({ navigation }: ScreenProps<'MemoryFlip
 
       if (isMatch) {
         setTimeout(() => {
-          if (deck[idx].sound) {
-            playSound(deck[idx].sound);
-          } else {
-            import('expo-speech').then(Speech => {
-              Speech.speak(deck[idx].name, { rate: 1.0, pitch: 1.2 });
-            });
-          }
+          import('expo-speech').then(Speech => {
+            Speech.speak(deck[idx].name, { rate: 1.0, pitch: 1.2 });
+          });
           setStatuses(prev => prev.map((s, i) =>
             i === firstIdx || i === idx ? 'matched' : s
           ) as CardStatus[]);

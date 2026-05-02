@@ -19,7 +19,6 @@ export interface Animal {
   id: string;
   name: string;
   image: any;
-  sound?: any;
   color: string;
   bgGradient: [string, string];
   fact: string;
@@ -64,30 +63,7 @@ export interface MusicTrack {
 
 // ─── Sound Files ──────────────────────────────────────────────────────────────
 
-export const ANIMAL_SOUNDS = {
-  lion: require('../../assets/sounds/lion.mp3'),
-  tiger: require('../../assets/sounds/tiger.mp3'),
-  elephant: require('../../assets/sounds/elephant.mp3'),
-  dog: require('../../assets/sounds/dog.mp3'),
-  cat: require('../../assets/sounds/cat.mp3'),
-  cow: require('../../assets/sounds/cow.mp3'),
-  bear: require('../../assets/sounds/bear.mp3'),
-  chicken: require('../../assets/sounds/chicken.mp3'),
-  pig: require('../../assets/sounds/pig.mp3'),
-  monkey: require('../../assets/sounds/monkey.mp3'),
-  gorilla: require('../../assets/sounds/gorilla.mp3'),
-  deer: require('../../assets/sounds/deer.mp3'),
-  horse: require('../../assets/sounds/horse.mp3'),
-  sheep: require('../../assets/sounds/sheep.mp3'),
-  wolf: require('../../assets/sounds/wolf.mp3'),
-  fox: require('../../assets/sounds/fox.mp3'),
-  duck: require('../../assets/sounds/duck.mp3'),
-  squirrel: require('../../assets/sounds/squirrel.mp3'),
-  frog: require('../../assets/sounds/frog.mp3'),
-  crocodile: require('../../assets/sounds/crocodile.mp3'),
-  owl: require('../../assets/sounds/owl.mp3'),
-  dolphin: require('../../assets/sounds/dolphin.mp3'),
-};
+
 
 export const MUSIC_FILES = {
   twinkle: require('../../assets/music/twinkle_tts.mp3'),
@@ -110,37 +86,37 @@ export const MUSIC_FILES = {
 // ─── Animals ──────────────────────────────────────────────────────────────────
 
 export const ANIMALS: Animal[] = [
-  { id: '1', name: 'Lion', image: require('../../assets/animals/lion.jpg'), sound: ANIMAL_SOUNDS.lion, color: '#FFB347', bgGradient: ['#FFD580', '#FF9500'], fact: 'King of the jungle!' },
-  { id: '2', name: 'Tiger', image: require('../../assets/animals/tiger.jpg'), sound: ANIMAL_SOUNDS.tiger, color: '#FF7043', bgGradient: ['#FFAB91', '#FF5722'], fact: 'Has 100 stripes!' },
-  { id: '3', name: 'Elephant', image: require('../../assets/animals/elephant.jpg'), sound: ANIMAL_SOUNDS.elephant, color: '#90A4AE', bgGradient: ['#CFD8DC', '#78909C'], fact: 'Never forgets!' },
-  { id: '4', name: 'Dog', image: require('../../assets/animals/dog.jpg'), sound: ANIMAL_SOUNDS.dog, color: '#A1887F', bgGradient: ['#D7CCC8', '#795548'], fact: "Human's best friend!" },
-  { id: '5', name: 'Cat', image: require('../../assets/animals/cat.jpg'), sound: ANIMAL_SOUNDS.cat, color: '#CE93D8', bgGradient: ['#E1BEE7', '#AB47BC'], fact: 'Purr-fect pets!' },
-  { id: '6', name: 'Cow', image: require('../../assets/animals/cow.jpg'), sound: ANIMAL_SOUNDS.cow, color: '#80CBC4', bgGradient: ['#B2EBF2', '#26C6DA'], fact: 'Gives us milk!' },
-  { id: '7', name: 'Bear', image: require('../../assets/animals/bear.jpg'), sound: ANIMAL_SOUNDS.bear, color: '#8D6E63', bgGradient: ['#BCAAA4', '#6D4C41'], fact: 'Loves honey!' },
-  { id: '8', name: 'Chicken', image: require('../../assets/animals/chicken.jpg'), sound: ANIMAL_SOUNDS.chicken, color: '#F9A825', bgGradient: ['#FFF59D', '#F9A825'], fact: 'Lays yummy eggs!' },
-  { id: '9', name: 'Pig', image: require('../../assets/animals/pig.jpg'), sound: ANIMAL_SOUNDS.pig, color: '#F48FB1', bgGradient: ['#FCE4EC', '#EC407A'], fact: 'Very smart animal!' },
-  { id: '10', name: 'Monkey', image: require('../../assets/animals/monkey.jpg'), sound: ANIMAL_SOUNDS.monkey, color: '#FFCC80', bgGradient: ['#FFE0B2', '#FB8C00'], fact: 'Loves bananas!' },
-  { id: '11', name: 'Gorilla', image: require('../../assets/animals/gorilla.jpg'), sound: ANIMAL_SOUNDS.gorilla, color: '#78909C', bgGradient: ['#B0BEC5', '#455A64'], fact: 'Strongest primate!' },
-  { id: '12', name: 'Deer', image: require('../../assets/animals/deer.jpg'), sound: ANIMAL_SOUNDS.deer, color: '#A5D6A7', bgGradient: ['#C8E6C9', '#43A047'], fact: 'Has big antlers!' },
+  { id: '1', name: 'Lion', image: require('../../assets/animals/lion.jpg'), color: '#FFB347', bgGradient: ['#FFD580', '#FF9500'], fact: 'King of the jungle!' },
+  { id: '2', name: 'Tiger', image: require('../../assets/animals/tiger.jpg'), color: '#FF7043', bgGradient: ['#FFAB91', '#FF5722'], fact: 'Has 100 stripes!' },
+  { id: '3', name: 'Elephant', image: require('../../assets/animals/elephant.jpg'), color: '#90A4AE', bgGradient: ['#CFD8DC', '#78909C'], fact: 'Never forgets!' },
+  { id: '4', name: 'Dog', image: require('../../assets/animals/dog.jpg'), color: '#A1887F', bgGradient: ['#D7CCC8', '#795548'], fact: "Human's best friend!" },
+  { id: '5', name: 'Cat', image: require('../../assets/animals/cat.jpg'), color: '#CE93D8', bgGradient: ['#E1BEE7', '#AB47BC'], fact: 'Purr-fect pets!' },
+  { id: '6', name: 'Cow', image: require('../../assets/animals/cow.jpg'), color: '#80CBC4', bgGradient: ['#B2EBF2', '#26C6DA'], fact: 'Gives us milk!' },
+  { id: '7', name: 'Bear', image: require('../../assets/animals/bear.jpg'), color: '#8D6E63', bgGradient: ['#BCAAA4', '#6D4C41'], fact: 'Loves honey!' },
+  { id: '8', name: 'Chicken', image: require('../../assets/animals/chicken.jpg'), color: '#F9A825', bgGradient: ['#FFF59D', '#F9A825'], fact: 'Lays yummy eggs!' },
+  { id: '9', name: 'Pig', image: require('../../assets/animals/pig.jpg'), color: '#F48FB1', bgGradient: ['#FCE4EC', '#EC407A'], fact: 'Very smart animal!' },
+  { id: '10', name: 'Monkey', image: require('../../assets/animals/monkey.jpg'), color: '#FFCC80', bgGradient: ['#FFE0B2', '#FB8C00'], fact: 'Loves bananas!' },
+  { id: '11', name: 'Gorilla', image: require('../../assets/animals/gorilla.jpg'), color: '#78909C', bgGradient: ['#B0BEC5', '#455A64'], fact: 'Strongest primate!' },
+  { id: '12', name: 'Deer', image: require('../../assets/animals/deer.jpg'), color: '#A5D6A7', bgGradient: ['#C8E6C9', '#43A047'], fact: 'Has big antlers!' },
   { id: '13', name: 'Rabbit', image: require('../../assets/animals/rabbit.jpg'), color: '#EF9A9A', bgGradient: ['#FFCDD2', '#EF5350'], fact: 'Hops super fast!' },
   { id: '14', name: 'Goat', image: require('../../assets/animals/goat.jpg'), color: '#C5E1A5', bgGradient: ['#DCEDC8', '#7CB342'], fact: 'Climbs mountains!' },
-  { id: '15', name: 'Horse', image: require('../../assets/animals/horse.jpg'), sound: ANIMAL_SOUNDS.horse, color: '#BCAAA4', bgGradient: ['#D7CCC8', '#8D6E63'], fact: 'Runs super fast!' },
-  { id: '16', name: 'Sheep', image: require('../../assets/animals/sheep.jpg'), sound: ANIMAL_SOUNDS.sheep, color: '#E0E0E0', bgGradient: ['#F5F5F5', '#BDBDBD'], fact: 'Gives us wool!' },
-  { id: '17', name: 'Wolf', image: require('../../assets/animals/wolf.jpg'), sound: ANIMAL_SOUNDS.wolf, color: '#B0BEC5', bgGradient: ['#ECEFF1', '#607D8B'], fact: 'Howls at the moon!' },
-  { id: '18', name: 'Fox', image: require('../../assets/animals/fox.jpg'), sound: ANIMAL_SOUNDS.fox, color: '#FF8A65', bgGradient: ['#FFCCBC', '#FF5722'], fact: 'Very clever animal!' },
-  { id: '19', name: 'Duck', image: require('../../assets/animals/duck.jpg'), sound: ANIMAL_SOUNDS.duck, color: '#80DEEA', bgGradient: ['#E0F7FA', '#00BCD4'], fact: 'Loves to swim!' },
-  { id: '20', name: 'Squirrel', image: require('../../assets/animals/squirrel.jpg'), sound: ANIMAL_SOUNDS.squirrel, color: '#FFAB91', bgGradient: ['#FBE9E7', '#FF7043'], fact: 'Collects acorns!' },
+  { id: '15', name: 'Horse', image: require('../../assets/animals/horse.jpg'), color: '#BCAAA4', bgGradient: ['#D7CCC8', '#8D6E63'], fact: 'Runs super fast!' },
+  { id: '16', name: 'Sheep', image: require('../../assets/animals/sheep.jpg'), color: '#E0E0E0', bgGradient: ['#F5F5F5', '#BDBDBD'], fact: 'Gives us wool!' },
+  { id: '17', name: 'Wolf', image: require('../../assets/animals/wolf.jpg'), color: '#B0BEC5', bgGradient: ['#ECEFF1', '#607D8B'], fact: 'Howls at the moon!' },
+  { id: '18', name: 'Fox', image: require('../../assets/animals/fox.jpg'), color: '#FF8A65', bgGradient: ['#FFCCBC', '#FF5722'], fact: 'Very clever animal!' },
+  { id: '19', name: 'Duck', image: require('../../assets/animals/duck.jpg'), color: '#80DEEA', bgGradient: ['#E0F7FA', '#00BCD4'], fact: 'Loves to swim!' },
+  { id: '20', name: 'Squirrel', image: require('../../assets/animals/squirrel.jpg'), color: '#FFAB91', bgGradient: ['#FBE9E7', '#FF7043'], fact: 'Collects acorns!' },
   { id: '21', name: 'Zebra', image: require('../../assets/animals/zebra.jpg'), color: '#757575', bgGradient: ['#F5F5F5', '#424242'], fact: 'Has cool stripes!' },
   { id: '22', name: 'Giraffe', image: require('../../assets/animals/giraffe.jpg'), color: '#FFD54F', bgGradient: ['#FFF8E1', '#FFB300'], fact: 'Tallest animal ever!' },
   { id: '23', name: 'Penguin', image: require('../../assets/animals/penguin.jpg'), color: '#90CAF9', bgGradient: ['#E3F2FD', '#1E88E5'], fact: 'Swims but not fly!' },
-  { id: '24', name: 'Frog', image: require('../../assets/animals/frog.jpg'), sound: ANIMAL_SOUNDS.frog, color: '#69F0AE', bgGradient: ['#E8F5E9', '#00C853'], fact: 'Ribbit ribbit!' },
+  { id: '24', name: 'Frog', image: require('../../assets/animals/frog.jpg'), color: '#69F0AE', bgGradient: ['#E8F5E9', '#00C853'], fact: 'Ribbit ribbit!' },
   { id: '25', name: 'Panda', image: require('../../assets/animals/panda.jpg'), color: '#EEEEEE', bgGradient: ['#FAFAFA', '#9E9E9E'], fact: 'Eats bamboo all day!' },
-  { id: '26', name: 'Crocodile', image: require('../../assets/animals/crocodile.jpg'), sound: ANIMAL_SOUNDS.crocodile, color: '#66BB6A', bgGradient: ['#C8E6C9', '#388E3C'], fact: 'Very old reptile!' },
-  { id: '27', name: 'Owl', image: require('../../assets/animals/owl.jpg'), sound: ANIMAL_SOUNDS.owl, color: '#8D6E63', bgGradient: ['#EFEBE9', '#5D4037'], fact: 'Sees in the dark!' },
+  { id: '26', name: 'Crocodile', image: require('../../assets/animals/crocodile.jpg'), color: '#66BB6A', bgGradient: ['#C8E6C9', '#388E3C'], fact: 'Very old reptile!' },
+  { id: '27', name: 'Owl', image: require('../../assets/animals/owl.jpg'), color: '#8D6E63', bgGradient: ['#EFEBE9', '#5D4037'], fact: 'Sees in the dark!' },
   { id: '28', name: 'Parrot', image: require('../../assets/animals/parrot.jpg'), color: '#AED581', bgGradient: ['#F1F8E9', '#7CB342'], fact: 'Can copy your words!' },
   { id: '29', name: 'Flamingo', image: require('../../assets/animals/flamingo.jpg'), color: '#F48FB1', bgGradient: ['#FCE4EC', '#E91E63'], fact: 'Stands on one leg!' },
   { id: '30', name: 'Camel', image: require('../../assets/animals/camel.jpg'), color: '#FFD54F', bgGradient: ['#FFF8E1', '#F9A825'], fact: 'Survives without water!' },
-  { id: '31', name: 'Dolphin', image: require('../../assets/animals/dolphin.jpg'), sound: ANIMAL_SOUNDS.dolphin, color: '#4FC3F7', bgGradient: ['#E1F5FE', '#0288D1'], fact: 'Super smart swimmer!' },
+  { id: '31', name: 'Dolphin', image: require('../../assets/animals/dolphin.jpg'), color: '#4FC3F7', bgGradient: ['#E1F5FE', '#0288D1'], fact: 'Super smart swimmer!' },
   { id: '32', name: 'Turtle', image: require('../../assets/animals/turtle.jpg'), color: '#81C784', bgGradient: ['#E8F5E9', '#388E3C'], fact: 'Lives 100+ years!' },
 ];
 

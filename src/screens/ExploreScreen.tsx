@@ -10,11 +10,10 @@ import { useAudio } from '../hooks/useAudio';
 import type { ScreenProps } from '../navigation/types';
 
 import ExploreCard from '../components/cards/ExploreCard';
-import { ANIMAL_SOUNDS, MUSIC_FILES } from '../data/GameAssets';
+import { MUSIC_FILES } from '../data/GameAssets';
 
 const SOUNDS = {
   abc: MUSIC_FILES.abc,
-  lion: ANIMAL_SOUNDS.lion,
   happy: MUSIC_FILES.happy,
   twinkle: MUSIC_FILES.twinkle,
 };

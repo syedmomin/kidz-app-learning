@@ -19,7 +19,6 @@ export type RootStackParamList = {
   ShapeQuiz:  undefined;
   BalloonPop: undefined;
   ShadowMatch:  undefined;
-  SoundMatch: undefined;
   LetterBalloonPop: undefined;
   AlphabetSound: undefined;
   LetterTrace: undefined;

@@ -29,7 +29,6 @@ import MemoryFlipScreen from './src/screens/MemoryFlipScreen';
 import ShapeQuizScreen from './src/screens/ShapeQuizScreen';
 import BalloonPopScreen from './src/screens/BalloonPopScreen';
 import ShadowMatchScreen from './src/screens/ShadowMatchScreen';
-import SoundMatchScreen from './src/screens/SoundMatchScreen';
 import LetterBalloonPopScreen from './src/screens/LetterBalloonPopScreen';
 import LetterTraceScreen from './src/screens/LetterTraceScreen';
 import ColorMixScreen from './src/screens/ColorMixScreen';
@@ -83,7 +82,6 @@ export default function App() {
               <Stack.Screen name="ShapeQuiz" component={ShapeQuizScreen} />
               <Stack.Screen name="BalloonPop" component={BalloonPopScreen} />
               <Stack.Screen name="ShadowMatch" component={ShadowMatchScreen} />
-              <Stack.Screen name="SoundMatch" component={SoundMatchScreen} />
               <Stack.Screen name="LetterBalloonPop" component={LetterBalloonPopScreen} />
               <Stack.Screen name="LetterTrace" component={LetterTraceScreen} />
               <Stack.Screen name="ColorMix" component={ColorMixScreen} />
