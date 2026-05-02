@@ -1,12 +1,14 @@
-import React, { useState, useRef } from 'react';
-import { View, Text, StyleSheet, Pressable, Animated, Dimensions, ScrollView } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, Pressable, Dimensions, ScrollView } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { Ionicons } from '@expo/vector-icons';
-import Svg, { Path, G, Circle } from 'react-native-svg';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import type { ScreenProps } from '../navigation/types';
 
-const { width, height } = Dimensions.get('window');
+// Import all SVGs from Illustrations
+import * as Illustrations from '../components/Illustrations';
+
+const { width } = Dimensions.get('window');
 
 const PALETTE = [
   '#FF5252', '#FF4081', '#E040FB', '#7C4DFF', 
@@ -15,37 +17,80 @@ const PALETTE = [
   '#FFFF00', '#FFD740', '#FFAB40', '#FF6E40',
 ];
 
-const SHAPES = [
-  {
-    id: 'butterfly',
-    paths: [
-      { id: 'wing-l', d: "M 80 80 Q 20 20 20 80 Q 20 140 80 140 Z" },
-      { id: 'wing-r', d: "M 80 80 Q 140 20 140 80 Q 140 140 80 140 Z" },
-      { id: 'body',   d: "M 75 60 Q 80 40 85 60 L 85 150 Q 80 160 75 150 Z" },
-    ]
-  },
-  {
-    id: 'flower',
-    paths: [
-      { id: 'petal-1', d: "M 80 80 Q 80 20 110 50 Q 140 80 80 80 Z" },
-      { id: 'petal-2', d: "M 80 80 Q 140 80 110 110 Q 80 140 80 80 Z" },
-      { id: 'petal-3', d: "M 80 80 Q 80 140 50 110 Q 20 80 80 80 Z" },
-      { id: 'petal-4', d: "M 80 80 Q 20 80 50 50 Q 80 20 80 80 Z" },
-      { id: 'center',  d: "M 70 80 A 10 10 0 1 0 90 80 A 10 10 0 1 0 70 80 Z" },
-    ]
-  }
+// Map the Illustration keys we want to use for coloring
+const ASSETS = [
+  { id: 'Cat',       Comp: Illustrations.SvgCat },
+  { id: 'Dog',       Comp: Illustrations.SvgDog },
+  { id: 'Bird',      Comp: Illustrations.SvgBird },
+  { id: 'Owl',       Comp: Illustrations.SvgOwl },
+  { id: 'Pig',       Comp: Illustrations.SvgPig },
+  { id: 'Fish',      Comp: Illustrations.SvgFish },
+  { id: 'Car',       Comp: Illustrations.SvgCar },
+  { id: 'Rocket',    Comp: Illustrations.SvgRocket },
+  { id: 'Train',     Comp: Illustrations.SvgTrain },
+  { id: 'Apple',     Comp: Illustrations.SvgApple },
+  { id: 'Grape',     Comp: Illustrations.SvgGrape },
+  { id: 'Sun',       Comp: Illustrations.SvgSun },
+  { id: 'Moon',      Comp: Illustrations.SvgMoon },
+  { id: 'Star',      Comp: Illustrations.SvgStar },
+  { id: 'Tree',      Comp: Illustrations.SvgTree },
+  { id: 'Butterfly', Comp: Illustrations.SvgButterfly },
+  { id: 'Rainbow',   Comp: Illustrations.SvgRainbow },
+  { id: 'Robot',     Comp: Illustrations.SvgRobot },
+  { id: 'Pizza',     Comp: Illustrations.SvgPizza },
+  { id: 'Cake',      Comp: Illustrations.SvgCake },
+  { id: 'Boat',      Comp: Illustrations.SvgBoat },
+  { id: 'Plane',     Comp: Illustrations.SvgPlane },
+  { id: 'Flower',    Comp: Illustrations.SvgFlower },
+  { id: 'Mushroom',  Comp: Illustrations.SvgMushroom },
+  { id: 'Crab',      Comp: Illustrations.SvgCrab },
+  { id: 'Whale',     Comp: Illustrations.SvgWhale },
+  { id: 'Cactus',    Comp: Illustrations.SvgCactus },
+  { id: 'Gift',      Comp: Illustrations.SvgGift },
+  { id: 'Helicopter',Comp: Illustrations.SvgHelicopter },
+  { id: 'Submarine', Comp: Illustrations.SvgSubmarine },
+  { id: 'Ball',      Comp: Illustrations.SvgBall },
+  { id: 'Egg',       Comp: Illustrations.SvgEgg },
+  { id: 'Jar',       Comp: Illustrations.SvgJar },
+  { id: 'Kite',      Comp: Illustrations.SvgKite },
+  { id: 'Leaf',      Comp: Illustrations.SvgLeaf },
+  { id: 'Nest',      Comp: Illustrations.SvgNest },
+  { id: 'Quilt',     Comp: Illustrations.SvgQuilt },
+  { id: 'Umbrella',  Comp: Illustrations.SvgUmbrella },
+  { id: 'Vase',      Comp: Illustrations.SvgVase },
+  { id: 'Watch',     Comp: Illustrations.SvgWatch },
+  { id: 'Xylophone', Comp: Illustrations.SvgXylophone },
+  { id: 'Yak',       Comp: Illustrations.SvgYak },
+  { id: 'Zebra',     Comp: Illustrations.SvgZebra },
+  { id: 'Mango',     Comp: Illustrations.SvgMango },
+  { id: 'Heart',     Comp: Illustrations.SvgHeart },
+  { id: 'Cloud',     Comp: Illustrations.SvgCloud },
+  { id: 'Cup',       Comp: Illustrations.SvgCup },
+  { id: 'Key',       Comp: Illustrations.SvgKey },
+  { id: 'Hat',       Comp: Illustrations.SvgHat },
+  { id: 'Sock',      Comp: Illustrations.SvgSock },
+  { id: 'Bed',       Comp: Illustrations.SvgBed },
+  { id: 'Door',      Comp: Illustrations.SvgDoor },
+  { id: 'Ring',      Comp: Illustrations.SvgRing },
+  { id: 'Book',      Comp: Illustrations.SvgBook },
 ];
 
 export default function ColoringScreen({ navigation }: ScreenProps<'Coloring'>) {
   const [selectedColor, setSelectedColor] = useState(PALETTE[0]);
-  const [fills, setFills] = useState<{ [key: string]: string }>({});
-  const [activeShapeIdx, setActiveShapeIdx] = useState(0);
+  const [fills, setFills] = useState<{ [assetId: string]: { [partId: string]: string } }>({});
+  const [activeAssetIdx, setActiveAssetIdx] = useState(0);
 
-  const handleFill = (pathId: string) => {
-    setFills(prev => ({ ...prev, [pathId]: selectedColor }));
+  const activeAsset = ASSETS[activeAssetIdx];
+
+  const handlePartPress = (partId: string) => {
+    setFills(prev => ({
+      ...prev,
+      [activeAsset.id]: {
+        ...(prev[activeAsset.id] || {}),
+        [partId]: selectedColor
+      }
+    }));
   };
-
-  const activeShape = SHAPES[activeShapeIdx];
 
   return (
     <View style={s.container}>
@@ -71,36 +116,31 @@ export default function ColoringScreen({ navigation }: ScreenProps<'Coloring'>) 
         {/* Canvas Area */}
         <View style={s.canvasContainer}>
           <BlurView intensity={40} tint="light" style={s.canvasBlur}>
-            <Svg width={width * 0.8} height={width * 0.8} viewBox="0 0 160 200">
-              <G transform="translate(0, 10)">
-                {activeShape.paths.map(p => (
-                  <Path
-                    key={p.id}
-                    d={p.d}
-                    fill={fills[p.id] || '#fff'}
-                    stroke="#333"
-                    strokeWidth="3"
-                    onPress={() => handleFill(p.id)}
-                  />
-                ))}
-              </G>
-            </Svg>
+            <View style={s.svgWrapper}>
+              <activeAsset.Comp 
+                isShadow={false} 
+                partColors={fills[activeAsset.id] || {}} 
+                onPartPress={handlePartPress}
+              />
+            </View>
           </BlurView>
         </View>
 
-        {/* Shape Selector */}
-        <View style={s.shapeSelector}>
-          {SHAPES.map((shape, idx) => (
-            <Pressable 
-              key={shape.id} 
-              onPress={() => { setActiveShapeIdx(idx); setFills({}); }}
-              style={[s.shapeTab, activeShapeIdx === idx && s.activeTab]}
-            >
-              <Text style={[s.tabText, activeShapeIdx === idx && s.activeTabText]}>
-                {shape.id.toUpperCase()}
-              </Text>
-            </Pressable>
-          ))}
+        {/* Asset Selector */}
+        <View style={s.selectorContainer}>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={s.selectorScroll}>
+            {ASSETS.map((asset, idx) => (
+              <Pressable 
+                key={asset.id} 
+                onPress={() => { setActiveAssetIdx(idx); }}
+                style={[s.assetTab, activeAssetIdx === idx && s.activeTab]}
+              >
+                <View style={s.tabPreview}>
+                   <asset.Comp />
+                </View>
+              </Pressable>
+            ))}
+          </ScrollView>
         </View>
 
         {/* Palette */}
@@ -140,13 +180,14 @@ const s = StyleSheet.create({
   title: { fontSize: 28, fontWeight: '900', color: '#333' },
   canvasContainer: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 20 },
   canvasBlur: { width: width * 0.85, height: width * 0.95, borderRadius: 30, overflow: 'hidden', alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: 'rgba(255,255,255,0.3)' },
+  svgWrapper: { transform: [{ scale: 1.8 }] },
   paletteContainer: { height: 100, paddingVertical: 10 },
   paletteScroll: { paddingHorizontal: 20, alignItems: 'center' },
   colorCircle: { width: 50, height: 50, borderRadius: 25, marginHorizontal: 8, alignItems: 'center', justifyContent: 'center', elevation: 3, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, shadowRadius: 3 },
   selectedColor: { borderWidth: 3, borderColor: '#fff', transform: [{ scale: 1.1 }] },
-  shapeSelector: { flexDirection: 'row', justifyContent: 'center', marginBottom: 10 },
-  shapeTab: { paddingHorizontal: 20, paddingVertical: 10, borderRadius: 20, backgroundColor: 'rgba(255,255,255,0.5)', marginHorizontal: 5 },
-  activeTab: { backgroundColor: '#FF99C8' },
-  tabText: { fontWeight: '700', color: '#666' },
-  activeTabText: { color: '#fff' },
+  selectorContainer: { height: 80, marginBottom: 10 },
+  selectorScroll: { paddingHorizontal: 20 },
+  assetTab: { width: 60, height: 60, borderRadius: 15, backgroundColor: 'rgba(255,255,255,0.5)', marginHorizontal: 5, overflow: 'hidden', alignItems: 'center', justifyContent: 'center' },
+  activeTab: { backgroundColor: '#FF99C8', borderWidth: 2, borderColor: '#fff' },
+  tabPreview: { transform: [{ scale: 0.3 }] },
 });

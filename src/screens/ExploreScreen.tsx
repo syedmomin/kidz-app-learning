@@ -37,6 +37,7 @@ const EXPLORE_DATA = [
   { target: 'ArabicDua', title: 'Daily Duas', image: require('../../assets/images/card_arabic_dua.png'), color: '#8EECFF' },
   { target: 'Namaz', title: 'Namaz Learn', image: require('../../assets/images/card_namaz.png'), color: '#A0C4FF' },
   { target: 'Asma', title: 'Asma ul Husna', image: require('../../assets/images/card_asma.png'), color: '#BDB2FF' },
+  { target: 'WordSwap', title: 'Word Swap', image: require('../../assets/images/card_alphabets.png'), color: '#FF6B6B' },
 ];
 
 export default function ExploreScreen({ navigation }: ScreenProps<'Explore'>) {
