@@ -58,7 +58,8 @@ export interface MusicTrack {
   color: string;
   dark: string;
   lyrics: string[];
-  file: any;
+  file?: any;
+  youtubeId?: string;
 }
 
 // ─── Sound Files ──────────────────────────────────────────────────────────────
@@ -458,6 +459,24 @@ export const MUSIC_TRACKS: MusicTrack[] = [
     color: '#B3E5FC', dark: '#01579B',
     lyrics: ["🌟 Let's go on an adventure! 🌟", 'Through jungles and over mountains,', '🦋 What will we discover? 🦋'],
     file: MUSIC_FILES.adventure,
+  },
+  {
+    id: '16', title: 'Johny Johny', type: 'poem', emoji: '👶',
+    color: '#FFCCBC', dark: '#E64A19',
+    lyrics: ['Johny, Johny, Yes Papa!', 'Eating sugar? No Papa!', 'Telling lies? No Papa!', 'Open your mouth, Ha! Ha! Ha!'],
+    youtubeId: '809t-32kC3k', // Example YouTube ID
+  },
+  {
+    id: '17', title: 'Finger Family', type: 'poem', emoji: '✋',
+    color: '#C8E6C9', dark: '#2E7D32',
+    lyrics: ['Daddy finger, daddy finger, where are you?', 'Here I am, here I am. How do you do?'],
+    youtubeId: 'YJyNoFkud6g',
+  },
+  {
+    id: '18', title: 'Five Little Ducks', type: 'poem', emoji: '🦆',
+    color: '#FFF9C4', dark: '#FBC02D',
+    lyrics: ['Five little ducks went out one day', 'Over the hill and far away'],
+    youtubeId: 'pZw9veQ76fo',
   },
 ];
 

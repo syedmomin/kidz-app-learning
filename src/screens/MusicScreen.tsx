@@ -1,11 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   View, Text, StyleSheet, Pressable, ScrollView,
-  Animated, Dimensions, Easing,
+  Animated, Dimensions, Easing, ActivityIndicator,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Audio } from 'expo-av';
 import * as Speech from 'expo-speech';
+import YoutubePlayer from 'react-native-youtube-iframe';
 import { C } from '../theme';
 import type { ScreenProps } from '../navigation/types';
 
@@ -82,25 +83,27 @@ function Waveform({ color, active }: { color: string; active: boolean }) {
 
 // ─── Player Component ──────────────────────────────────────────────────────────
 
-function PremiumPlayer({ track, isPlaying, onToggle, onClose, useGirlVoice }: { 
+function PremiumPlayer({ track, isPlaying, onToggle, onClose, useGirlVoice, onYoutubeStateChange }: { 
   track: Track; isPlaying: boolean; onToggle: () => void; onClose: () => void; useGirlVoice: boolean;
+  onYoutubeStateChange?: (state: string) => void;
 }) {
   const rotate = useRef(new Animated.Value(0)).current;
   const slideY = useRef(new Animated.Value(500)).current;
+  const [ytReady, setYtReady] = useState(false);
 
   useEffect(() => {
     Animated.spring(slideY, { toValue: 0, damping: 15, stiffness: 60, useNativeDriver: true }).start();
   }, []);
 
   useEffect(() => {
-    if (isPlaying) {
+    if (isPlaying && !track.youtubeId) {
       Animated.loop(
         Animated.timing(rotate, { toValue: 1, duration: 3000, easing: Easing.linear, useNativeDriver: true })
       ).start();
     } else {
       rotate.stopAnimation();
     }
-  }, [isPlaying]);
+  }, [isPlaying, track.youtubeId]);
 
   const spin = rotate.interpolate({ inputRange: [0, 1], outputRange: ['0deg', '360deg'] });
 
@@ -110,41 +113,65 @@ function PremiumPlayer({ track, isPlaying, onToggle, onClose, useGirlVoice }: {
       
       <View style={p.header}>
         <View style={[p.badge, { backgroundColor: track.dark }]}>
-          <Text style={p.badgeT}>{track.type === 'poem' ? '📖 Rhyme' : '🎵 Song'}</Text>
+          <Text style={p.badgeT}>{track.youtubeId ? '📺 Video Poem' : track.type === 'poem' ? '📖 Rhyme' : '🎵 Song'}</Text>
         </View>
         <Pressable onPress={onClose} style={p.closeBtn}><Text style={p.closeT}>✕</Text></Pressable>
       </View>
 
       <View style={p.main}>
-        <Animated.View style={[p.disk, { borderColor: track.dark, transform: [{ rotate: spin }] }]}>
-          <Text style={p.diskEmoji}>{track.emoji}</Text>
-          <View style={[p.diskCenter, { backgroundColor: track.dark }]} />
-        </Animated.View>
+        {track.youtubeId ? (
+          <View style={p.ytWrap}>
+            <YoutubePlayer
+              height={200}
+              play={isPlaying}
+              videoId={track.youtubeId}
+              onChangeState={onYoutubeStateChange}
+              onReady={() => setYtReady(true)}
+            />
+            {!ytReady && (
+              <View style={p.loader}>
+                <ActivityIndicator size="large" color={track.dark} />
+                <Text style={[p.loaderT, { color: track.dark }]}>Loading Poem...</Text>
+              </View>
+            )}
+          </View>
+        ) : (
+          <Animated.View style={[p.disk, { borderColor: track.dark, transform: [{ rotate: spin }] }]}>
+            <Text style={p.diskEmoji}>{track.emoji}</Text>
+            <View style={[p.diskCenter, { backgroundColor: track.dark }]} />
+          </Animated.View>
+        )}
         
-        <View style={p.info}>
-          <Text style={[p.title, { color: track.dark }]}>{track.title}</Text>
-          {useGirlVoice && track.type === 'poem' && (
-            <View style={p.girlTag}>
-              <Text style={p.girlTagEmoji}>👧</Text>
-              <Text style={p.girlTagText}>Girl Voice ON</Text>
-            </View>
-          )}
+        {!track.youtubeId && (
+          <View style={p.info}>
+            <Text style={[p.title, { color: track.dark }]}>{track.title}</Text>
+            {useGirlVoice && track.type === 'poem' && (
+              <View style={p.girlTag}>
+                <Text style={p.girlTagEmoji}>👧</Text>
+                <Text style={p.girlTagText}>Girl Voice ON</Text>
+              </View>
+            )}
+          </View>
+        )}
+      </View>
+
+      {!track.youtubeId && (
+        <ScrollView style={p.lyricsBox} contentContainerStyle={p.lyricsContent}>
+          {track.lyrics.map((line, i) => (
+            <Text key={i} style={[p.lyricLine, { color: track.dark }]}>{line}</Text>
+          ))}
+        </ScrollView>
+      )}
+
+      {!track.youtubeId && (
+        <View style={p.footer}>
+          <Waveform color={track.dark} active={isPlaying} />
+          <Pressable onPress={onToggle} style={[p.playBtn, { backgroundColor: track.dark }]}>
+            <Text style={p.playIcon}>{isPlaying ? '⏸' : '▶'}</Text>
+          </Pressable>
+          <Waveform color={track.dark} active={isPlaying} />
         </View>
-      </View>
-
-      <ScrollView style={p.lyricsBox} contentContainerStyle={p.lyricsContent}>
-        {track.lyrics.map((line, i) => (
-          <Text key={i} style={[p.lyricLine, { color: track.dark }]}>{line}</Text>
-        ))}
-      </ScrollView>
-
-      <View style={p.footer}>
-        <Waveform color={track.dark} active={isPlaying} />
-        <Pressable onPress={onToggle} style={[p.playBtn, { backgroundColor: track.dark }]}>
-          <Text style={p.playIcon}>{isPlaying ? '⏸' : '▶'}</Text>
-        </Pressable>
-        <Waveform color={track.dark} active={isPlaying} />
-      </View>
+      )}
     </Animated.View>
   );
 }
@@ -188,21 +215,18 @@ export default function MusicScreen({ navigation }: ScreenProps<'Music'>) {
 
   const handleTrackPress = async (track: Track) => {
     if (activeId === track.id) {
-      if (isPlaying) {
+      setIsPlaying(!isPlaying);
+      if (isPlaying && !track.youtubeId) {
         if (track.type === 'poem' && (!track.file || useGirlVoice)) {
           Speech.stop();
-          setIsPlaying(false);
         } else if (soundRef.current) {
           await soundRef.current.pauseAsync();
-          setIsPlaying(false);
         }
-      } else {
+      } else if (!isPlaying && !track.youtubeId) {
         if (track.type === 'poem' && (!track.file || useGirlVoice)) {
           playPoemTTS(track);
-          setIsPlaying(true);
         } else if (soundRef.current) {
           await soundRef.current.playAsync();
-          setIsPlaying(true);
         }
       }
       return;
@@ -212,6 +236,11 @@ export default function MusicScreen({ navigation }: ScreenProps<'Music'>) {
     await stopAll();
     setActiveId(track.id);
     setIsPlaying(true);
+
+    if (track.youtubeId) {
+      // YouTube handles its own audio
+      return;
+    }
 
     if (track.type === 'poem' && (!track.file || useGirlVoice)) {
       playPoemTTS(track);
@@ -223,6 +252,12 @@ export default function MusicScreen({ navigation }: ScreenProps<'Music'>) {
       });
     }
   };
+
+  const onYoutubeStateChange = useCallback((state: string) => {
+    if (state === 'ended') setIsPlaying(false);
+    if (state === 'playing') setIsPlaying(true);
+    if (state === 'paused') setIsPlaying(false);
+  }, []);
 
   const activeTrack = TRACKS.find(t => t.id === activeId);
   const filtered = filter === 'all' ? TRACKS : TRACKS.filter(t => t.type === filter);
@@ -265,6 +300,7 @@ export default function MusicScreen({ navigation }: ScreenProps<'Music'>) {
             onToggle={() => handleTrackPress(activeTrack)} 
             onClose={stopAll}
             useGirlVoice={useGirlVoice}
+            onYoutubeStateChange={onYoutubeStateChange}
           />
         )}
 
@@ -279,7 +315,10 @@ export default function MusicScreen({ navigation }: ScreenProps<'Music'>) {
                 <Text style={s.itemEmoji}>{t.emoji}</Text>
               </View>
               <View style={s.itemInfo}>
-                <Text style={s.itemTitle}>{t.title}</Text>
+                <View style={s.itemRow}>
+                  <Text style={s.itemTitle}>{t.title}</Text>
+                  {t.youtubeId && <View style={s.onlineBadge}><Text style={s.onlineT}>Online</Text></View>}
+                </View>
                 <Text style={[s.itemSub, { color: t.dark }]}>{t.type === 'poem' ? 'Rhyme 📖' : 'Song 🎵'}</Text>
               </View>
               {activeId === t.id && isPlaying ? <Waveform color={t.dark} active={true} /> : <Text style={s.playHint}>▶</Text>}
@@ -302,7 +341,10 @@ const p = StyleSheet.create({
   badgeT: { color: '#fff', fontWeight: '900', fontSize: 12 },
   closeBtn: { width: 32, height: 32, borderRadius: 16, backgroundColor: 'rgba(0,0,0,0.1)', alignItems: 'center', justifyContent: 'center' },
   closeT: { color: '#fff', fontWeight: '900' },
-  main: { flexDirection: 'row', alignItems: 'center', gap: 20, marginBottom: 20 },
+  main: { flexDirection: 'row', alignItems: 'center', gap: 20, marginBottom: 10 },
+  ytWrap: { flex: 1, height: 200, borderRadius: 20, overflow: 'hidden', backgroundColor: '#000' },
+  loader: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(0,0,0,0.6)', alignItems: 'center', justifyContent: 'center' },
+  loaderT: { marginTop: 10, fontWeight: '800', fontSize: 12 },
   disk: { width: 100, height: 100, borderRadius: 50, borderWidth: 6, backgroundColor: '#333', alignItems: 'center', justifyContent: 'center', elevation: 8 },
   diskEmoji: { fontSize: 40 },
   diskCenter: { position: 'absolute', width: 20, height: 20, borderRadius: 10, borderWidth: 2, borderColor: '#fff' },
@@ -342,7 +384,10 @@ const s = StyleSheet.create({
   itemEmojiBox: { width: 50, height: 50, borderRadius: 18, alignItems: 'center', justifyContent: 'center' },
   itemEmoji: { fontSize: 26 },
   itemInfo: { flex: 1, marginLeft: 14 },
+  itemRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   itemTitle: { fontSize: 17, fontWeight: '900', color: C.ink },
+  onlineBadge: { backgroundColor: '#FF5252', paddingHorizontal: 6, paddingVertical: 2, borderRadius: 6 },
+  onlineT: { color: '#fff', fontSize: 10, fontWeight: '900' },
   itemSub: { fontSize: 12, fontWeight: '800', marginTop: 2 },
   playHint: { fontSize: 16, color: 'rgba(0,0,0,0.2)', fontWeight: '900' },
   waveWrap: { flexDirection: 'row', alignItems: 'flex-end', gap: 3, height: 20 },
