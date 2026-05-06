@@ -6,16 +6,16 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Audio } from 'expo-av';
 import * as Speech from 'expo-speech';
-import YoutubePlayer from 'react-native-youtube-iframe';
 import { C } from '../theme';
 import type { ScreenProps } from '../navigation/types';
-
-const { width: SW, height: SH } = Dimensions.get('window');
 
 import { MUSIC_TRACKS, type MusicTrack } from '../data/GameAssets';
 
 type Track = MusicTrack;
 const TRACKS = MUSIC_TRACKS;
+
+const { width: SW, height: SH } = Dimensions.get('window');
+
 
 // ─── Floating Notes & Bubbles ───────────────────────────────────────────────────
 
@@ -52,7 +52,7 @@ function FloatingNote() {
 // ─── Waveform ──────────────────────────────────────────────────────────────────
 
 function Waveform({ color, active }: { color: string; active: boolean }) {
-  const anims = [useRef(new Animated.Value(0.3)).current, useRef(new Animated.Value(0.3)).current, 
+  const anims = [useRef(new Animated.Value(0.3)).current, useRef(new Animated.Value(0.3)).current,
                  useRef(new Animated.Value(0.3)).current, useRef(new Animated.Value(0.3)).current,
                  useRef(new Animated.Value(0.3)).current];
 
@@ -83,98 +83,73 @@ function Waveform({ color, active }: { color: string; active: boolean }) {
 
 // ─── Player Component ──────────────────────────────────────────────────────────
 
-function PremiumPlayer({ track, isPlaying, onToggle, onClose, useGirlVoice, onYoutubeStateChange }: { 
+function PremiumPlayer({ track, isPlaying, onToggle, onClose, useGirlVoice }: {
   track: Track; isPlaying: boolean; onToggle: () => void; onClose: () => void; useGirlVoice: boolean;
-  onYoutubeStateChange?: (state: string) => void;
 }) {
   const rotate = useRef(new Animated.Value(0)).current;
   const slideY = useRef(new Animated.Value(500)).current;
-  const [ytReady, setYtReady] = useState(false);
 
   useEffect(() => {
     Animated.spring(slideY, { toValue: 0, damping: 15, stiffness: 60, useNativeDriver: true }).start();
   }, []);
 
   useEffect(() => {
-    if (isPlaying && !track.youtubeId) {
+    if (isPlaying) {
       Animated.loop(
         Animated.timing(rotate, { toValue: 1, duration: 3000, easing: Easing.linear, useNativeDriver: true })
       ).start();
     } else {
       rotate.stopAnimation();
     }
-  }, [isPlaying, track.youtubeId]);
+  }, [isPlaying]);
 
   const spin = rotate.interpolate({ inputRange: [0, 1], outputRange: ['0deg', '360deg'] });
 
   return (
     <Animated.View style={[p.card, { transform: [{ translateY: slideY }] }]}>
       <View style={[p.bg, { backgroundColor: track.color }]} />
-      
+
       <View style={p.header}>
         <View style={[p.badge, { backgroundColor: track.dark }]}>
-          <Text style={p.badgeT}>{track.youtubeId ? '📺 Video Poem' : track.type === 'poem' ? '📖 Rhyme' : '🎵 Song'}</Text>
+          <Text style={p.badgeT}>{track.type === 'poem' ? '📖 Rhyme' : '🎵 Song'}</Text>
         </View>
         <Pressable onPress={onClose} style={p.closeBtn}><Text style={p.closeT}>✕</Text></Pressable>
       </View>
 
       <View style={p.main}>
-        {track.youtubeId ? (
-          <View style={p.ytWrap}>
-            <YoutubePlayer
-              height={200}
-              play={isPlaying}
-              videoId={track.youtubeId}
-              onChangeState={onYoutubeStateChange}
-              onReady={() => setYtReady(true)}
-            />
-            {!ytReady && (
-              <View style={p.loader}>
-                <ActivityIndicator size="large" color={track.dark} />
-                <Text style={[p.loaderT, { color: track.dark }]}>Loading Poem...</Text>
-              </View>
-            )}
-          </View>
-        ) : (
-          <Animated.View style={[p.disk, { borderColor: track.dark, transform: [{ rotate: spin }] }]}>
-            <Text style={p.diskEmoji}>{track.emoji}</Text>
-            <View style={[p.diskCenter, { backgroundColor: track.dark }]} />
-          </Animated.View>
-        )}
-        
-        {!track.youtubeId && (
-          <View style={p.info}>
-            <Text style={[p.title, { color: track.dark }]}>{track.title}</Text>
-            {useGirlVoice && track.type === 'poem' && (
-              <View style={p.girlTag}>
-                <Text style={p.girlTagEmoji}>👧</Text>
-                <Text style={p.girlTagText}>Girl Voice ON</Text>
-              </View>
-            )}
-          </View>
-        )}
+        <Animated.View style={[p.disk, { borderColor: track.dark, transform: [{ rotate: spin }] }]}>
+          <Text style={p.diskEmoji}>{track.emoji}</Text>
+          <View style={[p.diskCenter, { backgroundColor: track.dark }]} />
+        </Animated.View>
+
+        <View style={p.info}>
+          <Text style={[p.title, { color: track.dark }]}>{track.title}</Text>
+          {useGirlVoice && track.type === 'poem' && (
+            <View style={p.girlTag}>
+              <Text style={p.girlTagEmoji}>👧</Text>
+              <Text style={p.girlTagText}>Girl Voice ON</Text>
+            </View>
+          )}
+        </View>
       </View>
 
-      {!track.youtubeId && (
-        <ScrollView style={p.lyricsBox} contentContainerStyle={p.lyricsContent}>
-          {track.lyrics.map((line, i) => (
-            <Text key={i} style={[p.lyricLine, { color: track.dark }]}>{line}</Text>
-          ))}
-        </ScrollView>
-      )}
+      <ScrollView style={p.lyricsBox} contentContainerStyle={p.lyricsContent}>
+        {track.lyrics.map((line, i) => (
+          <Text key={i} style={[p.lyricLine, { color: track.dark }]}>{line}</Text>
+        ))}
+      </ScrollView>
 
-      {!track.youtubeId && (
-        <View style={p.footer}>
-          <Waveform color={track.dark} active={isPlaying} />
-          <Pressable onPress={onToggle} style={[p.playBtn, { backgroundColor: track.dark }]}>
-            <Text style={p.playIcon}>{isPlaying ? '⏸' : '▶'}</Text>
-          </Pressable>
-          <Waveform color={track.dark} active={isPlaying} />
-        </View>
-      )}
+      <View style={p.footer}>
+        <Waveform color={track.dark} active={isPlaying} />
+        <Pressable onPress={onToggle} style={[p.playBtn, { backgroundColor: track.dark }]}>
+          <Text style={p.playIcon}>{isPlaying ? '⏸' : '▶'}</Text>
+        </Pressable>
+        <Waveform color={track.dark} active={isPlaying} />
+      </View>
     </Animated.View>
   );
 }
+
 
 // ─── Main Screen ──────────────────────────────────────────────────────────────
 
@@ -183,7 +158,7 @@ export default function MusicScreen({ navigation }: ScreenProps<'Music'>) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [filter, setFilter] = useState<'all' | 'poem' | 'song'>('all');
   const [useGirlVoice, setUseGirlVoice] = useState(true);
-  
+
   const soundRef = useRef<Audio.Sound | null>(null);
 
   useEffect(() => {
@@ -216,13 +191,13 @@ export default function MusicScreen({ navigation }: ScreenProps<'Music'>) {
   const handleTrackPress = async (track: Track) => {
     if (activeId === track.id) {
       setIsPlaying(!isPlaying);
-      if (isPlaying && !track.youtubeId) {
+      if (isPlaying) {
         if (track.type === 'poem' && (!track.file || useGirlVoice)) {
           Speech.stop();
         } else if (soundRef.current) {
           await soundRef.current.pauseAsync();
         }
-      } else if (!isPlaying && !track.youtubeId) {
+      } else {
         if (track.type === 'poem' && (!track.file || useGirlVoice)) {
           playPoemTTS(track);
         } else if (soundRef.current) {
@@ -237,11 +212,6 @@ export default function MusicScreen({ navigation }: ScreenProps<'Music'>) {
     setActiveId(track.id);
     setIsPlaying(true);
 
-    if (track.youtubeId) {
-      // YouTube handles its own audio
-      return;
-    }
-
     if (track.type === 'poem' && (!track.file || useGirlVoice)) {
       playPoemTTS(track);
     } else if (track.file) {
@@ -253,11 +223,6 @@ export default function MusicScreen({ navigation }: ScreenProps<'Music'>) {
     }
   };
 
-  const onYoutubeStateChange = useCallback((state: string) => {
-    if (state === 'ended') setIsPlaying(false);
-    if (state === 'playing') setIsPlaying(true);
-    if (state === 'paused') setIsPlaying(false);
-  }, []);
 
   const activeTrack = TRACKS.find(t => t.id === activeId);
   const filtered = filter === 'all' ? TRACKS : TRACKS.filter(t => t.type === filter);
@@ -294,21 +259,20 @@ export default function MusicScreen({ navigation }: ScreenProps<'Music'>) {
 
       <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
         {activeTrack && (
-          <PremiumPlayer 
-            track={activeTrack} 
-            isPlaying={isPlaying} 
-            onToggle={() => handleTrackPress(activeTrack)} 
+          <PremiumPlayer
+            track={activeTrack}
+            isPlaying={isPlaying}
+            onToggle={() => handleTrackPress(activeTrack)}
             onClose={stopAll}
             useGirlVoice={useGirlVoice}
-            onYoutubeStateChange={onYoutubeStateChange}
           />
         )}
 
         <View style={s.list}>
           {filtered.map(t => (
-            <Pressable 
-              key={t.id} 
-              onPress={() => handleTrackPress(t)} 
+            <Pressable
+              key={t.id}
+              onPress={() => handleTrackPress(t)}
               style={[s.item, { backgroundColor: t.color }, activeId === t.id && { borderColor: t.dark, borderWidth: 3 }]}
             >
               <View style={[s.itemEmojiBox, { backgroundColor: t.dark }]}>
@@ -317,7 +281,6 @@ export default function MusicScreen({ navigation }: ScreenProps<'Music'>) {
               <View style={s.itemInfo}>
                 <View style={s.itemRow}>
                   <Text style={s.itemTitle}>{t.title}</Text>
-                  {t.youtubeId && <View style={s.onlineBadge}><Text style={s.onlineT}>Online</Text></View>}
                 </View>
                 <Text style={[s.itemSub, { color: t.dark }]}>{t.type === 'poem' ? 'Rhyme 📖' : 'Song 🎵'}</Text>
               </View>
@@ -328,7 +291,7 @@ export default function MusicScreen({ navigation }: ScreenProps<'Music'>) {
       </ScrollView>
 
       {/* Floating particles */}
-      {isPlaying && [1,2,3,4,5].map(i => <FloatingNote key={i} />)}
+      {isPlaying && [1, 2, 3, 4, 5].map(i => <FloatingNote key={i} />)}
     </SafeAreaView>
   );
 }

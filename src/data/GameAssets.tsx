@@ -62,28 +62,6 @@ export interface MusicTrack {
   youtubeId?: string;
 }
 
-// ─── Sound Files ──────────────────────────────────────────────────────────────
-
-
-
-export const MUSIC_FILES = {
-  twinkle: require('../../assets/music/twinkle_tts.mp3'),
-  abc: require('../../assets/music/abc_tts.mp3'),
-  wheels: require('../../assets/music/wheels_tts.mp3'),
-  baa: require('../../assets/music/baa_tts.mp3'),
-  humpty: require('../../assets/music/humpty_tts.mp3'),
-  row: require('../../assets/music/row_tts.mp3'),
-  old_mcdonald: require('../../assets/music/old_mcdonald_tts.mp3'),
-  itsy: require('../../assets/music/itsy_tts.mp3'),
-  happy: require('../../assets/music/happy.mp3'),
-  circus: require('../../assets/music/circus.mp3'),
-  monkeys: require('../../assets/music/monkeys.mp3'),
-  adventure: require('../../assets/music/adventure.mp3'),
-  rain_go_away: require('../../assets/music/raingoaway.mp3'),
-  london_bridge: require('../../assets/music/london.mp3'),
-  head_shoulders: require('../../assets/music/headshoulders.mp3'),
-};
-
 // ─── Animals ──────────────────────────────────────────────────────────────────
 
 export const ANIMALS: Animal[] = [
@@ -176,21 +154,21 @@ export const SHADOW_ITEMS: ShadowItem[] = [
   { id: 'bed', name: 'Bed', render: (s) => <SvgBed isShadow={s} /> },
   { id: 'door', name: 'Door', render: (s) => <SvgDoor isShadow={s} /> },
   { id: 'ring', name: 'Ring', render: (s) => <SvgRing isShadow={s} /> },
-  { id: 'bird',   name: 'Bird',   render: (s) => <SvgBird isShadow={s} /> },
+  { id: 'bird', name: 'Bird', render: (s) => <SvgBird isShadow={s} /> },
   { id: 'rocket', name: 'Rocket', render: (s) => <SvgRocket isShadow={s} /> },
-  { id: 'train',  name: 'Train',  render: (s) => <SvgTrain isShadow={s} /> },
-  { id: 'owl',    name: 'Owl',    render: (s) => <SvgOwl isShadow={s} /> },
-  { id: 'pig',    name: 'Pig',    render: (s) => <SvgPig isShadow={s} /> },
-  { id: 'egg',    name: 'Egg',    render: (s) => <SvgEgg isShadow={s} /> },
-  { id: 'kite',   name: 'Kite',   render: (s) => <SvgKite isShadow={s} /> },
-  { id: 'nest',   name: 'Nest',   render: (s) => <SvgNest isShadow={s} /> },
-  { id: 'umbrella',name: 'Umbrella',render: (s) => <SvgUmbrella isShadow={s} /> },
-  { id: 'vase',   name: 'Vase',   render: (s) => <SvgVase isShadow={s} /> },
-  { id: 'watch',  name: 'Watch',  render: (s) => <SvgWatch isShadow={s} /> },
-  { id: 'zebra',  name: 'Zebra',  render: (s) => <SvgZebra isShadow={s} /> },
-  { id: 'mango',  name: 'Mango',  render: (s) => <SvgMango isShadow={s} /> },
-  { id: 'dog',    name: 'Dog',    render: (s) => <SvgDog isShadow={s} /> },
-  { id: 'grape',  name: 'Grape',  render: (s) => <SvgGrape isShadow={s} /> },
+  { id: 'train', name: 'Train', render: (s) => <SvgTrain isShadow={s} /> },
+  { id: 'owl', name: 'Owl', render: (s) => <SvgOwl isShadow={s} /> },
+  { id: 'pig', name: 'Pig', render: (s) => <SvgPig isShadow={s} /> },
+  { id: 'egg', name: 'Egg', render: (s) => <SvgEgg isShadow={s} /> },
+  { id: 'kite', name: 'Kite', render: (s) => <SvgKite isShadow={s} /> },
+  { id: 'nest', name: 'Nest', render: (s) => <SvgNest isShadow={s} /> },
+  { id: 'umbrella', name: 'Umbrella', render: (s) => <SvgUmbrella isShadow={s} /> },
+  { id: 'vase', name: 'Vase', render: (s) => <SvgVase isShadow={s} /> },
+  { id: 'watch', name: 'Watch', render: (s) => <SvgWatch isShadow={s} /> },
+  { id: 'zebra', name: 'Zebra', render: (s) => <SvgZebra isShadow={s} /> },
+  { id: 'mango', name: 'Mango', render: (s) => <SvgMango isShadow={s} /> },
+  { id: 'dog', name: 'Dog', render: (s) => <SvgDog isShadow={s} /> },
+  { id: 'grape', name: 'Grape', render: (s) => <SvgGrape isShadow={s} /> },
   { id: 'butterfly', name: 'Butterfly', render: (s) => <SvgButterfly isShadow={s} /> },
   { id: 'rainbow', name: 'Rainbow', render: (s) => <SvgRainbow isShadow={s} /> },
   { id: 'robot', name: 'Robot', render: (s) => <SvgRobot isShadow={s} /> },
@@ -266,6 +244,160 @@ export const WORD_BANK: WordRound[] = [
 ];
 
 
+// ─── Music Tracks ─────────────────────────────────────────────────────────────
+
+export const MUSIC_TRACKS: MusicTrack[] = [
+  {
+    id: '1', title: 'Twinkle Twinkle', type: 'poem', emoji: '⭐',
+    color: '#FFF176', dark: '#F9A825',
+    lyrics: [
+      'Twinkle, twinkle, little star,',
+      'How I wonder what you are!',
+      'Up above the world so high,',
+      'Like a diamond in the sky.',
+      'Twinkle, twinkle, little star,',
+      'How I wonder what you are!',
+    ],
+  },
+  {
+    id: '2', title: 'ABC Song', type: 'poem', emoji: '🔤',
+    color: '#B3E5FC', dark: '#0288D1',
+    lyrics: [
+      'A B C D E F G,',
+      'H I J K L M N O P,',
+      'Q R S T U V,',
+      'W X Y and Z!',
+      'Now I know my ABCs,',
+      "Next time won't you sing with me?",
+    ],
+  },
+  {
+    id: '3', title: 'Wheels on the Bus', type: 'poem', emoji: '🚌',
+    color: '#C8E6C9', dark: '#388E3C',
+    lyrics: [
+      'The wheels on the bus go round and round,',
+      'Round and round, round and round,',
+      'The wheels on the bus go round and round,',
+      'All through the town!',
+    ],
+  },
+  {
+    id: '4', title: 'Baa Baa Black Sheep', type: 'poem', emoji: '🐑',
+    color: '#F3E5F5', dark: '#7B1FA2',
+    lyrics: [
+      'Baa, baa, black sheep,',
+      'Have you any wool?',
+      'Yes sir, yes sir,',
+      'Three bags full!',
+      'One for the master,',
+      'One for the dame,',
+      'One for the little boy',
+      'Who lives down the lane.',
+    ],
+  },
+  {
+    id: '5', title: 'Humpty Dumpty', type: 'poem', emoji: '🥚',
+    color: '#FFE0B2', dark: '#E65100',
+    lyrics: [
+      'Humpty Dumpty sat on a wall,',
+      'Humpty Dumpty had a great fall.',
+      "All the king's horses",
+      'And all the king\'s men,',
+      "Couldn't put Humpty",
+      'Together again!',
+    ],
+  },
+  {
+    id: '6', title: 'Row Your Boat', type: 'poem', emoji: '🚣',
+    color: '#B2EBF2', dark: '#00838F',
+    lyrics: [
+      'Row, row, row your boat,',
+      'Gently down the stream,',
+      'Merrily, merrily, merrily, merrily,',
+      'Life is but a dream!',
+    ],
+  },
+  {
+    id: '7', title: 'Old MacDonald', type: 'poem', emoji: '🚜',
+    color: '#DCEDC8', dark: '#558B2F',
+    lyrics: [
+      'Old MacDonald had a farm,',
+      'E-I-E-I-O!',
+      'And on his farm he had a cow,',
+      'E-I-E-I-O!',
+      'With a moo moo here,',
+      'And a moo moo there,',
+      'Here a moo, there a moo,',
+      'Everywhere a moo moo!',
+    ],
+  },
+  {
+    id: '8', title: 'Itsy Bitsy Spider', type: 'poem', emoji: '🕷️',
+    color: '#FCE4EC', dark: '#C2185B',
+    lyrics: [
+      'The itsy bitsy spider',
+      'Climbed up the water spout,',
+      'Down came the rain',
+      'And washed the spider out.',
+      'Out came the sun',
+      'And dried up all the rain,',
+      'And the itsy bitsy spider',
+      'Climbed up the spout again!',
+    ],
+  },
+  {
+    id: '13', title: 'London Bridge', type: 'poem', emoji: '🌉',
+    color: '#E0F2F1', dark: '#00695C',
+    lyrics: [
+      'London Bridge is falling down,',
+      'Falling down, falling down.',
+      'London Bridge is falling down,',
+      'My fair lady!',
+    ],
+  },
+  {
+    id: '14', title: 'Rain Rain Go Away', type: 'poem', emoji: '☔',
+    color: '#E1F5FE', dark: '#0277BD',
+    lyrics: [
+      'Rain, rain, go away,',
+      'Come again another day.',
+      'Little Johnny wants to play,',
+      'Rain, rain, go away!',
+    ],
+  },
+  {
+    id: '15', title: 'Head & Shoulders', type: 'poem', emoji: '🧘',
+    color: '#F3E5F5', dark: '#6A1B9A',
+    lyrics: [
+      'Head, shoulders, knees, and toes,',
+      'Knees and toes!',
+      'Head, shoulders, knees, and toes,',
+      'Knees and toes!',
+      'And eyes and ears and mouth and nose,',
+      'Head, shoulders, knees, and toes,',
+      'Knees and toes!',
+    ],
+  },
+  {
+    id: '16', title: 'Johny Johny', type: 'poem', emoji: '👶',
+    color: '#FFCCBC', dark: '#E64A19',
+    lyrics: ['Johny, Johny, Yes Papa!', 'Eating sugar? No Papa!', 'Telling lies? No Papa!', 'Open your mouth, Ha! Ha! Ha!'],
+    youtubeId: '809t-32kC3k',
+  },
+  {
+    id: '17', title: 'Finger Family', type: 'poem', emoji: '✋',
+    color: '#C8E6C9', dark: '#2E7D32',
+    lyrics: ['Daddy finger, daddy finger, where are you?', 'Here I am, here I am. How do you do?'],
+    youtubeId: 'YJyNoFkud6g',
+  },
+  {
+    id: '18', title: 'Five Little Ducks', type: 'poem', emoji: '🦆',
+    color: '#FFF9C4', dark: '#FBC02D',
+    lyrics: ['Five little ducks went out one day', 'Over the hill and far away'],
+    youtubeId: 'pZw9veQ76fo',
+  },
+];
+
 // ─── Shapes ───────────────────────────────────────────────────────────────────
 
 export const SHAPES: ShapeDef[] = [
@@ -291,194 +423,6 @@ export const SHAPES: ShapeDef[] = [
   { name: 'Pie', color: '#FFC107', render: f => <SvgPieShape fill={f} /> },
 ];
 
-// ─── Music Tracks ─────────────────────────────────────────────────────────────
-
-export const MUSIC_TRACKS: MusicTrack[] = [
-  {
-    id: '1', title: 'Twinkle Twinkle', type: 'poem', emoji: '⭐',
-    color: '#FFF176', dark: '#F9A825',
-    lyrics: [
-      'Twinkle, twinkle, little star,',
-      'How I wonder what you are!',
-      'Up above the world so high,',
-      'Like a diamond in the sky.',
-      'Twinkle, twinkle, little star,',
-      'How I wonder what you are!',
-    ],
-    file: MUSIC_FILES.twinkle,
-  },
-  {
-    id: '2', title: 'ABC Song', type: 'poem', emoji: '🔤',
-    color: '#B3E5FC', dark: '#0288D1',
-    lyrics: [
-      'A B C D E F G,',
-      'H I J K L M N O P,',
-      'Q R S T U V,',
-      'W X Y and Z!',
-      'Now I know my ABCs,',
-      "Next time won't you sing with me?",
-    ],
-    file: MUSIC_FILES.abc,
-  },
-  {
-    id: '3', title: 'Wheels on the Bus', type: 'poem', emoji: '🚌',
-    color: '#C8E6C9', dark: '#388E3C',
-    lyrics: [
-      'The wheels on the bus go round and round,',
-      'Round and round, round and round,',
-      'The wheels on the bus go round and round,',
-      'All through the town!',
-    ],
-    file: MUSIC_FILES.wheels,
-  },
-  {
-    id: '4', title: 'Baa Baa Black Sheep', type: 'poem', emoji: '🐑',
-    color: '#F3E5F5', dark: '#7B1FA2',
-    lyrics: [
-      'Baa, baa, black sheep,',
-      'Have you any wool?',
-      'Yes sir, yes sir,',
-      'Three bags full!',
-      'One for the master,',
-      'One for the dame,',
-      'One for the little boy',
-      'Who lives down the lane.',
-    ],
-    file: MUSIC_FILES.baa,
-  },
-  {
-    id: '5', title: 'Humpty Dumpty', type: 'poem', emoji: '🥚',
-    color: '#FFE0B2', dark: '#E65100',
-    lyrics: [
-      'Humpty Dumpty sat on a wall,',
-      'Humpty Dumpty had a great fall.',
-      "All the king's horses",
-      'And all the king\'s men,',
-      "Couldn't put Humpty",
-      'Together again!',
-    ],
-    file: MUSIC_FILES.humpty,
-  },
-  {
-    id: '6', title: 'Row Your Boat', type: 'poem', emoji: '🚣',
-    color: '#B2EBF2', dark: '#00838F',
-    lyrics: [
-      'Row, row, row your boat,',
-      'Gently down the stream,',
-      'Merrily, merrily, merrily, merrily,',
-      'Life is but a dream!',
-    ],
-    file: MUSIC_FILES.row,
-  },
-  {
-    id: '7', title: 'Old MacDonald', type: 'poem', emoji: '🚜',
-    color: '#DCEDC8', dark: '#558B2F',
-    lyrics: [
-      'Old MacDonald had a farm,',
-      'E-I-E-I-O!',
-      'And on his farm he had a cow,',
-      'E-I-E-I-O!',
-      'With a moo moo here,',
-      'And a moo moo there,',
-      'Here a moo, there a moo,',
-      'Everywhere a moo moo!',
-    ],
-    file: MUSIC_FILES.old_mcdonald,
-  },
-  {
-    id: '8', title: 'Itsy Bitsy Spider', type: 'poem', emoji: '🕷️',
-    color: '#FCE4EC', dark: '#C2185B',
-    lyrics: [
-      'The itsy bitsy spider',
-      'Climbed up the water spout,',
-      'Down came the rain',
-      'And washed the spider out.',
-      'Out came the sun',
-      'And dried up all the rain,',
-      'And the itsy bitsy spider',
-      'Climbed up the spout again!',
-    ],
-    file: MUSIC_FILES.itsy,
-  },
-  {
-    id: '13', title: 'London Bridge', type: 'poem', emoji: '🌉',
-    color: '#E0F2F1', dark: '#00695C',
-    lyrics: [
-      'London Bridge is falling down,',
-      'Falling down, falling down.',
-      'London Bridge is falling down,',
-      'My fair lady!',
-    ],
-    file: MUSIC_FILES.london_bridge,
-  },
-  {
-    id: '14', title: 'Rain Rain Go Away', type: 'poem', emoji: '☔',
-    color: '#E1F5FE', dark: '#0277BD',
-    lyrics: [
-      'Rain, rain, go away,',
-      'Come again another day.',
-      'Little Johnny wants to play,',
-      'Rain, rain, go away!',
-    ],
-    file: MUSIC_FILES.rain_go_away,
-  },
-  {
-    id: '15', title: 'Head & Shoulders', type: 'poem', emoji: '🧘',
-    color: '#F3E5F5', dark: '#6A1B9A',
-    lyrics: [
-      'Head, shoulders, knees, and toes,',
-      'Knees and toes!',
-      'Head, shoulders, knees, and toes,',
-      'Knees and toes!',
-      'And eyes and ears and mouth and nose,',
-      'Head, shoulders, knees, and toes,',
-      'Knees and toes!',
-    ],
-    file: MUSIC_FILES.head_shoulders,
-  },
-  {
-    id: '9', title: 'Happy Tune', type: 'song', emoji: '😊',
-    color: '#FFF9C4', dark: '#F57F17',
-    lyrics: ['🎵 A fun happy melody 🎵', 'Perfect for dancing and singing!', '🎶 La la la la la 🎶'],
-    file: MUSIC_FILES.happy,
-  },
-  {
-    id: '10', title: 'Circus Fun', type: 'song', emoji: '🎪',
-    color: '#FFCCBC', dark: '#BF360C',
-    lyrics: ['🎠 Welcome to the circus! 🎠', 'Clowns, acrobats and fun!', '🎡 Round and round we go 🎡'],
-    file: MUSIC_FILES.circus,
-  },
-  {
-    id: '11', title: 'Silly Monkeys', type: 'song', emoji: '🐒',
-    color: '#FFE082', dark: '#FF6F00',
-    lyrics: ['🐵 Monkeys jumping around 🐵', 'Swinging from tree to tree!', '🍌 Yummy bananas for all 🍌'],
-    file: MUSIC_FILES.monkeys,
-  },
-  {
-    id: '12', title: 'Adventure Time', type: 'song', emoji: '🗺️',
-    color: '#B3E5FC', dark: '#01579B',
-    lyrics: ["🌟 Let's go on an adventure! 🌟", 'Through jungles and over mountains,', '🦋 What will we discover? 🦋'],
-    file: MUSIC_FILES.adventure,
-  },
-  {
-    id: '16', title: 'Johny Johny', type: 'poem', emoji: '👶',
-    color: '#FFCCBC', dark: '#E64A19',
-    lyrics: ['Johny, Johny, Yes Papa!', 'Eating sugar? No Papa!', 'Telling lies? No Papa!', 'Open your mouth, Ha! Ha! Ha!'],
-    youtubeId: '809t-32kC3k', // Example YouTube ID
-  },
-  {
-    id: '17', title: 'Finger Family', type: 'poem', emoji: '✋',
-    color: '#C8E6C9', dark: '#2E7D32',
-    lyrics: ['Daddy finger, daddy finger, where are you?', 'Here I am, here I am. How do you do?'],
-    youtubeId: 'YJyNoFkud6g',
-  },
-  {
-    id: '18', title: 'Five Little Ducks', type: 'poem', emoji: '🦆',
-    color: '#FFF9C4', dark: '#FBC02D',
-    lyrics: ['Five little ducks went out one day', 'Over the hill and far away'],
-    youtubeId: 'pZw9veQ76fo',
-  },
-];
 
 // ─── Math Game ────────────────────────────────────────────────────────────────
 
