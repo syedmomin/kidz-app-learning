@@ -77,8 +77,8 @@ export default function NamazScreen({ navigation }: ScreenProps<'Namaz'>) {
           <Text style={s.backText}>←</Text>
         </Pressable>
         <View style={{ flex: 1 }}>
-          <Text style={s.titleArabic}>نَمَاز سِیکھُو</Text>
-          <Text style={s.titleEng}>Learn Namaz</Text>
+          <Text style={s.titleArabic}>تَعَلَّمِ الصَّلَاةَ</Text>
+          <Text style={s.titleEng}>Learn Salah</Text>
         </View>
         <View style={s.progressChip}>
           <Text style={s.progressChipText}>{totalDone}/{totalAll} ✓</Text>

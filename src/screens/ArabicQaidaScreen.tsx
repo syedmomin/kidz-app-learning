@@ -16,14 +16,14 @@ const TAT = 'ـ';
 
 // ─── Harakat (vowel marks) ─────────────────────────────────
 const HARAKAT = [
-  { mark: 'َ',        name: 'Fatha',       sound: 'a',    color: '#FF6B6B', label: 'َ' },
-  { mark: 'ِ',        name: 'Kasra',       sound: 'i',    color: '#3FB5FF', label: 'ِ' },
-  { mark: 'ُ',        name: 'Damma',       sound: 'u',    color: '#FFB347', label: 'ُ' },
-  { mark: 'ْ',        name: 'Sukoon',      sound: '(silent)', color: '#77DD77', label: 'ْ' },
-  { mark: 'َّ',  name: 'Shadda+Fatha',sound: 'bb-a', color: '#B68CFF', label: 'َّ' },
-  { mark: 'ً',        name: 'Tanwin Fath', sound: 'an',   color: '#FF8CCC', label: 'ً' },
-  { mark: 'ٌ',        name: 'Tanwin Damm', sound: 'un',   color: '#D898FF', label: 'ٌ' },
-  { mark: 'ٍ',        name: 'Tanwin Kasr', sound: 'in',   color: '#4BC8A0', label: 'ٍ' },
+  { mark: 'َ',        name: 'Fatha',       arabicName: 'فَتْحَة',    sound: 'a',    color: '#FF6B6B', label: 'َ' },
+  { mark: 'ِ',        name: 'Kasra',       arabicName: 'كَسْرَة',    sound: 'i',    color: '#3FB5FF', label: 'ِ' },
+  { mark: 'ُ',        name: 'Damma',       arabicName: 'ضَمَّة',    sound: 'u',    color: '#FFB347', label: 'ُ' },
+  { mark: 'ْ',        name: 'Sukoon',      arabicName: 'سُكُون',    sound: '(silent)', color: '#77DD77', label: 'ْ' },
+  { mark: 'َّ',  name: 'Shadda+Fatha',arabicName: 'شَدَّة فَتْحَة',sound: 'bb-a', color: '#B68CFF', label: 'َّ' },
+  { mark: 'ً',        name: 'Tanwin Fath', arabicName: 'تَنْوِين فَتْح', sound: 'an',   color: '#FF8CCC', label: 'ً' },
+  { mark: 'ٌ',        name: 'Tanwin Damm', arabicName: 'تَنْوِين ضَمّ', sound: 'un',   color: '#D898FF', label: 'ٌ' },
+  { mark: 'ٍ',        name: 'Tanwin Kasr', arabicName: 'تَنْوِين كَسْر', sound: 'in',   color: '#4BC8A0', label: 'ٍ' },
 ];
 
 type Tab = 'letters' | 'harakat' | 'forms' | 'quiz';
@@ -69,7 +69,7 @@ function LettersTab({ heard, setHeard, addStars }: {
   const progress = Math.round((heard.size / ARABIC_LETTERS.length) * 100);
 
   function openLetter(letter: ArabicLetter, idx: number) {
-    speak(letter.name);
+    speak(letter.arabicName);
     Animated.sequence([
       Animated.timing(bounceAnims[idx], { toValue: 0.85, duration: 80, useNativeDriver: true }),
       Animated.spring(bounceAnims[idx], { toValue: 1, useNativeDriver: true }),
@@ -132,7 +132,7 @@ function LettersTab({ heard, setHeard, addStars }: {
                   <Text style={[s.exampleArabic, { color: letter.color }]}>{letter.example}</Text>
                   <Text style={s.exampleMeaning}>{letter.exampleMeaning}</Text>
                   <Pressable style={[s.speakBtn, { backgroundColor: letter.color }]}
-                    onPress={() => speak(letter.letter + ' ' + letter.name)}>
+                    onPress={() => speak(letter.letter + ' ' + letter.arabicName)}>
                     <Text style={s.speakBtnText}>🔊 Hear letter</Text>
                   </Pressable>
                   <Pressable style={[s.speakBtn, { backgroundColor: '#EEE', marginTop: 8 }]}
@@ -157,9 +157,9 @@ function HarakatTab() {
   const letter = ARABIC_LETTERS[selectedLetterIdx];
   const bounceAnims = useRef(HARAKAT.map(() => new Animated.Value(1))).current;
 
-  function tapHarakat(idx: number, mark: string, name: string) {
+  function tapHarakat(idx: number, mark: string, arabicName: string) {
     const syllable = letter.letter + mark;
-    speak(syllable + ' ' + name);
+    speak(syllable + ' ' + arabicName);
     Animated.sequence([
       Animated.timing(bounceAnims[idx], { toValue: 0.8, duration: 70, useNativeDriver: true }),
       Animated.spring(bounceAnims[idx], { toValue: 1, useNativeDriver: true }),
@@ -197,7 +197,7 @@ function HarakatTab() {
             <Animated.View key={i} style={{ transform: [{ scale: bounceAnims[i] }], width: '46%' }}>
               <Pressable
                 style={[s.harakatCard, { borderColor: h.color, backgroundColor: h.color + '18' }]}
-                onPress={() => tapHarakat(i, h.mark, h.name)}
+                onPress={() => tapHarakat(i, h.mark, h.arabicName)}
               >
                 <Text style={[s.harakatSyllable, { color: h.color }]}>{syllable}</Text>
                 <Text style={s.harakatName}>{h.name}</Text>
@@ -244,7 +244,7 @@ function FormsTab() {
       ];
 
   function tapForm(idx: number, arabic: string, label: string) {
-    speak(arabic + ' ' + label);
+    speak(arabic); // Speak just the letter form in Arabic
     Animated.sequence([
       Animated.timing(bounceAnims[idx], { toValue: 0.8, duration: 70, useNativeDriver: true }),
       Animated.spring(bounceAnims[idx], { toValue: 1, useNativeDriver: true }),
@@ -338,7 +338,7 @@ function QuizTab({ addStars }: { addStars: (n: number) => void }) {
     if (answered) return;
     setAnswered(choice.name);
     setTotal(t => t + 1);
-    speak(correctLetter.letter + ' ' + correctLetter.name);
+    speak(correctLetter.letter + ' ' + correctLetter.arabicName);
     if (choice.letter === correctLetter.letter) {
       setScore(s => s + 1);
       addStars(1);

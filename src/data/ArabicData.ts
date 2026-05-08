@@ -3,6 +3,7 @@
 export type ArabicLetter = {
   letter: string;
   name: string;
+  arabicName: string;
   transliteration: string;
   example: string;
   exampleMeaning: string;
@@ -29,34 +30,34 @@ export type Dua = {
 };
 
 export const ARABIC_LETTERS: ArabicLetter[] = [
-  { letter: 'ا', name: 'Alif',  transliteration: 'A',  example: 'أَسَد',   exampleMeaning: 'Lion',      color: '#FF6B6B', nonConnecting: true  },
-  { letter: 'ب', name: 'Ba',    transliteration: 'B',  example: 'بَيْت',   exampleMeaning: 'House',     color: '#FF8E53', nonConnecting: false },
-  { letter: 'ت', name: 'Ta',    transliteration: 'T',  example: 'تُفَّاح',  exampleMeaning: 'Apple',     color: '#FFB347', nonConnecting: false },
-  { letter: 'ث', name: 'Tha',   transliteration: 'Th', example: 'ثَعْلَب',  exampleMeaning: 'Fox',       color: '#FFD700', nonConnecting: false },
-  { letter: 'ج', name: 'Jim',   transliteration: 'J',  example: 'جَمَل',   exampleMeaning: 'Camel',     color: '#9EE09E', nonConnecting: false },
-  { letter: 'ح', name: 'Ha',    transliteration: 'H',  example: 'حِمَار',   exampleMeaning: 'Donkey',    color: '#77DD77', nonConnecting: false },
-  { letter: 'خ', name: 'Kha',   transliteration: 'Kh', example: 'خَرُوف',  exampleMeaning: 'Sheep',     color: '#4BC8A0', nonConnecting: false },
-  { letter: 'د', name: 'Dal',   transliteration: 'D',  example: 'دَجَاجَة', exampleMeaning: 'Hen',       color: '#3FB5FF', nonConnecting: true  },
-  { letter: 'ذ', name: 'Dhal',  transliteration: 'Dh', example: 'ذِئْب',   exampleMeaning: 'Wolf',      color: '#7BB8FF', nonConnecting: true  },
-  { letter: 'ر', name: 'Ra',    transliteration: 'R',  example: 'رُمَّان',  exampleMeaning: 'Pomegranate', color: '#B68CFF', nonConnecting: true },
-  { letter: 'ز', name: 'Zay',   transliteration: 'Z',  example: 'زَهْرَة',  exampleMeaning: 'Flower',    color: '#D898FF', nonConnecting: true  },
-  { letter: 'س', name: 'Sin',   transliteration: 'S',  example: 'سَمَكَة',  exampleMeaning: 'Fish',      color: '#FF8CCC', nonConnecting: false },
-  { letter: 'ش', name: 'Shin',  transliteration: 'Sh', example: 'شَجَرَة',  exampleMeaning: 'Tree',      color: '#FF6B9D', nonConnecting: false },
-  { letter: 'ص', name: 'Sad',   transliteration: 'S',  example: 'صَقْر',   exampleMeaning: 'Falcon',    color: '#FF6B6B', nonConnecting: false },
-  { letter: 'ض', name: 'Dad',   transliteration: 'D',  example: 'ضِفْدَع',  exampleMeaning: 'Frog',      color: '#FF8E53', nonConnecting: false },
-  { letter: 'ط', name: 'Ta',    transliteration: 'T',  example: 'طَاوُوس',  exampleMeaning: 'Peacock',   color: '#FFB347', nonConnecting: false },
-  { letter: 'ظ', name: 'Dha',   transliteration: 'Dh', example: 'ظَبْي',   exampleMeaning: 'Deer',      color: '#FFD700', nonConnecting: false },
-  { letter: 'ع', name: 'Ain',   transliteration: 'A',  example: 'عَصْفُور', exampleMeaning: 'Sparrow',   color: '#9EE09E', nonConnecting: false },
-  { letter: 'غ', name: 'Ghain', transliteration: 'Gh', example: 'غُرَاب',  exampleMeaning: 'Crow',      color: '#77DD77', nonConnecting: false },
-  { letter: 'ف', name: 'Fa',    transliteration: 'F',  example: 'فِيل',    exampleMeaning: 'Elephant',  color: '#4BC8A0', nonConnecting: false },
-  { letter: 'ق', name: 'Qaf',   transliteration: 'Q',  example: 'قِطّ',    exampleMeaning: 'Cat',       color: '#3FB5FF', nonConnecting: false },
-  { letter: 'ك', name: 'Kaf',   transliteration: 'K',  example: 'كَلْب',   exampleMeaning: 'Dog',       color: '#7BB8FF', nonConnecting: false },
-  { letter: 'ل', name: 'Lam',   transliteration: 'L',  example: 'لَيْمُون', exampleMeaning: 'Lemon',    color: '#B68CFF', nonConnecting: false },
-  { letter: 'م', name: 'Mim',   transliteration: 'M',  example: 'مَوْز',   exampleMeaning: 'Banana',    color: '#D898FF', nonConnecting: false },
-  { letter: 'ن', name: 'Nun',   transliteration: 'N',  example: 'نَمْلَة',  exampleMeaning: 'Ant',       color: '#FF8CCC', nonConnecting: false },
-  { letter: 'ه', name: 'Ha',    transliteration: 'H',  example: 'هِرّ',    exampleMeaning: 'Cat',       color: '#FF6B9D', nonConnecting: false },
-  { letter: 'و', name: 'Waw',   transliteration: 'W',  example: 'وَرْد',   exampleMeaning: 'Rose',      color: '#FF6B6B', nonConnecting: true  },
-  { letter: 'ي', name: 'Ya',    transliteration: 'Y',  example: 'يَد',    exampleMeaning: 'Hand',      color: '#FF8E53', nonConnecting: false },
+  { letter: 'ا', name: 'Alif',  arabicName: 'أَلِف',   transliteration: 'A',  example: 'أَسَد',   exampleMeaning: 'Lion',      color: '#FF6B6B', nonConnecting: true  },
+  { letter: 'ب', name: 'Ba',    arabicName: 'بَاء',   transliteration: 'B',  example: 'بَيْت',   exampleMeaning: 'House',     color: '#FF8E53', nonConnecting: false },
+  { letter: 'ت', name: 'Ta',    arabicName: 'تَاء',   transliteration: 'T',  example: 'تُفَّاح',  exampleMeaning: 'Apple',     color: '#FFB347', nonConnecting: false },
+  { letter: 'ث', name: 'Tha',   arabicName: 'ثَاء',   transliteration: 'Th', example: 'ثَعْلَب',  exampleMeaning: 'Fox',       color: '#FFD700', nonConnecting: false },
+  { letter: 'ج', name: 'Jim',   arabicName: 'جِيم',   transliteration: 'J',  example: 'جَمَل',   exampleMeaning: 'Camel',     color: '#9EE09E', nonConnecting: false },
+  { letter: 'ح', name: 'Ha',    arabicName: 'حَاء',   transliteration: 'H',  example: 'حِمَار',   exampleMeaning: 'Donkey',    color: '#77DD77', nonConnecting: false },
+  { letter: 'خ', name: 'Kha',   arabicName: 'خَاء',   transliteration: 'Kh', example: 'خَرُوف',  exampleMeaning: 'Sheep',     color: '#4BC8A0', nonConnecting: false },
+  { letter: 'د', name: 'Dal',   arabicName: 'دَال',   transliteration: 'D',  example: 'دَجَاجَة', exampleMeaning: 'Hen',       color: '#3FB5FF', nonConnecting: true  },
+  { letter: 'ذ', name: 'Dhal',  arabicName: 'ذَال',   transliteration: 'Dh', example: 'ذِئْب',   exampleMeaning: 'Wolf',      color: '#7BB8FF', nonConnecting: true  },
+  { letter: 'ر', name: 'Ra',    arabicName: 'رَاء',   transliteration: 'R',  example: 'رُمَّان',  exampleMeaning: 'Pomegranate', color: '#B68CFF', nonConnecting: true },
+  { letter: 'ز', name: 'Zay',   arabicName: 'زَاي',   transliteration: 'Z',  example: 'زَهْرَة',  exampleMeaning: 'Flower',    color: '#D898FF', nonConnecting: true  },
+  { letter: 'س', name: 'Sin',   arabicName: 'سِين',   transliteration: 'S',  example: 'سَمَكَة',  exampleMeaning: 'Fish',      color: '#FF8CCC', nonConnecting: false },
+  { letter: 'ش', name: 'Shin',  arabicName: 'شِين',   transliteration: 'Sh', example: 'شَجَرَة',  exampleMeaning: 'Tree',      color: '#FF6B9D', nonConnecting: false },
+  { letter: 'ص', name: 'Sad',   arabicName: 'صَاد',   transliteration: 'S',  example: 'صَقْر',   exampleMeaning: 'Falcon',    color: '#FF6B6B', nonConnecting: false },
+  { letter: 'ض', name: 'Dad',   arabicName: 'ضَاد',   transliteration: 'D',  example: 'ضِفْدَع',  exampleMeaning: 'Frog',      color: '#FF8E53', nonConnecting: false },
+  { letter: 'ط', name: 'Ta',    arabicName: 'طَاء',   transliteration: 'T',  example: 'طَاوُوس',  exampleMeaning: 'Peacock',   color: '#FFB347', nonConnecting: false },
+  { letter: 'ظ', name: 'Dha',   arabicName: 'ظَاء',   transliteration: 'Dh', example: 'ظَبْي',   exampleMeaning: 'Deer',      color: '#FFD700', nonConnecting: false },
+  { letter: 'ع', name: 'Ain',   arabicName: 'عَيْن',   transliteration: 'A',  example: 'عَصْفُور', exampleMeaning: 'Sparrow',   color: '#9EE09E', nonConnecting: false },
+  { letter: 'غ', name: 'Ghain', arabicName: 'غَيْن',   transliteration: 'Gh', example: 'غُرَاب',  exampleMeaning: 'Crow',      color: '#77DD77', nonConnecting: false },
+  { letter: 'ف', name: 'Fa',    arabicName: 'فَاء',   transliteration: 'F',  example: 'فِيل',    exampleMeaning: 'Elephant',  color: '#4BC8A0', nonConnecting: false },
+  { letter: 'ق', name: 'Qaf',   arabicName: 'قَاف',   transliteration: 'Q',  example: 'قِطّ',    exampleMeaning: 'Cat',       color: '#3FB5FF', nonConnecting: false },
+  { letter: 'ك', name: 'Kaf',   arabicName: 'كَاف',   transliteration: 'K',  example: 'كَلْب',   exampleMeaning: 'Dog',       color: '#7BB8FF', nonConnecting: false },
+  { letter: 'ل', name: 'Lam',   arabicName: 'لاَم',   transliteration: 'L',  example: 'لَيْمُون', exampleMeaning: 'Lemon',    color: '#B68CFF', nonConnecting: false },
+  { letter: 'م', name: 'Mim',   arabicName: 'مِيم',   transliteration: 'M',  example: 'مَوْز',   exampleMeaning: 'Banana',    color: '#D898FF', nonConnecting: false },
+  { letter: 'ن', name: 'Nun',   arabicName: 'نُون',   transliteration: 'N',  example: 'نَمْلَة',  exampleMeaning: 'Ant',       color: '#FF8CCC', nonConnecting: false },
+  { letter: 'ه', name: 'Ha',    arabicName: 'هَاء',   transliteration: 'H',  example: 'هِرّ',    exampleMeaning: 'Cat',       color: '#FF6B9D', nonConnecting: false },
+  { letter: 'و', name: 'Waw',   arabicName: 'وَاو',   transliteration: 'W',  example: 'وَرْد',   exampleMeaning: 'Rose',      color: '#FF6B6B', nonConnecting: true  },
+  { letter: 'ي', name: 'Ya',    arabicName: 'يَاء',   transliteration: 'Y',  example: 'يَد',    exampleMeaning: 'Hand',      color: '#FF8E53', nonConnecting: false },
 ];
 
 export const SURAHS: Surah[] = [

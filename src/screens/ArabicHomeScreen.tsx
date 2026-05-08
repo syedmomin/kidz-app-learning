@@ -41,8 +41,8 @@ const SECTIONS = [
   {
     key: 'Namaz',
     title: 'نَمَاز',
-    subtitle: 'Namaz Seekho',
-    desc: 'Wuzu steps & Namaz rakaat for kids',
+    subtitle: 'Learn Salah',
+    desc: 'Wuzu steps & Salah guide for kids',
     emoji: '🕌',
     bg: '#E8FFF4',
     border: '#3CB57F',
