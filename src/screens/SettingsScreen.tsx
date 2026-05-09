@@ -5,6 +5,7 @@ import PhoneSafe from '../components/PhoneSafe';
 import { C } from '../theme';
 import GameHeader from '../components/GameHeader';
 import { useProgress } from '../store/ProgressStore';
+import { ArabicSpeech } from '../utils/AudioUtils';
 import type { ScreenProps } from '../navigation/types';
 
 export default function SettingsScreen({ navigation }: ScreenProps<'Settings'>) {
@@ -34,6 +35,14 @@ export default function SettingsScreen({ navigation }: ScreenProps<'Settings'>) 
           <Info label="Ages" value="3 – 8"/>
           <Info label="Made with" value="❤️ for kids"/>
         </View>
+
+        <Text style={s.section}>TEST VOICE</Text>
+        <Pressable 
+          onPress={() => ArabicSpeech.speak('أَهْلاً وَسَهْلاً، كَيْفَ حَالُكَ؟')} 
+          style={s.testVoiceBtn}
+        >
+          <Text style={s.testVoiceBtnText}>🔊 Test Arabic Voice</Text>
+        </Pressable>
 
         <Text style={s.section}>DANGER ZONE</Text>
         <Pressable onPress={confirmReset} style={s.danger}>
@@ -70,4 +79,6 @@ const s = StyleSheet.create({
   rowV: { fontSize: 15, fontWeight: '800', color: C.inkSoft },
   danger: { backgroundColor: C.coral, borderWidth: 4, borderColor: C.ink, borderRadius: 16, padding: 14, alignItems: 'center' },
   dangerT: { color: C.cream, fontWeight: '900', fontSize: 16 },
+  testVoiceBtn: { backgroundColor: '#B68CFF', borderWidth: 4, borderColor: C.ink, borderRadius: 16, padding: 14, alignItems: 'center' },
+  testVoiceBtnText: { color: '#FFF', fontWeight: '900', fontSize: 16 },
 });

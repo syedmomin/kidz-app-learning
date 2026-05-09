@@ -8,13 +8,13 @@ import * as Speech from 'expo-speech';
 import { C } from '../theme';
 import { useProgress } from '../store/ProgressStore';
 import { DUAS, type Dua } from '../data/ArabicData';
+import { ArabicSpeech } from '../utils/AudioUtils';
 import type { ScreenProps } from '../navigation/types';
 
 const DUA_COLORS = ['#FF6B6B', '#FFB347', '#FFD700', '#77DD77', '#3FB5FF', '#B68CFF', '#FF8CCC', '#4BC8A0', '#FF8E53', '#D898FF'];
 
 function speakDua(dua: Dua) {
-  Speech.stop();
-  Speech.speak(dua.arabic, { language: 'ar', rate: 0.6, pitch: 1.0 });
+  ArabicSpeech.speak(dua.arabic);
 }
 
 export default function ArabicDuaScreen({ navigation }: ScreenProps<'ArabicDua'>) {

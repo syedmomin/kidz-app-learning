@@ -35,6 +35,8 @@ export type RootStackParamList = {
   BrainStorm: undefined;
   Coloring: undefined;
   WordSwap: undefined;
+  ArabicHarakat: undefined;
+  ArabicQuiz: undefined;
 };
 
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';

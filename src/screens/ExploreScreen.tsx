@@ -12,7 +12,9 @@ import ExploreCard from '../components/cards/ExploreCard';
 
 const EXPLORE_DATA = [
   // ─── Arabic & Islamic ───
-  { target: 'ArabicQaida', title: 'Arabic Qaida', image: require('../../assets/images/card_arabic_qaida.png'), color: '#CAFFBF' },
+  { target: 'ArabicQaida', title: 'Arabic Letters', image: require('../../assets/images/card_arabic_qaida.png'), color: '#CAFFBF' },
+  { target: 'ArabicHarakat', title: 'Arabic Harakat', image: require('../../assets/images/card_arabic_harakat.png'), color: '#FFD6A5' },
+  { target: 'ArabicQuiz', title: 'Arabic Quiz', image: require('../../assets/images/card_arabic_quiz.png'), color: '#FFADAD' },
   { target: 'ArabicSurah', title: 'Quran Surahs', image: require('../../assets/images/card_arabic_surah.png'), color: '#9BFBC0' },
   { target: 'ArabicDua', title: 'Daily Duas', image: require('../../assets/images/card_arabic_dua.png'), color: '#8EECFF' },
   { target: 'Namaz', title: 'Namaz Learn', image: require('../../assets/images/card_namaz.png'), color: '#A0C4FF' },
@@ -75,6 +77,12 @@ export default function ExploreScreen({ navigation }: ScreenProps<'Explore'>) {
           <View style={s.headerRight}>
             <Pressable style={s.chip} onPress={() => navigation.navigate('Streak')}>
               <Star size={16} /><Text style={s.chipText}>{p.stars}</Text>
+            </Pressable>
+            <Pressable 
+              style={[s.chip, { backgroundColor: '#F0EBFF', borderColor: '#E0D4FF' }]} 
+              onPress={() => navigation.navigate('Settings')}
+            >
+              <Text style={{ fontSize: 18 }}>⚙️</Text>
             </Pressable>
           </View>
         </View>

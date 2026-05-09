@@ -10,13 +10,33 @@ import type { ScreenProps } from '../navigation/types';
 const SECTIONS = [
   {
     key: 'ArabicQaida',
-    title: 'القاعدة',
-    subtitle: 'Qaida',
+    title: 'الْحُرُوف',
+    subtitle: 'Arabic Letters',
     desc: 'Learn Arabic Letters A to Z',
     emoji: '🔤',
     bg: '#FFF0E0',
     border: '#FFB347',
     accent: '#FF8E53',
+  },
+  {
+    key: 'ArabicHarakat',
+    title: 'الْحَرَكَات',
+    subtitle: 'Arabic Harakat',
+    desc: 'Learn vowels (Fatha, Kasra, Damma)',
+    emoji: '🎵',
+    bg: '#FDF6FF',
+    border: '#B68CFF',
+    accent: '#8857E0',
+  },
+  {
+    key: 'ArabicQuiz',
+    title: 'الِاخْتِبَار',
+    subtitle: 'Arabic Quiz',
+    desc: 'Test your letter knowledge!',
+    emoji: '📝',
+    bg: '#FFFBE8',
+    border: '#FFD700',
+    accent: '#C8A000',
   },
   {
     key: 'ArabicSurah',
@@ -86,6 +106,12 @@ export default function ArabicHomeScreen({ navigation }: ScreenProps<'ArabicHome
           <Text style={s.arabicTitle}>تَعَلَّمِ الْعَرَبِيَّة</Text>
           <Text style={s.englishTitle}>Arabic Learning</Text>
         </View>
+        <Pressable 
+          style={s.settingsBtn} 
+          onPress={() => navigation.navigate('Settings')}
+        >
+          <Text style={{ fontSize: 24 }}>⚙️</Text>
+        </Pressable>
       </View>
 
       <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
@@ -136,6 +162,7 @@ const s = StyleSheet.create({
   titleBox:       { flex: 1 },
   arabicTitle:    { fontSize: 22, fontWeight: '900', color: C.ink, textAlign: 'right' },
   englishTitle:   { fontSize: 13, fontWeight: '700', color: C.inkSoft, marginTop: 2 },
+  settingsBtn:    { width: 44, height: 44, borderRadius: 22, backgroundColor: '#FFF', justifyContent: 'center', alignItems: 'center', elevation: 4 },
   scroll:         { paddingHorizontal: 18, paddingTop: 4, paddingBottom: 32 },
   sectionLabel:   { fontSize: 16, fontWeight: '800', color: C.ink, marginBottom: 18, marginTop: 4 },
   card:           { flexDirection: 'row', alignItems: 'center', borderRadius: 22, borderWidth: 3, padding: 18, marginBottom: 16, elevation: 4, shadowColor: '#000', shadowOffset: { width: 0, height: 3 }, shadowOpacity: 0.1, shadowRadius: 6, gap: 14 },

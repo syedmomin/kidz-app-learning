@@ -8,14 +8,14 @@ import * as Speech from 'expo-speech';
 import { C } from '../theme';
 import { useProgress } from '../store/ProgressStore';
 import { WUZU_STEPS, NAMAZ_STEPS, type WuzuStep, type NamazStep } from '../data/IslamicData';
+import { ArabicSpeech } from '../utils/AudioUtils';
 import type { ScreenProps } from '../navigation/types';
 
 type Mode = 'wuzu' | 'namaz';
 type Step = WuzuStep | NamazStep;
 
 function speakArabic(text: string) {
-  Speech.stop();
-  Speech.speak(text, { language: 'ar', rate: 0.6, pitch: 1.0 });
+  ArabicSpeech.speak(text);
 }
 
 export default function NamazScreen({ navigation }: ScreenProps<'Namaz'>) {

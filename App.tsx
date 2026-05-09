@@ -44,6 +44,8 @@ import AsmaScreen from './src/screens/AsmaScreen';
 import BrainStormScreen from './src/screens/BrainStormScreen';
 import ColoringScreen from './src/screens/ColoringScreen';
 import WordSwapScreen from './src/screens/WordSwapScreen';
+import ArabicHarakatScreen from './src/screens/ArabicHarakatScreen';
+import ArabicQuizScreen from './src/screens/ArabicQuizScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -97,6 +99,8 @@ export default function App() {
               <Stack.Screen name="BrainStorm" component={BrainStormScreen} />
               <Stack.Screen name="Coloring" component={ColoringScreen} />
               <Stack.Screen name="WordSwap" component={WordSwapScreen} />
+              <Stack.Screen name="ArabicHarakat" component={ArabicHarakatScreen} />
+              <Stack.Screen name="ArabicQuiz" component={ArabicQuizScreen} />
             </Stack.Navigator>
           </NavigationContainer>
         </ProgressProvider>

@@ -8,19 +8,18 @@ import * as Speech from 'expo-speech';
 import { C } from '../theme';
 import { useProgress } from '../store/ProgressStore';
 import { SURAHS, type Surah } from '../data/ArabicData';
+import { ArabicSpeech } from '../utils/AudioUtils';
 import type { ScreenProps } from '../navigation/types';
 
 const SURAH_COLORS = ['#FFB347', '#77DD77', '#3FB5FF', '#B68CFF', '#FF6B6B', '#FF8CCC'];
 
 function speakSurah(surah: Surah) {
-  Speech.stop();
   const fullText = surah.verses.map(v => v.arabic).join(' ');
-  Speech.speak(fullText, { language: 'ar', rate: 0.65, pitch: 1.0 });
+  ArabicSpeech.speak(fullText);
 }
 
 function speakVerse(arabic: string) {
-  Speech.stop();
-  Speech.speak(arabic, { language: 'ar', rate: 0.65, pitch: 1.0 });
+  ArabicSpeech.speak(arabic);
 }
 
 export default function ArabicSurahScreen({ navigation }: ScreenProps<'ArabicSurah'>) {

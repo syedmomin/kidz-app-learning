@@ -9,11 +9,11 @@ import * as Speech from 'expo-speech';
 import { C } from '../theme';
 import { useProgress } from '../store/ProgressStore';
 import { ASMA_UL_HUSNA, type AsmaName } from '../data/IslamicData';
+import { ArabicSpeech } from '../utils/AudioUtils';
 import type { ScreenProps } from '../navigation/types';
 
 function speakName(name: AsmaName) {
-  Speech.stop();
-  Speech.speak(name.arabic, { language: 'ar', rate: 0.65, pitch: 1.0 });
+  ArabicSpeech.speak(name.arabic);
 }
 
 export default function AsmaScreen({ navigation }: ScreenProps<'Asma'>) {
