@@ -764,3 +764,117 @@ footer::before {
   background: var(--pink-deep);
   border-radius: 4px;
 }
+/* ─── SPLASH CRESCENT ───────────────────── */
+.splash-crescent {
+  display: block;
+  margin: 0 auto 10px;
+  animation: fadeUp 0.8s ease both;
+}
+
+/* ─── STARFIELD ──────────────────────────── */
+.starfield {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.starfield::before,
+.starfield::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+}
+
+.starfield::before {
+  animation: twinkle1 3.2s ease-in-out infinite;
+  box-shadow:
+    45px 80px 0 rgba(255,255,255,.7),
+    120px 45px 0 rgba(200,220,255,.8),
+    200px 120px 0 rgba(255,255,255,.5),
+    280px 60px 0 rgba(200,216,248,.9),
+    350px 140px 0 rgba(255,255,255,.6),
+    80px 200px 0 rgba(200,220,255,.5),
+    160px 250px 0 rgba(255,255,255,.7),
+    240px 300px 0 rgba(200,216,248,.6),
+    320px 180px 0 rgba(255,255,255,.55),
+    30px 340px 0 rgba(200,220,255,.6),
+    180px 380px 0 rgba(255,255,255,.4),
+    380px 320px 0 rgba(200,216,248,.7),
+    60px 420px 0 rgba(255,255,255,.5);
+}
+
+.starfield::after {
+  animation: twinkle2 4.1s 1.6s ease-in-out infinite;
+  box-shadow:
+    70px 110px 0 rgba(255,255,255,.6),
+    150px 70px 0 rgba(200,216,248,.7),
+    230px 160px 0 rgba(255,255,255,.5),
+    310px 90px 0 rgba(200,220,255,.8),
+    390px 200px 0 rgba(255,255,255,.6),
+    50px 260px 0 rgba(200,216,248,.5),
+    180px 310px 0 rgba(255,255,255,.7),
+    260px 240px 0 rgba(200,220,255,.55),
+    340px 320px 0 rgba(255,255,255,.5),
+    100px 380px 0 rgba(200,216,248,.65),
+    290px 410px 0 rgba(255,255,255,.4),
+    420px 140px 0 rgba(200,220,255,.6),
+    10px 480px 0 rgba(255,255,255,.5);
+}
+
+@keyframes twinkle1 {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 1; }
+}
+
+@keyframes twinkle2 {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 0.12; }
+}
+
+/* ─── ARCH DIVIDER ───────────────────────── */
+.arch-divider {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+  margin: 0;
+}
+
+/* ─── INVITE CARD VINES ─────────────────── */
+.invite-card {
+  position: relative;
+}
+
+.invite-vine {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  opacity: 0.28;
+}
+
+.invite-vine-left { left: 6px; }
+.invite-vine-right { right: 6px; transform: translateY(-50%) scaleX(-1); }
+
+/* ─── LANTERN ────────────────────────────── */
+.lantern-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 18px;
+}
+
+.lantern-svg {
+  animation: lanternGlow 3s ease-in-out infinite;
+}
+
+@keyframes lanternGlow {
+  0%, 100% { filter: drop-shadow(0 0 6px rgba(30,80,200,0.35)); }
+  50%       { filter: drop-shadow(0 0 18px rgba(100,149,237,0.75)); }
+}
