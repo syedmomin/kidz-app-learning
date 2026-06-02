@@ -1,18 +1,18 @@
 :root {
-  --pink: #f8c8d4;
-  --pink-light: #fde8ef;
-  --pink-deep: #e8a0b4;
-  --gold: #c9a84c;
-  --gold-deep: #a8872e;
-  --gold-pale: #f5ecd7;
-  --cream: #faf0e6;
-  --ivory: #fdf8f2;
-  --teal: #1b6b5a;
-  --teal-light: #2a8c76;
-  --teal-pale: #e0f0ec;
-  --charcoal: #2c2c2c;
-  --mid: #666;
-  --light: #999;
+  --pink: #c8d8f8;
+  --pink-light: #e8f1fd;
+  --pink-deep: #90aeee;
+  --gold: #1a2a5e;
+  --gold-deep: #0f1d4a;
+  --gold-pale: #dce8fc;
+  --cream: #f0f5fd;
+  --ivory: #f5f8ff;
+  --teal: #1e50c8;
+  --teal-light: #3674e0;
+  --teal-pale: #dce8fc;
+  --charcoal: #0d1a3a;
+  --mid: #4a5a7a;
+  --light: #7a8aaa;
   --serif: "Cormorant Garamond", Georgia, serif;
   --sans: "Nunito", sans-serif;
 }
@@ -40,7 +40,7 @@ body {
   position: fixed;
   inset: 0;
   z-index: 9999;
-  background: #f9e8ee;
+  background: #e8f0f9;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -56,7 +56,7 @@ body {
   pointer-events: none;
 }
 
-/* Full-bleed background texture — soft blush wash */
+/* Full-bleed background texture */
 #splash-bg {
   position: absolute;
   inset: 0;
@@ -64,7 +64,7 @@ body {
   z-index: 0;
 }
 
-/* Watercolour wash blob behind text — like the reference card */
+/* Watercolour wash blob behind text */
 #splash-wash {
   position: absolute;
   top: 50%;
@@ -74,8 +74,8 @@ body {
   height: 45%;
   background: radial-gradient(
     ellipse at 50% 50%,
-    rgba(240, 180, 195, 0.55) 0%,
-    rgba(235, 170, 188, 0.3) 40%,
+    rgba(100, 149, 237, 0.45) 0%,
+    rgba(80, 120, 220, 0.25) 40%,
     transparent 75%
   );
   border-radius: 50%;
@@ -105,7 +105,7 @@ body {
   font-weight: 600;
   letter-spacing: 3px;
   text-transform: uppercase;
-  color: #7a4a58;
+  color: #2a3a7a;
   margin-bottom: 12px;
   animation: fadeUp 0.8s ease both;
   line-height: 1.6;
@@ -116,7 +116,7 @@ body {
   font-size: clamp(1.6rem, 6.5vw, 2.4rem);
   font-weight: 700;
   font-style: normal;
-  color: #8b2252;
+  color: #1a3a8b;
   letter-spacing: 0;
   line-height: 2;
   text-align: center;
@@ -125,7 +125,7 @@ body {
   animation: fadeUp 0.8s 0.1s ease both;
 }
 
-/* Gold rule lines like the reference card */
+/* Rule lines */
 .splash-gold-rule {
   display: flex;
   align-items: center;
@@ -138,24 +138,24 @@ body {
 .splash-gold-rule-line {
   flex: 1;
   height: 1px;
-  background: linear-gradient(90deg, transparent, #c9a84c, transparent);
+  background: linear-gradient(90deg, transparent, #1a2a5e, transparent);
 }
 
 .splash-gold-rule-dot {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #c9a84c;
+  background: #1a2a5e;
   flex-shrink: 0;
 }
 
-/* Couple names — big cursive like the reference */
+/* Couple names */
 .splash-couple {
   font-family: var(--serif);
   font-size: clamp(2.2rem, 9vw, 3.2rem);
   font-style: italic;
   font-weight: 500;
-  color: #8b2252;
+  color: #1a3a8b;
   line-height: 1.1;
   text-align: center;
   animation: fadeUp 0.8s 0.2s ease both;
@@ -166,13 +166,13 @@ body {
   font-family: var(--serif);
   font-size: clamp(1.8rem, 7vw, 2.6rem);
   font-style: italic;
-  color: #8b2252;
+  color: #1a3a8b;
   line-height: 1;
   margin: 2px 0;
   animation: fadeUp 0.8s 0.25s ease both;
 }
 
-/* Date bar — Friday | 10 | 6:00 PM like the reference */
+/* Date bar */
 .splash-date-bar {
   display: flex;
   align-items: center;
@@ -180,8 +180,8 @@ body {
   gap: 0;
   width: min(320px, 85vw);
   margin: 16px auto 4px;
-  border-top: 1px solid #c9a84c;
-  border-bottom: 1px solid #c9a84c;
+  border-top: 1px solid #1a2a5e;
+  border-bottom: 1px solid #1a2a5e;
   padding: 8px 0;
   animation: fadeUp 0.8s 0.3s ease both;
 }
@@ -193,7 +193,7 @@ body {
   font-weight: 700;
   letter-spacing: 2px;
   text-transform: uppercase;
-  color: #7a4a58;
+  color: #2a3a7a;
   text-align: center;
 }
 
@@ -201,11 +201,11 @@ body {
   font-family: var(--serif);
   font-size: clamp(1.8rem, 7vw, 2.4rem);
   font-weight: 600;
-  color: #8b2252;
+  color: #1a3a8b;
   line-height: 1;
   padding: 0 12px;
-  border-left: 1px solid rgba(201, 168, 76, 0.5);
-  border-right: 1px solid rgba(201, 168, 76, 0.5);
+  border-left: 1px solid rgba(26, 42, 94, 0.4);
+  border-right: 1px solid rgba(26, 42, 94, 0.4);
   flex-shrink: 0;
 }
 
@@ -214,7 +214,7 @@ body {
   font-size: clamp(0.6rem, 2vw, 0.7rem);
   letter-spacing: 3px;
   text-transform: uppercase;
-  color: #9a6070;
+  color: #3a4a8a;
   font-weight: 600;
   margin-top: 2px;
   margin-bottom: 14px;
@@ -225,7 +225,7 @@ body {
 .splash-venue {
   font-family: var(--sans);
   font-size: clamp(0.68rem, 2.5vw, 0.8rem);
-  color: #7a5060;
+  color: #2a3a6a;
   font-weight: 400;
   letter-spacing: 0.5px;
   line-height: 1.6;
@@ -236,14 +236,14 @@ body {
 .open-btn {
   padding: 11px 32px;
   background: rgba(255, 255, 255, 0.55);
-  border: 1.5px solid #c9a84c;
+  border: 1.5px solid #1a2a5e;
   border-radius: 50px;
   font-family: var(--sans);
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 2.5px;
   text-transform: uppercase;
-  color: #8b5e2a;
+  color: #0f1d4a;
   cursor: pointer;
   position: relative;
   overflow: hidden;
@@ -258,7 +258,7 @@ body {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, #c9a84c, #e2b84a);
+  background: linear-gradient(135deg, #1e50c8, #3674e0);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.35s ease;
@@ -276,11 +276,11 @@ body {
 @keyframes pulse-btn {
   0%,
   100% {
-    box-shadow: 0 0 0 0 rgba(201, 168, 76, 0.4);
+    box-shadow: 0 0 0 0 rgba(26, 42, 94, 0.35);
   }
 
   50% {
-    box-shadow: 0 0 0 12px rgba(201, 168, 76, 0);
+    box-shadow: 0 0 0 12px rgba(26, 42, 94, 0);
   }
 }
 
@@ -348,7 +348,7 @@ body {
   position: absolute;
   inset: 0;
   opacity: 0.045;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Cpath d='M30 0L60 30L30 60L0 30Z' fill='none' stroke='%23C9A84C' stroke-width='1'/%3E%3Cpath d='M30 10L50 30L30 50L10 30Z' fill='none' stroke='%23C9A84C' stroke-width='.6'/%3E%3Ccircle cx='30' cy='30' r='4' fill='%23C9A84C'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Cpath d='M30 0L60 30L30 60L0 30Z' fill='none' stroke='%231A2A5E' stroke-width='1'/%3E%3Cpath d='M30 10L50 30L30 50L10 30Z' fill='none' stroke='%231A2A5E' stroke-width='.6'/%3E%3Ccircle cx='30' cy='30' r='4' fill='%231A2A5E'/%3E%3C/svg%3E");
   background-size: 60px 60px;
   pointer-events: none;
 }
@@ -360,12 +360,12 @@ body {
   background:
     radial-gradient(
       ellipse 70% 50% at 20% 30%,
-      rgba(248, 200, 212, 0.45) 0%,
+      rgba(200, 216, 248, 0.45) 0%,
       transparent 70%
     ),
     radial-gradient(
       ellipse 60% 40% at 80% 70%,
-      rgba(201, 168, 76, 0.12) 0%,
+      rgba(26, 42, 94, 0.1) 0%,
       transparent 70%
     );
   pointer-events: none;
@@ -440,7 +440,7 @@ body {
   padding: 14px 16px;
   min-width: 68px;
   text-align: center;
-  box-shadow: 0 4px 16px rgba(201, 168, 76, 0.15);
+  box-shadow: 0 4px 16px rgba(26, 42, 94, 0.12);
 }
 
 .cd-num {
@@ -545,14 +545,14 @@ body {
   margin: 0 auto;
   background: rgba(255, 255, 255, 0.72);
   backdrop-filter: blur(14px);
-  border: 1px solid rgba(201, 168, 76, 0.4);
+  border: 1px solid rgba(26, 42, 94, 0.3);
   border-top: 3px solid var(--gold);
   border-radius: 20px;
   padding: 42px 32px;
   text-align: center;
   box-shadow:
-    0 8px 40px rgba(248, 200, 212, 0.5),
-    0 2px 12px rgba(201, 168, 76, 0.15);
+    0 8px 40px rgba(200, 216, 248, 0.5),
+    0 2px 12px rgba(26, 42, 94, 0.1);
 }
 
 .invite-card .section-label {
@@ -595,8 +595,8 @@ body {
   padding: 28px 24px;
   margin-bottom: 16px;
   box-shadow:
-    0 4px 24px rgba(248, 200, 212, 0.4),
-    0 1px 6px rgba(201, 168, 76, 0.1);
+    0 4px 24px rgba(200, 216, 248, 0.4),
+    0 1px 6px rgba(26, 42, 94, 0.08);
   position: relative;
   overflow: hidden;
 }
@@ -668,13 +668,13 @@ body {
     transform 0.2s,
     box-shadow 0.2s,
     background 0.2s;
-  box-shadow: 0 4px 16px rgba(27, 107, 90, 0.2);
+  box-shadow: 0 4px 16px rgba(30, 80, 200, 0.2);
 }
 
 .map-btn:hover {
   background: var(--teal-light);
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(27, 107, 90, 0.3);
+  box-shadow: 0 8px 24px rgba(30, 80, 200, 0.35);
 }
 
 /* ─── QUR'AN VERSE ───────────────────────── */
@@ -708,8 +708,6 @@ body {
   font-weight: 500;
 }
 
-/* RSVP removed - styles for RSVP form and thank-you have been removed */
-
 /* ─── FOOTER ─────────────────────────────── */
 footer {
   background: var(--pink-light);
@@ -723,7 +721,7 @@ footer::before {
   content: "";
   position: absolute;
   inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Cpath d='M30 0L60 30L30 60L0 30Z' fill='none' stroke='%23C9A84C' stroke-width='.6'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Cpath d='M30 0L60 30L30 60L0 30Z' fill='none' stroke='%231A2A5E' stroke-width='.6'/%3E%3C/svg%3E");
   background-size: 60px 60px;
   opacity: 0.06;
   pointer-events: none;
@@ -752,8 +750,6 @@ footer::before {
   color: var(--light);
   margin-top: 16px;
 }
-
-/* Admin UI removed - admin panel and trigger styles have been removed */
 
 /* ─── SCROLLBAR ──────────────────────────── */
 ::-webkit-scrollbar {
