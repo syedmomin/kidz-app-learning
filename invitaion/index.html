@@ -209,23 +209,9 @@
                 </div>
                 <p class="splash-month">July 2026</p>
                 <p class="splash-venue">Highlander Community Centre</p>
-                <button class="open-btn" onclick="openInvitation()">Open Invitation</button>
+                <button class="open-btn" onclick="openInvitation()">Open Invitation</button>           
             </div>
         </div>
-</div>
-<!-- ── ADMIN TRIGGER ── -->
-<button id="admin-trigger" onclick="toggleAdmin()">Admin ▾</button>
-<!-- ── ADMIN PANEL ── -->
-<div id="admin-panel">
-    <div class="admin-box">
-        <button class="admin-close" onclick="toggleAdmin()">✕ Close</button>
-        <h2>RSVP Dashboard</h2>
-        <p class="admin-sub">Nikaah of Abdul Azeem Qazi & Unzila Khan · 10 July 2026</p>
-        <div class="admin-stats" id="admin-stats"></div>
-        <div id="admin-table-wrap">
-            <p style="text-align:center;color:var(--light);padding:32px 0;font-size:.85rem;">No RSVPs submitted yet.</p>
-        </div>
-    </div>
 </div>
 <!-- ══ MAIN CONTENT ══ -->
 <main id="main-content" style="opacity:0;transition:opacity .9s ease;">
@@ -277,7 +263,7 @@
                 <span class="cd-lbl">Secs</span>
             </div>
         </div>
-        <div class="scroll-hint">
+                <div class="scroll-hint">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M12 5v14M5 12l7 7 7-7"/>
             </svg>
@@ -442,76 +428,7 @@
             <div style="width:40px;height:1.5px;background:var(--teal);margin:16px auto 0;opacity:.4;"></div>
         </div>
     </div>
-    <!-- ── RSVP ── -->
-    <section id="rsvp-section">
-        <div style="text-align:center;max-width:540px;margin:0 auto 28px;">
-            <span class="section-label reveal">RSVP</span>
-            <h2 class="section-heading reveal" style="transition-delay:.1s;text-align:center;">
-                Kindly <span class="teal">Respond</span>
-            </h2>
-            <div class="teal-rule reveal" style="transition-delay:.2s;margin:0 auto 16px;"></div>
-            <p class="body-text reveal" style="transition-delay:.25s;">Please let us know if you will be joining us for this blessed occasion.
-      </p>
-        </div>
-        <div class="rsvp-card reveal" style="transition-delay:.3s">
-            <div id="rsvp-form-area">
-                <div class="deadline-pill">
-                    RSVP by <strong>30th June 2026</strong>
-                </div>
-                <div class="form-group">
-                    <label for="f-name">Full Name</label>
-                    <input type="text" id="f-name" placeholder="Your full name">
-                    <span class="field-error" id="e-name">Please enter your full name.</span>
-                </div>
-                <div class="form-group">
-                    <label>Attendance</label>
-                    <div class="radio-group">
-                        <label class="radio-pill" id="pill-yes">
-                            <input type="radio" name="attendance" value="Attending">
-                            <span class="radio-dot"></span>
-                            <span>Attending</span>
-                        </label>
-                        <label class="radio-pill" id="pill-no">
-                            <input type="radio" name="attendance" value="Declining">
-                            <span class="radio-dot"></span>
-                            <span>Declining</span>
-                        </label>
-                    </div>
-                    <span class="field-error" id="e-attend">Please select an option.</span>
-                </div>
-                <div class="form-group" id="pax-group">
-                    <label for="f-pax">Number of Guests</label>
-                    <select id="f-pax">
-                        <option value="">— Select —</option>
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                        <option>5</option>
-                        <option>6</option>
-                        <option>7</option>
-                    </select>
-                    <span class="field-error" id="e-pax">Please select number of guests.</span>
-                </div>
-                <button class="submit-btn" onclick="submitRSVP()">Send My RSVP &nbsp;✦</button>
-            </div>
-            <div id="thankyou">
-                <div class="ty-heart">💌</div>
-                <h3>JazakAllah Khair</h3>
-                <p id="ty-msg">
-                    Thank you for your RSVP.<br>
-                    <span class="ty-gold">We look forward to celebrating with you, inshaAllah.</span>
-                </p>
-                <div class="gold-divider" style="margin-top:20px;">
-                    <div class="gold-divider-line"></div>
-                    <svg width="16" height="16" viewBox="0 0 20 20">
-                        <polygon points="10,1 12.4,7.2 19,7.6 14,11.9 15.9,18.5 10,15 4.1,18.5 6,11.9 1,7.6 7.6,7.2" fill="#C9A84C"/>
-                    </svg>
-                    <div class="gold-divider-line"></div>
-                </div>
-            </div>
-        </div>
-    </section>
+    <!-- RSVP removed -->
     <!-- ── FOOTER ── -->
     <footer>
         <div class="gold-divider reveal">
@@ -535,9 +452,7 @@
             </svg>
             <div class="gold-divider-line"></div>
         </div>
-        <p style="font-size:.65rem;color:var(--light);margin-top:10px;letter-spacing:.5px;">
-            <span onclick="toggleAdmin()" style="cursor:pointer;color:var(--gold-deep);text-decoration:underline;font-size:.65rem;">Admin</span>
-        </p>
+        <!-- Admin link removed -->
     </footer>
 </main>
 <!-- ── MUSIC (autoplay, no button) ── -->
