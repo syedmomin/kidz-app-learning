@@ -18,7 +18,7 @@ function openInvitation() {
 }
 
 /* ── COUNTDOWN ── */
-const TARGET = new Date("2026-07-10T18:00:00");
+const TARGET = new Date("2026-06-14T00:00:00");
 function tick() {
   const now = new Date();
   const diff = TARGET - now;
