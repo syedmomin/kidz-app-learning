@@ -83,3 +83,50 @@ function playMusic() {
     });
   }
 }
+
+/* ── SCROLL PROGRESS BAR ── */
+const progressBar = document.getElementById("scroll-progress");
+function updateProgress() {
+  if (!progressBar) return;
+  const scrollTop = window.scrollY || document.documentElement.scrollTop;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+  progressBar.style.width = pct + "%";
+}
+window.addEventListener("scroll", updateProgress, { passive: true });
+
+/* ── FALLING PETALS ── */
+(function spawnPetals() {
+  const container = document.getElementById("petals-container");
+  if (!container) return;
+  const colors = [
+    "rgba(100,149,237,0.55)",
+    "rgba(54,116,224,0.45)",
+    "rgba(200,216,248,0.6)",
+    "rgba(30,80,200,0.35)",
+    "rgba(135,186,255,0.5)",
+  ];
+  const count = 18;
+  for (let i = 0; i < count; i++) {
+    const p = document.createElement("div");
+    p.className = "petal";
+    const leftPct = 2 + Math.random() * 96;
+    const dur = 7 + Math.random() * 8;
+    const delay = Math.random() * 12;
+    const drift = (Math.random() - 0.5) * 120;
+    const size = 8 + Math.random() * 8;
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    p.style.cssText = `
+      left:${leftPct}%;
+      width:${size}px;
+      height:${size * 1.3}px;
+      background:${color};
+      --dur:${dur}s;
+      --delay:${delay}s;
+      --drift:${drift}px;
+      border-radius:${Math.random() > 0.5 ? "50% 0 50% 0" : "0 50% 0 50%"};
+      transform:rotate(${Math.random() * 360}deg);
+    `;
+    container.appendChild(p);
+  }
+})();

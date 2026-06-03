@@ -20,6 +20,7 @@
     </head>
     <body>
         <!-- ── SPLASH ── -->
+        <div id="scroll-progress"></div>
         <div id="splash">
             <!-- Blush background SVG with watercolour texture -->
             <div id="splash-bg">
@@ -228,6 +229,8 @@
     <section id="hero">
         <div class="tile-bg"></div>
         <div class="starfield"></div>
+        <!-- Falling petals -->
+        <div id="petals-container" aria-hidden="true"></div>
         <p class="hero-label reveal">The Nikaah of</p>
         <!-- Vine top -->
         <svg class="vine reveal" style="transition-delay:.1s" width="200" height="24" viewBox="0 0 200 24" fill="none">
@@ -367,6 +370,34 @@
                 <br>of their beloved children.
       
             </p>
+
+            <!-- Wedding rings -->
+            <div class="rings-wrap">
+                <svg class="rings-svg" width="90" height="44" viewBox="0 0 90 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Left ring -->
+                    <circle cx="32" cy="22" r="18" stroke="#1a2a5e" stroke-width="3" fill="none"/>
+                    <circle cx="32" cy="22" r="18" stroke="url(#rg1)" stroke-width="3" fill="none"/>
+                    <circle cx="32" cy="22" r="13" stroke="rgba(30,80,200,0.15)" stroke-width="1" fill="none"/>
+                    <!-- Right ring -->
+                    <circle cx="58" cy="22" r="18" stroke="#1a2a5e" stroke-width="3" fill="none"/>
+                    <circle cx="58" cy="22" r="18" stroke="url(#rg2)" stroke-width="3" fill="none"/>
+                    <circle cx="58" cy="22" r="13" stroke="rgba(30,80,200,0.15)" stroke-width="1" fill="none"/>
+                    <!-- Overlap highlight -->
+                    <path d="M45 6 Q50 22 45 38" stroke="rgba(255,255,255,0.5)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                    <defs>
+                        <linearGradient id="rg1" x1="14" y1="4" x2="50" y2="40" gradientUnits="userSpaceOnUse">
+                            <stop offset="0%" stop-color="#3674e0"/>
+                            <stop offset="50%" stop-color="#1a2a5e"/>
+                            <stop offset="100%" stop-color="#87ceeb"/>
+                        </linearGradient>
+                        <linearGradient id="rg2" x1="40" y1="4" x2="76" y2="40" gradientUnits="userSpaceOnUse">
+                            <stop offset="0%" stop-color="#87ceeb"/>
+                            <stop offset="50%" stop-color="#1a2a5e"/>
+                            <stop offset="100%" stop-color="#3674e0"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+            </div>
             <div class="gold-divider" style="margin-top:20px;">
                 <div class="gold-divider-line"></div>
                 <svg width="20" height="20" viewBox="0 0 20 20">
